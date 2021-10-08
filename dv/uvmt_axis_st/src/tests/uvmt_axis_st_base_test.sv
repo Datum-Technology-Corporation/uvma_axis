@@ -1,5 +1,5 @@
 // Copyright 2021 Datum Technology Corporation
-// 
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // SPDX-License-Identifier: Apache-2.0 WITH SHL-2.1
 // Licensed under the Solderpad Hardware License v 2.1 (the "License"); you may not use this file except in compliance
 // with the License, or, at your option, the Apache License version 2.0.  You may obtain a copy of the License at
@@ -7,6 +7,7 @@
 // Unless required by applicable law or agreed to in writing, any work distributed under the License is distributed on
 // an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
 // specific language governing permissions and limitations under the License.
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
 `ifndef __UVMT_AXIS_ST_BASE_TEST_SV__
@@ -14,12 +15,11 @@
 
 
 /**
- * Abstract component from which all other AMBA Advanced Extensible Interface
- * Stream test cases must ultimately extend.
+ * Abstract component from which all other AMBA Advanced Extensible Interface Stream test cases must ultimately extend.
  * Subclasses must provide stimulus via the virtual sequencer by implementing
  * UVM runtime phases.
  */
-class uvmt_axis_st_base_test_c extends uvm_test;
+class uvmt_axis_st_base_test_c extends uvml_test_c;
    
    // Objects
    rand uvmt_axis_st_test_cfg_c  test_cfg ;
@@ -154,11 +154,6 @@ class uvmt_axis_st_base_test_c extends uvm_test;
     */
    extern virtual task start_clk();
    
-   /**
-    * Fatals out after simulation_timeout has elapsed.
-    */
-   extern virtual task simulation_timeout();
-   
 endclass : uvmt_axis_st_base_test_c
 
 
@@ -203,7 +198,6 @@ task uvmt_axis_st_base_test_c::run_phase(uvm_phase phase);
    super.run_phase(phase);
    
    start_clk();
-   simulation_timeout();
    
 endtask : run_phase
 
@@ -277,8 +271,9 @@ endfunction : randomize_test
 
 function void uvmt_axis_st_base_test_c::cfg_hrtbt_monitor();
    
-   uvml_default_hrtbt.startup_timeout  = test_cfg.startup_timeout ;
-   uvml_default_hrtbt.heartbeat_period = test_cfg.heartbeat_period;
+   `uvml_hrtbt_set_cfg(startup_timeout , test_cfg.startup_timeout )
+   `uvml_hrtbt_set_cfg(heartbeat_period, test_cfg.heartbeat_period)
+   `uvml_watchdog_set_cfg(timeout, test_cfg.simulation_timeout)
    
 endfunction : cfg_hrtbt_monitor
 
@@ -334,18 +329,6 @@ task uvmt_axis_st_base_test_c::start_clk();
    clknrst_gen_vif.start_clk();
    
 endtask : start_clk
-
-
-task uvmt_axis_st_base_test_c::simulation_timeout();
-   
-   fork
-      begin
-         #(test_cfg.simulation_timeout * 1ns);
-         `uvm_fatal("TIMEOUT", $sformatf("Global timeout after %0dns. Heartbeat list:\n%s", test_cfg.simulation_timeout, uvml_default_hrtbt.print_comp_names()))
-      end
-   join_none
-   
-endtask : simulation_timeout
 
 
 `endif // __UVMT_AXIS_ST_BASE_TEST_SV__

@@ -1,5 +1,5 @@
 // Copyright 2021 Datum Technology Corporation
-// 
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // SPDX-License-Identifier: Apache-2.0 WITH SHL-2.1
 // Licensed under the Solderpad Hardware License v 2.1 (the "License"); you may not use this file except in compliance
 // with the License, or, at your option, the Apache License version 2.0.  You may obtain a copy of the License at
@@ -7,6 +7,7 @@
 // Unless required by applicable law or agreed to in writing, any work distributed under the License is distributed on
 // an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
 // specific language governing permissions and limitations under the License.
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
 `ifndef __UVMA_AXIS_MON_SV__
@@ -14,10 +15,9 @@
 
 
 /**
- * Component sampling transactions from a AMBA Advanced Extensible Interface Stream virtual interface
- * (uvma_axis_if).
+ * Component sampling transactions from a AMBA Advanced Extensible Interface Stream virtual interface (uvma_axis_if).
  */
-class uvma_axis_mon_c extends uvm_monitor;
+class uvma_axis_mon_c extends uvml_mon_c;
    
    // Objects
    uvma_axis_cfg_c    cfg;
@@ -58,17 +58,17 @@ class uvma_axis_mon_c extends uvm_monitor;
    /**
     * Called by run_phase() while agent is in pre-reset state.
     */
-   extern virtual task mon_pre_reset(uvm_phase phase);
+   extern virtual task mon_pre_reset();
    
    /**
     * Called by run_phase() while agent is in reset state.
     */
-   extern virtual task mon_in_reset(uvm_phase phase);
+   extern virtual task mon_in_reset();
    
    /**
     * Called by run_phase() while agent is in post-reset state.
     */
-   extern virtual task mon_post_reset(uvm_phase phase);
+   extern virtual task mon_post_reset();
    
    /**
     * Creates trn by sampling the virtual interface's (cntxt.vif) signals.
@@ -119,30 +119,29 @@ task uvma_axis_mon_c::run_phase(uvm_phase phase);
    
    super.run_phase(phase);
    
-   fork
-      observe_reset();
-      
-      begin
-         forever begin
-            wait (cfg.enabled) begin
+   if (cfg.enabled) begin
+      fork
+         observe_reset();
+         
+         begin
+            forever begin
                case (cntxt.reset_state)
-                  UVMA_AXIS_RESET_STATE_PRE_RESET : mon_pre_reset (phase);
-                  UVMA_AXIS_RESET_STATE_IN_RESET  : mon_in_reset  (phase);
-                  UVMA_AXIS_RESET_STATE_POST_RESET: mon_post_reset(phase);
+                  UVMA_AXIS_RESET_STATE_PRE_RESET : mon_pre_reset ();
+                  UVMA_AXIS_RESET_STATE_IN_RESET  : mon_in_reset  ();
+                  UVMA_AXIS_RESET_STATE_POST_RESET: mon_post_reset();
                endcase
             end
          end
-      end
+      join_none
    end
-   join_none
    
 endtask : run_phase
 
 
 task uvma_axis_mon_c::observe_reset();
    
-   forever begin
-      wait (cfg.enabled) begin
+   if (cfg.enabled) begin
+      forever begin
          wait (cntxt.vif.reset_n == 0);
          cntxt.reset_state = UVMA_AXIS_RESET_STATE_IN_RESET;
          wait (cntxt.vif.reset_n == 1);
@@ -153,21 +152,21 @@ task uvma_axis_mon_c::observe_reset();
 endtask : observe_reset
 
 
-task uvma_axis_mon_c::mon_pre_reset(uvm_phase phase);
+task uvma_axis_mon_c::mon_pre_reset();
    
    @(cntxt.vif.passive_mp.mon_cb);
    
 endtask : mon_pre_reset
 
 
-task uvma_axis_mon_c::mon_in_reset(uvm_phase phase);
+task uvma_axis_mon_c::mon_in_reset();
    
    @(cntxt.vif.passive_mp.mon_cb);
    
 endtask : mon_in_reset
 
 
-task uvma_axis_mon_c::mon_post_reset(uvm_phase phase);
+task uvma_axis_mon_c::mon_post_reset();
    
    uvma_axis_cycle_mon_trn_c  trn;
    
@@ -221,12 +220,12 @@ task uvma_axis_mon_c::sample_signals(output uvma_axis_cycle_mon_trn_c trn);
    
    // Create transaction and fill in metadata
    trn = uvma_axis_cycle_mon_trn_c::type_id::create("trn");
-   trn.originator = this.get_full_name();
+   trn.set_initiator(this);
    trn.tid_width   = cfg.tid_width     ;
    trn.tdest_width = cfg.tdest_width   ;
    trn.tuser_width = cfg.tuser_width   ;
-   trn.timestamp_start = $realtime();
-   trn.timestamp_end   = $realtime();
+   trn.set_timestamp_start($realtime());
+   trn.set_timestamp_end  ($realtime());
    
    // Sample bus signals
    trn.tready = cntxt.vif.passive_mp.mon_cb.tready;
@@ -267,8 +266,8 @@ function void uvma_axis_mon_c::process_trn(ref uvma_axis_cycle_mon_trn_c trn);
    if (trn.tlast === 1) begin
       // Create transaction and fill in metadata
       data_trn = uvma_axis_mon_trn_c::type_id::create("data_trn");
-      data_trn.originator = this.get_full_name();
-      data_trn.timestamp   = $realtime();
+      data_trn.set_initiator(this);
+      data_trn.set_timestamp_end($realtime());
       data_trn.tid_width   = cfg.tid_width  ;
       data_trn.tdest_width = cfg.tdest_width;
       data_trn.tuser_width = cfg.tuser_width;

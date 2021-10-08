@@ -1,5 +1,5 @@
 // Copyright 2021 Datum Technology Corporation
-// 
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // SPDX-License-Identifier: Apache-2.0 WITH SHL-2.1
 // Licensed under the Solderpad Hardware License v 2.1 (the "License"); you may not use this file except in compliance
 // with the License, or, at your option, the Apache License version 2.0.  You may obtain a copy of the License at
@@ -7,6 +7,7 @@
 // Unless required by applicable law or agreed to in writing, any work distributed under the License is distributed on
 // an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
 // specific language governing permissions and limitations under the License.
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
 `ifndef __UVMT_AXIS_ST_TEST_CFG_SV__
@@ -14,10 +15,10 @@
 
 
 /**
- * Object encapsulating configuration parameters common to most if not all tests
- * extending from uvmt_axis_st_base_test_c.
+ * Object encapsulating configuration parameters common to most if not all tests extending from
+ * uvmt_axis_st_base_test_c.
  */
-class uvmt_axis_st_test_cfg_c extends uvm_object;
+class uvmt_axis_st_test_cfg_c extends uvml_test_cfg_c;
    
    // Simulation Knobs
    rand int unsigned  clk_period        ; // Specified in picoseconds (ps)

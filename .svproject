@@ -6,7 +6,7 @@
   <pluginPaths/>
   <libraryPaths/>
   <argFilePaths>
-    <argFilePath path="${project_loc}/dv/uvmt_st/src/uvmt_st_pkg.flist"/>
+    <argFilePath path="${project_loc}/dv/uvmt_axis_st/src/uvmt_axis_st_pkg.flist"/>
   </argFilePaths>
   <sourceCollections/>
   <projectRefs/>

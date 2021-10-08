@@ -5,8 +5,20 @@
 	<projects>
 	</projects>
 	<buildSpec>
+		<buildCommand>
+			<name>org.python.pydev.PyDevBuilder</name>
+			<arguments>
+			</arguments>
+		</buildCommand>
+		<buildCommand>
+			<name>net.sf.sveditor.core.SVProjectBuilder</name>
+			<arguments>
+			</arguments>
+		</buildCommand>
 	</buildSpec>
 	<natures>
+		<nature>org.python.pydev.pythonNature</nature>
+		<nature>net.sf.sveditor.core.SVNature</nature>
 	</natures>
 	<linkedResources>
 		<link>
@@ -15,4 +27,34 @@
 			<locationURI>svext://mio_base</locationURI>
 		</link>
 	</linkedResources>
+	<variableList>
+		<variable>
+			<name>DV_UVMA_AXIS_SRC_PATH</name>
+			<value>$%7BPROJECT_LOC%7D/dv/uvma_axis/src</value>
+		</variable>
+		<variable>
+			<name>DV_UVME_AXIS_ST_SRC_PATH</name>
+			<value>$%7BPROJECT_LOC%7D/dv/uvme_axis_st/src</value>
+		</variable>
+		<variable>
+			<name>DV_UVML_LOGS_SRC_PATH</name>
+			<value>$%7BPROJECT_LOC%7D/dv/.imports/uvml_logs/src</value>
+		</variable>
+		<variable>
+			<name>DV_UVML_SB_SRC_PATH</name>
+			<value>$%7BPROJECT_LOC%7D/dv/.imports/uvml_sb/src</value>
+		</variable>
+		<variable>
+			<name>DV_UVML_SRC_PATH</name>
+			<value>$%7BPROJECT_LOC%7D/dv/.imports/uvml/src</value>
+		</variable>
+		<variable>
+			<name>DV_UVMT_AXIS_ST_SRC_PATH</name>
+			<value>$%7BPROJECT_LOC%7D/dv/uvmt_axis_st/src</value>
+		</variable>
+		<variable>
+			<name>DV_UVM_SRC_PATH</name>
+			<value>$%7BPROJECT_LOC%7D/dv/.imports/uvm/src</value>
+		</variable>
+	</variableList>
 </projectDescription>

@@ -1,5 +1,5 @@
 // Copyright 2021 Datum Technology Corporation
-// 
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // SPDX-License-Identifier: Apache-2.0 WITH SHL-2.1
 // Licensed under the Solderpad Hardware License v 2.1 (the "License"); you may not use this file except in compliance
 // with the License, or, at your option, the Apache License version 2.0.  You may obtain a copy of the License at
@@ -7,6 +7,7 @@
 // Unless required by applicable law or agreed to in writing, any work distributed under the License is distributed on
 // an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
 // specific language governing permissions and limitations under the License.
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
 `ifndef __UVMA_AXIS_DRV_SV__
@@ -16,7 +17,7 @@
 /**
  * Component driving a AMBA Advanced Extensible Interface Stream virtual interface (uvma_axis_if).
  */
-class uvma_axis_drv_c extends uvm_driver#(
+class uvma_axis_drv_c extends uvml_drv_c#(
    .REQ(uvma_axis_cycle_seq_item_c),
    .RSP(uvma_axis_cycle_seq_item_c)
 );
@@ -54,17 +55,17 @@ class uvma_axis_drv_c extends uvm_driver#(
    /**
     * Called by run_phase() while agent is in pre-reset state.
     */
-   extern virtual task drv_pre_reset(uvm_phase phase);
+   extern virtual task drv_pre_reset();
    
    /**
     * Called by run_phase() while agent is in reset state.
     */
-   extern virtual task drv_in_reset(uvm_phase phase);
+   extern virtual task drv_in_reset();
    
    /**
     * Called by run_phase() while agent is in post-reset state.
     */
-   extern virtual task drv_post_reset(uvm_phase phase);
+   extern virtual task drv_post_reset();
    
    /**
     * Drives the virtual interface's (cntxt.vif) signals using req's contents.
@@ -116,12 +117,12 @@ task uvma_axis_drv_c::run_phase(uvm_phase phase);
    
    super.run_phase(phase);
    
-   forever begin
-      wait (cfg.enabled && cfg.is_active) begin
+   if (cfg.enabled && cfg.is_active) begin
+      forever begin
          case (cntxt.reset_state)
-            UVMA_AXIS_RESET_STATE_PRE_RESET : drv_pre_reset (phase);
-            UVMA_AXIS_RESET_STATE_IN_RESET  : drv_in_reset  (phase);
-            UVMA_AXIS_RESET_STATE_POST_RESET: drv_post_reset(phase);
+            UVMA_AXIS_RESET_STATE_PRE_RESET : drv_pre_reset ();
+            UVMA_AXIS_RESET_STATE_IN_RESET  : drv_in_reset  ();
+            UVMA_AXIS_RESET_STATE_POST_RESET: drv_post_reset();
          endcase
       end
    end
@@ -129,11 +130,11 @@ task uvma_axis_drv_c::run_phase(uvm_phase phase);
 endtask : run_phase
 
 
-task uvma_axis_drv_c::drv_pre_reset(uvm_phase phase);
+task uvma_axis_drv_c::drv_pre_reset();
    
    case (cfg.mode)
       UVMA_AXIS_MODE_MASTER: drv_mstr_idle();
-      UVMA_AXIS_MODE_SLAVE : @(cntxt.vif.active_slave_mp.drv_slv_cb);
+      UVMA_AXIS_MODE_SLAVE : @(cntxt.vif.active_slave_mp.drv_slave_cb);
       
       default: `uvm_fatal("AXIS_DRV", $sformatf("Invalid cfg.mode: %s", cfg.mode.name()))
    endcase
@@ -141,11 +142,11 @@ task uvma_axis_drv_c::drv_pre_reset(uvm_phase phase);
 endtask : drv_pre_reset
 
 
-task uvma_axis_drv_c::drv_in_reset(uvm_phase phase);
+task uvma_axis_drv_c::drv_in_reset();
    
    case (cfg.mode)
       UVMA_AXIS_MODE_MASTER: drv_mstr_idle();
-      UVMA_AXIS_MODE_SLAVE : @(cntxt.vif.active_slave_mp.drv_slv_cb);
+      UVMA_AXIS_MODE_SLAVE : @(cntxt.vif.active_slave_mp.drv_slave_cb);
       
       default: `uvm_fatal("AXIS_DRV", $sformatf("Invalid cfg.mode: %s", cfg.mode.name()))
    endcase
@@ -153,7 +154,7 @@ task uvma_axis_drv_c::drv_in_reset(uvm_phase phase);
 endtask : drv_in_reset
 
 
-task uvma_axis_drv_c::drv_post_reset(uvm_phase phase);
+task uvma_axis_drv_c::drv_post_reset();
    
    seq_item_port.get_next_item(req);
    
