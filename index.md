@@ -4,7 +4,7 @@ The Moore.io Arm® AMBA® IP Suite's Advanced eXtensible Interface (AXI)-Stream 
 # IP
 * [Download latest release (.tgz)](Todo)
 * [View latest documentation](Todo)
-* [Browse code](https://github.com/Datum-Technology-Corporation/uvma_axis/tree/main/dv/uvma_axis/src)
+* [Browse code](https://github.com/Datum-Technology-Corporation/uvma_axis/tree/main/dv/uvma_axis)
 
 # Metrics
 ## Stability
