@@ -20,12 +20,12 @@ const int unsigned uvmt_axis_st_default_startup_timeout     =    200_000; //  2 
 const int unsigned uvmt_axis_st_default_heartbeat_period    =    200_000; //  2 us // TODO Set default Heartbeat Monitor period
 const int unsigned uvmt_axis_st_default_simulation_timeout  = 10_000_000; // 10 ms // TODO Set default simulation timeout
 
-const int unsigned uvmt_axis_st_default_num_pkts      =   100;
-const int unsigned uvmt_axis_st_default_min_pkt_size  =    64;
-const int unsigned uvmt_axis_st_default_max_pkt_size  = 1_024;
-const int unsigned uvmt_axis_st_default_min_ipg       =     0;
-const int unsigned uvmt_axis_st_default_max_ipg       =     8;
-const int unsigned uvmt_axis_st_default_pct_ton       =    85;
+const int unsigned uvmt_axis_st_default_num_transfers      =   100;
+const int unsigned uvmt_axis_st_default_min_transfer_size  =    64;
+const int unsigned uvmt_axis_st_default_max_transfer_size  = 1_024;
+const int unsigned uvmt_axis_st_default_min_gap            =     0;
+const int unsigned uvmt_axis_st_default_max_gap            =     8;
+const int unsigned uvmt_axis_st_default_pct_ton            =    85;
 
 
 `endif // __UVMT_AXIS_ST_CONSTANTS_SV__

@@ -28,31 +28,31 @@ class uvmt_axis_st_test_cfg_c extends uvml_test_cfg_c;
    rand int unsigned  simulation_timeout; // Specified in nanoseconds (ns)
    
    // Stimulus Knobs
-   rand int unsigned  num_pkts    ;
-   rand int unsigned  min_pkt_size;
-   rand int unsigned  max_pkt_size;
-   rand int unsigned  min_ipg     ;
-   rand int unsigned  max_ipg     ;
+   rand int unsigned  num_transfers    ;
+   rand int unsigned  min_transfer_size;
+   rand int unsigned  max_transfer_size;
+   rand int unsigned  min_gap     ;
+   rand int unsigned  max_gap     ;
    rand int unsigned  pct_ton     ;
    
    // Command line arguments
-   string        cli_num_pkts_str      = "NPKTS";
-   string        cli_min_pkt_size_str  = "MINSZ";
-   string        cli_max_pkt_size_str  = "MAXSZ";
-   string        cli_min_ipg_str       = "MNIPG";
-   string        cli_max_ipg_str       = "MXIPG";
+   string        cli_num_transfers_str      = "NPKTS";
+   string        cli_min_transfer_size_str  = "MINSZ";
+   string        cli_max_transfer_size_str  = "MAXSZ";
+   string        cli_min_gap_str       = "MNIPG";
+   string        cli_max_gap_str       = "MXIPG";
    string        cli_pct_ton_str       = "PCTON";
-   bit           cli_num_pkts_override      = 0;
-   bit           cli_min_pkt_size_override  = 0;
-   bit           cli_max_pkt_size_override  = 0;
-   bit           cli_min_ipg_override       = 0;
-   bit           cli_max_ipg_override       = 0;
+   bit           cli_num_transfers_override      = 0;
+   bit           cli_min_transfer_size_override  = 0;
+   bit           cli_max_transfer_size_override  = 0;
+   bit           cli_min_gap_override       = 0;
+   bit           cli_max_gap_override       = 0;
    bit           cli_pct_ton_override       = 0;
-   int unsigned  cli_num_pkts_parsed    ;
-   int unsigned  cli_min_pkt_size_parsed;
-   int unsigned  cli_max_pkt_size_parsed;
-   int unsigned  cli_min_ipg_parsed     ;
-   int unsigned  cli_max_ipg_parsed     ;
+   int unsigned  cli_num_transfers_parsed    ;
+   int unsigned  cli_min_transfer_size_parsed;
+   int unsigned  cli_max_transfer_size_parsed;
+   int unsigned  cli_min_gap_parsed     ;
+   int unsigned  cli_max_gap_parsed     ;
    int unsigned  cli_pct_ton_parsed     ;
    
    
@@ -63,30 +63,30 @@ class uvmt_axis_st_test_cfg_c extends uvml_test_cfg_c;
       `uvm_field_int(heartbeat_period  , UVM_DEFAULT + UVM_DEC)
       `uvm_field_int(simulation_timeout, UVM_DEFAULT + UVM_DEC)
       
-      `uvm_field_int(num_pkts    , UVM_DEFAULT + UVM_DEC)
-      `uvm_field_int(min_pkt_size, UVM_DEFAULT + UVM_DEC)
-      `uvm_field_int(max_pkt_size, UVM_DEFAULT + UVM_DEC)
-      `uvm_field_int(min_ipg     , UVM_DEFAULT + UVM_DEC)
-      `uvm_field_int(max_ipg     , UVM_DEFAULT + UVM_DEC)
+      `uvm_field_int(num_transfers    , UVM_DEFAULT + UVM_DEC)
+      `uvm_field_int(min_transfer_size, UVM_DEFAULT + UVM_DEC)
+      `uvm_field_int(max_transfer_size, UVM_DEFAULT + UVM_DEC)
+      `uvm_field_int(min_gap     , UVM_DEFAULT + UVM_DEC)
+      `uvm_field_int(max_gap     , UVM_DEFAULT + UVM_DEC)
       `uvm_field_int(pct_ton     , UVM_DEFAULT + UVM_DEC)
       
-      `uvm_field_string(cli_num_pkts_str         , UVM_DEFAULT)
-      `uvm_field_string(cli_min_pkt_size_str     , UVM_DEFAULT)
-      `uvm_field_string(cli_max_pkt_size_str     , UVM_DEFAULT)
-      `uvm_field_string(cli_min_ipg_str          , UVM_DEFAULT)
-      `uvm_field_string(cli_max_ipg_str          , UVM_DEFAULT)
+      `uvm_field_string(cli_num_transfers_str         , UVM_DEFAULT)
+      `uvm_field_string(cli_min_transfer_size_str     , UVM_DEFAULT)
+      `uvm_field_string(cli_max_transfer_size_str     , UVM_DEFAULT)
+      `uvm_field_string(cli_min_gap_str          , UVM_DEFAULT)
+      `uvm_field_string(cli_max_gap_str          , UVM_DEFAULT)
       `uvm_field_string(cli_pct_ton_str          , UVM_DEFAULT)
-      `uvm_field_int   (cli_num_pkts_override    , UVM_DEFAULT)
-      `uvm_field_int   (cli_min_pkt_size_override, UVM_DEFAULT)
-      `uvm_field_int   (cli_max_pkt_size_override, UVM_DEFAULT)
-      `uvm_field_int   (cli_min_ipg_override     , UVM_DEFAULT)
-      `uvm_field_int   (cli_max_ipg_override     , UVM_DEFAULT)
+      `uvm_field_int   (cli_num_transfers_override    , UVM_DEFAULT)
+      `uvm_field_int   (cli_min_transfer_size_override, UVM_DEFAULT)
+      `uvm_field_int   (cli_max_transfer_size_override, UVM_DEFAULT)
+      `uvm_field_int   (cli_min_gap_override     , UVM_DEFAULT)
+      `uvm_field_int   (cli_max_gap_override     , UVM_DEFAULT)
       `uvm_field_int   (cli_pct_ton_override     , UVM_DEFAULT)
-      `uvm_field_int   (cli_num_pkts_parsed      , UVM_DEFAULT)
-      `uvm_field_int   (cli_min_pkt_size_parsed  , UVM_DEFAULT)
-      `uvm_field_int   (cli_max_pkt_size_parsed  , UVM_DEFAULT)
-      `uvm_field_int   (cli_min_ipg_parsed       , UVM_DEFAULT)
-      `uvm_field_int   (cli_max_ipg_parsed       , UVM_DEFAULT)
+      `uvm_field_int   (cli_num_transfers_parsed      , UVM_DEFAULT)
+      `uvm_field_int   (cli_min_transfer_size_parsed  , UVM_DEFAULT)
+      `uvm_field_int   (cli_max_transfer_size_parsed  , UVM_DEFAULT)
+      `uvm_field_int   (cli_min_gap_parsed       , UVM_DEFAULT)
+      `uvm_field_int   (cli_max_gap_parsed       , UVM_DEFAULT)
       `uvm_field_int   (cli_pct_ton_parsed       , UVM_DEFAULT)
    `uvm_object_utils_end
    
@@ -101,39 +101,39 @@ class uvmt_axis_st_test_cfg_c extends uvml_test_cfg_c;
    
    
    constraint cli_cons {
-      if (cli_num_pkts_override) {
-         num_pkts == cli_num_pkts_parsed;
+      if (cli_num_transfers_override) {
+         num_transfers == cli_num_transfers_parsed;
       }
       else {
-         /*soft*/ num_pkts == uvmt_axis_st_default_num_pkts;
+         /*soft*/ num_transfers == uvmt_axis_st_default_num_transfers;
       }
       
-      if (cli_min_pkt_size_override) {
-         min_pkt_size == cli_min_pkt_size_parsed;
+      if (cli_min_transfer_size_override) {
+         min_transfer_size == cli_min_transfer_size_parsed;
       }
       else {
-         /*soft*/ min_pkt_size == uvmt_axis_st_default_min_pkt_size;
+         /*soft*/ min_transfer_size == uvmt_axis_st_default_min_transfer_size;
       }
       
-      if (cli_max_pkt_size_override) {
-         max_pkt_size == cli_max_pkt_size_parsed;
+      if (cli_max_transfer_size_override) {
+         max_transfer_size == cli_max_transfer_size_parsed;
       }
       else {
-         /*soft*/ max_pkt_size == uvmt_axis_st_default_max_pkt_size;
+         /*soft*/ max_transfer_size == uvmt_axis_st_default_max_transfer_size;
       }
       
-      if (cli_min_ipg_override) {
-         min_ipg == cli_min_ipg_parsed;
+      if (cli_min_gap_override) {
+         min_gap == cli_min_gap_parsed;
       }
       else {
-         /*soft*/ min_ipg == uvmt_axis_st_default_min_ipg;
+         /*soft*/ min_gap == uvmt_axis_st_default_min_gap;
       }
       
-      if (cli_max_ipg_override) {
-         max_ipg == cli_max_ipg_parsed;
+      if (cli_max_gap_override) {
+         max_gap == cli_max_gap_parsed;
       }
       else {
-         /*soft*/ max_ipg == uvmt_axis_st_default_max_ipg;
+         /*soft*/ max_gap == uvmt_axis_st_default_max_gap;
       }
       
       if (cli_pct_ton_override) {
@@ -167,76 +167,76 @@ endfunction : new
 
 function void uvmt_axis_st_test_cfg_c::process_cli_args();
    
-   string  cli_num_pkts_parsed_str      = "";
-   string  cli_min_pkt_size_parsed_str  = "";
-   string  cli_max_pkt_size_parsed_str  = "";
-   string  cli_min_ipg_parsed_str       = "";
-   string  cli_max_ipg_parsed_str       = "";
+   string  cli_num_transfers_parsed_str      = "";
+   string  cli_min_transfer_size_parsed_str  = "";
+   string  cli_max_transfer_size_parsed_str  = "";
+   string  cli_min_gap_parsed_str       = "";
+   string  cli_max_gap_parsed_str       = "";
    string  cli_pct_ton_parsed_str       = "";
    
-   if (uvm_cmdline_proc.get_arg_value({"+", cli_num_pkts_str, "="}, cli_num_pkts_parsed_str)) begin
-      if (cli_num_pkts_parsed_str != "") begin
-         cli_num_pkts_override = 1;
-         cli_num_pkts_parsed = cli_num_pkts_parsed_str.atoi();
+   if (uvm_cmdline_proc.get_arg_value({"+", cli_num_transfers_str, "="}, cli_num_transfers_parsed_str)) begin
+      if (cli_num_transfers_parsed_str != "") begin
+         cli_num_transfers_override = 1;
+         cli_num_transfers_parsed = cli_num_transfers_parsed_str.atoi();
       end
       else begin
-         cli_num_pkts_override = 0;
+         cli_num_transfers_override = 0;
       end
    end
    else begin
-      cli_num_pkts_override = 0;
+      cli_num_transfers_override = 0;
    end
    
-   if (uvm_cmdline_proc.get_arg_value({"+", cli_min_pkt_size_str, "="}, cli_min_pkt_size_parsed_str)) begin
-      if (cli_min_pkt_size_parsed_str != "") begin
-         cli_min_pkt_size_override = 1;
-         cli_min_pkt_size_parsed = cli_min_pkt_size_parsed_str.atoi();
+   if (uvm_cmdline_proc.get_arg_value({"+", cli_min_transfer_size_str, "="}, cli_min_transfer_size_parsed_str)) begin
+      if (cli_min_transfer_size_parsed_str != "") begin
+         cli_min_transfer_size_override = 1;
+         cli_min_transfer_size_parsed = cli_min_transfer_size_parsed_str.atoi();
       end
       else begin
-         cli_min_pkt_size_override = 0;
+         cli_min_transfer_size_override = 0;
       end
    end
    else begin
-      cli_min_pkt_size_override = 0;
+      cli_min_transfer_size_override = 0;
    end
    
-   if (uvm_cmdline_proc.get_arg_value({"+", cli_max_pkt_size_str, "="}, cli_max_pkt_size_parsed_str)) begin
-      if (cli_max_pkt_size_parsed_str != "") begin
-         cli_max_pkt_size_override = 1;
-         cli_max_pkt_size_parsed = cli_max_pkt_size_parsed_str.atoi();
+   if (uvm_cmdline_proc.get_arg_value({"+", cli_max_transfer_size_str, "="}, cli_max_transfer_size_parsed_str)) begin
+      if (cli_max_transfer_size_parsed_str != "") begin
+         cli_max_transfer_size_override = 1;
+         cli_max_transfer_size_parsed = cli_max_transfer_size_parsed_str.atoi();
       end
       else begin
-         cli_max_pkt_size_override = 0;
+         cli_max_transfer_size_override = 0;
       end
    end
    else begin
-      cli_max_pkt_size_override = 0;
+      cli_max_transfer_size_override = 0;
    end
    
-   if (uvm_cmdline_proc.get_arg_value({"+", cli_min_ipg_str, "="}, cli_min_ipg_parsed_str)) begin
-      if (cli_min_ipg_parsed_str != "") begin
-         cli_min_ipg_override = 1;
-         cli_min_ipg_parsed = cli_min_ipg_parsed_str.atoi();
+   if (uvm_cmdline_proc.get_arg_value({"+", cli_min_gap_str, "="}, cli_min_gap_parsed_str)) begin
+      if (cli_min_gap_parsed_str != "") begin
+         cli_min_gap_override = 1;
+         cli_min_gap_parsed = cli_min_gap_parsed_str.atoi();
       end
       else begin
-         cli_min_ipg_override = 0;
+         cli_min_gap_override = 0;
       end
    end
    else begin
-      cli_min_ipg_override = 0;
+      cli_min_gap_override = 0;
    end
    
-   if (uvm_cmdline_proc.get_arg_value({"+", cli_max_ipg_str, "="}, cli_max_ipg_parsed_str)) begin
-      if (cli_max_ipg_parsed_str != "") begin
-         cli_max_ipg_override = 1;
-         cli_max_ipg_parsed = cli_max_ipg_parsed_str.atoi();
+   if (uvm_cmdline_proc.get_arg_value({"+", cli_max_gap_str, "="}, cli_max_gap_parsed_str)) begin
+      if (cli_max_gap_parsed_str != "") begin
+         cli_max_gap_override = 1;
+         cli_max_gap_parsed = cli_max_gap_parsed_str.atoi();
       end
       else begin
-         cli_max_ipg_override = 0;
+         cli_max_gap_override = 0;
       end
    end
    else begin
-      cli_max_ipg_override = 0;
+      cli_max_gap_override = 0;
    end
    
    if (uvm_cmdline_proc.get_arg_value({"+", cli_pct_ton_str, "="}, cli_pct_ton_parsed_str)) begin

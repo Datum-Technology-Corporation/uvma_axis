@@ -25,11 +25,11 @@ class uvma_axis_agent_c extends uvml_agent_c;
    uvma_axis_cntxt_c  cntxt; ///< 
    
    // Components
-   uvma_axis_drv_c              driver    ; ///< 
-   uvma_axis_mon_c              monitor   ; ///< 
-   uvma_axis_vsqr_c             vsequencer; ///< 
-   uvma_axis_cov_model_c        cov_model ; ///< 
-   uvma_axis_seq_item_logger_c  logger    ; ///< 
+   uvma_axis_drv_c        driver    ; ///< 
+   uvma_axis_mon_c        monitor   ; ///< 
+   uvma_axis_vsqr_c       vsequencer; ///< 
+   uvma_axis_logger_c     logger    ; ///< 
+   uvma_axis_cov_model_c  cov_model ; ///< 
    
    // TLM
    uvm_analysis_port#(uvma_axis_seq_item_c     )  seq_item_ap; //< 
@@ -261,15 +261,13 @@ endfunction : create_analysis_ports
 
 function void uvma_axis_agent_c::connect_sequencer();
    
-   sequencer.set_arbitration(cfg.sqr_arb_mode);
-   driver.mstr_a_driver.seq_item_port.connect(vsequencer.mstr_a_sequencer.seq_item_export);
-   driver.mstr_r_driver.seq_item_port.connect(vsequencer.mstr_r_sequencer.seq_item_export);
-   driver.slv_a_driver .seq_item_port.connect(vsequencer.slv_a_sequencer .seq_item_export);
-   driver.slv_r_driver .seq_item_port.connect(vsequencer.slv_r_sequencer .seq_item_export);
-   monitor.mon_mstr_a_ap.connect(vsequencer.mstr_a_mon_trn_export);
-   monitor.mon_mstr_r_ap.connect(vsequencer.mstr_r_mon_trn_export);
-   monitor.mon_slv_a_ap .connect(vsequencer.slv_a_mon_trn_export );
-   monitor.mon_slv_r_ap .connect(vsequencer.slv_r_mon_trn_export );
+   vsequencer.set_arbitration(cfg.sqr_arb_mode);
+   driver.mstr_driver.seq_item_port.connect(vsequencer.mstr_sequencer.seq_item_export);
+   driver.slv_driver .seq_item_port.connect(vsequencer.slv_sequencer .seq_item_export);
+   monitor.mstr_ap.connect(vsequencer.mstr_mon_trn_export);
+   monitor.mstr_ap.connect(vsequencer.mstr_mon_trn_export);
+   monitor.slv_ap .connect(vsequencer.slv_mon_trn_export );
+   monitor.slv_ap .connect(vsequencer.slv_mon_trn_export );
    
 endfunction : connect_sequencer
 
@@ -280,8 +278,8 @@ function void uvma_axis_agent_c::connect_analysis_ports();
    seq_item_ap = vsequencer.seq_item_ap;
    drv_mstr_ap = driver.mstr_driver.ap ;
    drv_slv_ap  = driver.slv_driver .ap ;
-   mon_mstr_ap = monitor.mon_mstr_ap   ;
-   mon_slv_ap  = monitor.mon_slv_ap    ;
+   mon_mstr_ap = monitor.mstr_ap       ;
+   mon_slv_ap  = monitor.slv_ap        ;
    
 endfunction : connect_analysis_ports
 
@@ -314,7 +312,7 @@ task uvma_axis_agent_c::start_mon_vseq();
    
    uvm_sequence  mon_vseq;
    uvm_object    temp_obj;
-   temp_obj = cfg.monitor_vseq_type.create_object("mon_vseq");
+   temp_obj = cfg.mon_vseq_type.create_object("mon_vseq");
    if (!$cast(mon_vseq, temp_obj)) begin
       `uvm_fatal("AXIS_AGENT", $sformatf("Could not cast 'temp_obj' (%s) to 'mon_vseq' (%s)", $typename(temp_obj), $typename(mon_vseq)))
    end
@@ -356,7 +354,7 @@ task uvma_axis_agent_c::start_mstr_vseq();
    uvm_sequence  mstr_vseq;
    uvm_object    temp_obj;
    
-   temp_obj = cfg.mstr_vseq_type.create_object("mstr_vseq");
+   temp_obj = cfg.mstr_drv_vseq_type.create_object("mstr_drv_vseq");
    if (!$cast(mstr_vseq, temp_obj)) begin
       `uvm_fatal("AXIS_AGENT", $sformatf("Could not cast 'temp_obj' (%s) to 'mstr_vseq' (%s)", $typename(temp_obj), $typename(mstr_vseq)))
    end
@@ -377,7 +375,7 @@ task uvma_axis_agent_c::start_slv_vseq();
    uvm_sequence  slv_vseq;
    uvm_object    temp_obj;
    
-   temp_obj = cfg.slv_vseq_type.create_object("slv_vseq");
+   temp_obj = cfg.slv_drv_vseq_type.create_object("slv_drv_vseq");
    if (!$cast(slv_vseq, temp_obj)) begin
       `uvm_fatal("AXIS_AGENT", $sformatf("Could not cast 'temp_obj' (%s) to 'slv_vseq' (%s)", $typename(temp_obj), $typename(slv_vseq)))
    end

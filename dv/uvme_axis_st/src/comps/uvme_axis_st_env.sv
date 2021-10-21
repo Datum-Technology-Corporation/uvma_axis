@@ -234,7 +234,7 @@ endfunction: connect_scoreboard
 function void uvme_axis_st_env_c::assemble_vsequencer();
    
    vsequencer.mstr_vsequencer = mstr_agent.vsequencer;
-   vsequencer.slv_sequencer   = slv_agent .vsequencer;
+   vsequencer.slv_vsequencer  = slv_agent .vsequencer;
    
 endfunction: assemble_vsequencer
 

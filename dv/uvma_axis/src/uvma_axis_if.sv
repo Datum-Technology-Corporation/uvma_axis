@@ -139,7 +139,7 @@ interface uvma_axis_if #(
    /**
     * 
     */
-   modport active_mstr_mp(
+   modport drv_mstr_mp(
       clocking  drv_mstr_cb,
       input     clk        ,
       input     reset_n
@@ -149,7 +149,7 @@ interface uvma_axis_if #(
    /**
     * 
     */
-   modport active_slv_mp (
+   modport drv_slv_mp (
       clocking  drv_slv_cb,
       input     clk       ,
       input     reset_n
@@ -158,7 +158,7 @@ interface uvma_axis_if #(
    /**
     * 
     */
-   modport passive_mp (
+   modport mon_mp (
       clocking  mon_cb ,
       input     clk    ,
       input     reset_n

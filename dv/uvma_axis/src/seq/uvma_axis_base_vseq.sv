@@ -53,19 +53,9 @@ class uvma_axis_base_vseq_c extends uvml_vseq_c #(
    extern task get_mstr_mon_trn(output uvma_axis_mstr_mon_trn_c trn);
    
    /**
-    * TODO Describe uvma_axis_base_vseq_c::peek_mstr_mon_trn()
-    */
-   extern task peek_mstr_mon_trn(output uvma_axis_mstr_mon_trn_c trn);
-   
-   /**
     * TODO Describe uvma_axis_base_vseq_c::get_slv_mon_trn()
     */
    extern task get_slv_mon_trn(output uvma_axis_slv_mon_trn_c trn);
-   
-   /**
-    * TODO Describe uvma_axis_base_vseq_c::peek_slv_mon_trn()
-    */
-   extern task peek_slv_mon_trn(output uvma_axis_slv_mon_trn_c trn);
    
 endclass : uvma_axis_base_vseq_c
 
@@ -79,8 +69,8 @@ endfunction : new
 
 task uvma_axis_base_vseq_c::pre_start();
    
-   cfg   = p_vsequencer.cfg;
-   cntxt = p_vsequencer.cntxt;
+   cfg   = p_sequencer.cfg;
+   cntxt = p_sequencer.cntxt;
    
 endtask : pre_start
 
@@ -99,25 +89,11 @@ task uvma_axis_base_vseq_c::get_mstr_mon_trn(output uvma_axis_mstr_mon_trn_c trn
 endtask : get_mstr_mon_trn
 
 
-task uvma_axis_base_vseq_c::peek_mstr_mon_trn(output uvma_axis_mstr_mon_trn_c trn);
-   
-   p_sequencer.mstr_mon_trn_fifo.peek_next_item(trn);
-   
-endtask : peek_mstr_mon_trn
-
-
 task uvma_axis_base_vseq_c::get_slv_mon_trn(output uvma_axis_slv_mon_trn_c trn);
    
    p_sequencer.slv_mon_trn_fifo.get(trn);
    
 endtask : get_slv_mon_trn
-
-
-task uvma_axis_base_vseq_c::peek_slv_mon_trn(output uvma_axis_slv_mon_trn_c trn);
-   
-   p_sequencer.slv_mon_trn_fifo.peek_next_item(trn);
-   
-endtask : peek_slv_mon_trn
 
 
 `endif // __UVMA_AXIS_BASE_VSEQ_SV__

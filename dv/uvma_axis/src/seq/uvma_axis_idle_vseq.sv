@@ -53,7 +53,7 @@ endfunction : new
 
 task uvma_axis_idle_vseq_c::body();
    
-   case (cfg.mode)
+   case (cfg.drv_mode)
       UVMA_AXIS_DRV_MODE_MSTR: mstr();
       UVMA_AXIS_DRV_MODE_SLV : slv ();
    endcase

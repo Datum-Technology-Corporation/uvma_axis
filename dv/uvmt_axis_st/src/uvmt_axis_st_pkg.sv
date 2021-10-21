@@ -49,8 +49,6 @@ package uvmt_axis_st_pkg;
    `include "uvmt_axis_st_constants.sv"
    
    // Virtual sequence library
-   // TODO Add virtual sequences
-   //      Ex: `include "uvmt_axis_st_sanity_vseq.sv"
    `include "uvmt_axis_st_vseq_lib.sv"
    
    // Base test

@@ -98,7 +98,7 @@ task uvma_axis_mon_vseq_c::process_transfers();
             begin
                get_mstr_mon_trn(mstr_mon_trn);
                if ((slv_mon_trn.tready === 1'b1) && (mstr_mon_trn.tvalid === 1'b1)) begin
-                  cntxt.mon_curent_transfer.push_back(mstr_mon_trn);
+                  cntxt.mon_current_transfer.push_back(mstr_mon_trn);
                end
             end
             
@@ -111,18 +111,18 @@ task uvma_axis_mon_vseq_c::process_transfers();
       // Process queue of transactions into final monitor transaction
       // TODO Add mechanism for adding error checkers
       mon_trn.set_timestamp_end($realtime());
-      mon_trn.size  = cntxt.mon_curent_transfer.size();
-      mon_trn.tid   = cntxt.mon_curent_transfer[0].tid  ;
-      mon_trn.tdest = cntxt.mon_curent_transfer[0].tdest;
-      mon_trn.tuser = cntxt.mon_curent_transfer[0].tuser;
-      mon_trn.tkeep = cntxt.mon_curent_transfer[$].tkeep;
-      foreach (cntxt.mon_curent_transfer[ii]) begin
-         mstr_mon_trn = cntxt.mon_curent_transfer[ii];
+      mon_trn.size  = cntxt.mon_current_transfer.size();
+      mon_trn.tid   = cntxt.mon_current_transfer[0].tid  ;
+      mon_trn.tdest = cntxt.mon_current_transfer[0].tdest;
+      mon_trn.tuser = cntxt.mon_current_transfer[0].tuser;
+      mon_trn.tkeep = cntxt.mon_current_transfer[$].tkeep;
+      foreach (cntxt.mon_current_transfer[ii]) begin
+         mstr_mon_trn = cntxt.mon_current_transfer[ii];
          mon_trn.data.push_back(mstr_mon_trn.tdata);
       end
-      cntxt.mon_curent_transfer.delete();
+      cntxt.mon_current_transfer.delete();
       
-      `uvml_hrtbt()
+      `uvml_hrtbt_owner(p_sequencer)
       write_mon_trn(mon_trn);
    end
    

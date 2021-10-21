@@ -28,12 +28,11 @@ class uvmt_axis_st_rand_traffic_test_c extends uvmt_axis_st_base_test_c;
    
    
    constraint test_cfg_cons {
-      /*soft*/ rand_traffic_vseq.num_pkts == test_cfg.num_pkts    ;
-      /*soft*/ rand_traffic_vseq.min_size == test_cfg.min_pkt_size;
-      /*soft*/ rand_traffic_vseq.max_size == test_cfg.max_pkt_size;
-      /*soft*/ rand_traffic_vseq.min_ipg  == test_cfg.min_ipg     ;
-      /*soft*/ rand_traffic_vseq.max_ipg  == test_cfg.max_ipg     ;
-      /*soft*/ rand_traffic_vseq.pct_ton  == test_cfg.pct_ton     ;
+      /*soft*/ rand_traffic_vseq.num_transfers == test_cfg.num_transfers    ;
+      /*soft*/ rand_traffic_vseq.min_size      == test_cfg.min_transfer_size;
+      /*soft*/ rand_traffic_vseq.max_size      == test_cfg.max_transfer_size;
+      /*soft*/ rand_traffic_vseq.min_gap       == test_cfg.min_gap          ;
+      /*soft*/ rand_traffic_vseq.max_gap       == test_cfg.max_gap          ;
    }
    
    

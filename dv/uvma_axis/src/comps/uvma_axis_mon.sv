@@ -188,7 +188,7 @@ task uvma_axis_mon_c::observe_reset();
       UVML_RESET_TYPE_ASYNCHRONOUS: observe_reset_async();
       
       default: begin
-         `uvm_fatal("AXIS_MON", $sformatf("Illegal cfg.reset_mode: %s", cfg.reset_mode.name()))
+         `uvm_fatal("AXIS_MON", $sformatf("Illegal cfg.reset_type: %s", cfg.reset_type.name()))
       end
    endcase
    

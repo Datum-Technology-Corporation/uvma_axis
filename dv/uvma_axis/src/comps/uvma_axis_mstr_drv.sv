@@ -100,7 +100,7 @@ task uvma_axis_mstr_drv_c::run_phase(uvm_phase phase);
    
    super.run_phase(phase);
    
-   if (cfg.enabled && cfg.is_active && (cfg.mode == UVMA_AXIS_DRV_MODE_MSTR)) begin
+   if (cfg.enabled && cfg.is_active && (cfg.drv_mode == UVMA_AXIS_DRV_MODE_MSTR)) begin
       forever begin
          seq_item_port.get_next_item(req);
          process_req                (req);
@@ -124,29 +124,28 @@ endfunction: process_req
 
 task uvma_axis_mstr_drv_c::drv_req(ref uvma_axis_mstr_seq_item_c req);
    
-   @(mp.drv_mstr_a_cb);
+   @(mp.drv_mstr_cb);
    
-   @(mp.mon_cb);
-   mp.mon_cb.tvalid <= trn.tvalid;
-   mp.mon_cb.tlast  <= trn.tlast ;
+   mp.drv_mstr_cb.tvalid <= req.tvalid;
+   mp.drv_mstr_cb.tlast  <= req.tlast ;
    
    for (int unsigned ii=0; ii<cfg.tdata_width; ii++) begin
-      mp.mon_cb.tdata[ii] <= req.tdata[ii];
+      mp.drv_mstr_cb.tdata[ii] <= req.tdata[ii];
    end
    for (int unsigned ii=0; ii<cfg.tdata_width; ii++) begin
-      mp.mon_cb.tstrb[ii] <= req.tstrb[ii];
+      mp.drv_mstr_cb.tstrb[ii] <= req.tstrb[ii];
    end
    for (int unsigned ii=0; ii<cfg.tdata_width; ii++) begin
-      mp.mon_cb.tkeep[ii] <= req.tkeep[ii];
+      mp.drv_mstr_cb.tkeep[ii] <= req.tkeep[ii];
    end
    for (int unsigned ii=0; ii<cfg.tid_width; ii++) begin
-      mp.mon_cb.tid[ii] <= req.tid[ii];
+      mp.drv_mstr_cb.tid[ii] <= req.tid[ii];
    end
    for (int unsigned ii=0; ii<cfg.tdest_width; ii++) begin
-      mp.mon_cb.tdest[ii] <= req.tdest[ii];
+      mp.drv_mstr_cb.tdest[ii] <= req.tdest[ii];
    end
    for (int unsigned ii=0; ii<cfg.tuser_width; ii++) begin
-      mp.mon_cb.tuser[ii] <= trn.tuser[ii];
+      mp.drv_mstr_cb.tuser[ii] <= req.tuser[ii];
    end
    
 endtask : drv_req

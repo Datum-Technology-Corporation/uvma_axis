@@ -23,38 +23,30 @@ class uvme_axis_st_rand_traffic_vseq_c extends uvme_axis_st_base_vseq_c;
    rand int unsigned  num_transfers;
    rand int unsigned  min_size     ;
    rand int unsigned  max_size     ;
-   rand int unsigned  min_ipg      ;
-   rand int unsigned  max_ipg      ;
+   rand int unsigned  min_gap      ;
+   rand int unsigned  max_gap      ;
    
    // Sequences
-   rand uvma_axis_rand_traffic_seq_c  mstr_seq;
+   rand uvma_axis_rand_traffic_vseq_c  mstr_vseq;
    
    
    `uvm_object_utils_begin(uvme_axis_st_rand_traffic_vseq_c)
       `uvm_field_int(num_transfers, UVM_DEFAULT + UVM_DEC)
       `uvm_field_int(min_size     , UVM_DEFAULT + UVM_DEC)
       `uvm_field_int(max_size     , UVM_DEFAULT + UVM_DEC)
-      `uvm_field_int(min_ipg      , UVM_DEFAULT + UVM_DEC)
-      `uvm_field_int(max_ipg      , UVM_DEFAULT + UVM_DEC)
+      `uvm_field_int(min_gap      , UVM_DEFAULT + UVM_DEC)
+      `uvm_field_int(max_gap      , UVM_DEFAULT + UVM_DEC)
       
-      `uvm_field_object(mstr_seq, UVM_DEFAULT)
+      `uvm_field_object(mstr_vseq, UVM_DEFAULT)
    `uvm_object_utils_end
    
    
-   constraint defaults_cons {
-      //soft num_transfers       == uvme_axis_st_rand_traffic_vseq_default_num_transfers     ;
-      //soft pct_bus_usage  == uvme_axis_st_rand_traffic_vseq_default_pct_bus_usage;
-   }
-   
    constraint limits_cons {
-      min_ipg  <= max_ipg ;
+      num_transfers inside {[1:100]};
+      min_gap  <= max_gap ;
       min_size <= max_size;
-      pct_ton > 0;
-      100 == (pct_ton + pct_toff);
       min_size >  0;
       max_size <= `UVM_PACKER_MAX_BYTES;
-      pct_bus_usage > 0;
-      pct_bus_usage <= 100;
    }
    
    
@@ -80,12 +72,12 @@ endfunction : new
 
 task uvme_axis_st_rand_traffic_vseq_c::body();
    
-   `uvm_do_on_with(mstr_seq, p_sequencer.mstr_vsequencer, {
-      mstr_seq.num_transfers == local::num_transfers;
-      mstr_seq.min_size == local::min_size;
-      mstr_seq.max_size == local::max_size;
-      mstr_seq.min_ipg  == local::min_ipg ;
-      mstr_seq.max_ipg  == local::max_ipg ;
+   `uvm_do_on_with(mstr_vseq, p_sequencer.mstr_vsequencer, {
+      num_transfers == local::num_transfers;
+      min_size      == local::min_size;
+      max_size      == local::max_size;
+      min_gap       == local::min_gap ;
+      max_gap       == local::max_gap ;
    })
    
 endtask : body

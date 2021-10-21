@@ -93,26 +93,28 @@ task uvma_axis_mstr_drv_vseq_c::drv(ref uvma_axis_seq_item_c seq_item);
       if (ii == (seq_item.size-1)) begin
          `uvm_rand_send_with(mstr_seq_item, {
             tvalid == 1'b1;
-            tid   == seq_item.tid  ;
-            tdest == seq_item.tdest;
-            tuser == seq_item.tuser;
-            tkeep == seq_item.tkeep;
-            tstrb == seq_item.tstrb;
-            tlast == 1;
+            tid    == seq_item.tid  ;
+            tdest  == seq_item.tdest;
+            tuser  == seq_item.tuser;
+            tkeep  == seq_item.tkeep;
+            tstrb  == seq_item.tkeep;
+            tlast  == 1;
          })
       end
       else begin
          `uvm_rand_send_with(mstr_seq_item, {
             tvalid == 1'b1;
-            tid   == seq_item.tid;
-            tdest == seq_item.tid;
-            tuser == seq_item.tid;
-            tkeep == '1;
-            tstrb == '1;
-            tlast ==  0;
+            tid    == seq_item.tid  ;
+            tdest  == seq_item.tdest;
+            tuser  == seq_item.tuser;
+            tkeep  == '1;
+            tstrb  == '1;
+            tlast  ==  0;
          })
       end
    end
+   
+   `uvml_hrtbt_owner(p_sequencer)
    
 endtask : drv
 
