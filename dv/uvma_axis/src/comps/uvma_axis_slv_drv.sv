@@ -10,29 +10,26 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-`ifndef __UVMA_AXIS_DRV_SV__
-`define __UVMA_AXIS_DRV_SV__
+`ifndef __UVMA_AXIS_SLV_DRV_SV__
+`define __UVMA_AXIS_SLV_DRV_SV__
 
 
 /**
- * Component driving a AMBA Advanced Extensible Interface Stream virtual interface (uvma_axis_if).
+ * TODO Describe uvma_axis_drv_c
  */
-class uvma_axis_drv_c extends uvml_drv_c#(
-   .REQ(uvma_axis_cycle_seq_item_c),
-   .RSP(uvma_axis_cycle_seq_item_c)
-);
+class uvma_axis_drv_c extends uvml_drv_c #(
+   .REQ(uvma_axis_slv_seq_item_c),
+   .RSP(uvma_axis_slv_seq_item_c)
+);;
+   
+   virtual uvma_axis_if.drv_slv_mp  mp; ///< Handle to virtual interface modport
    
    // Objects
    uvma_axis_cfg_c    cfg  ; ///< 
    uvma_axis_cntxt_c  cntxt; ///< 
    
-   // Components
-   uvma_obi_mstr_drv_c  mstr_driver; ///< TODO Describe uvma_obi_drv_c::mstr_driver
-   uvma_obi_slv_drv_c   slv_driver ; ///< TODO Describe uvma_obi_drv_c::slv_driver
-   
    // TLM
-   uvm_analysis_port#(uvma_axis_mstr_seq_item_c)  mstr_ap; ///< 
-   uvm_analysis_port#(uvma_axis_slv_seq_item_c )  slv_ap ; ///< 
+   uvm_analysis_port#(uvma_axis_slv_seq_item_c)  ap; ///< 
    
    
    `uvm_component_utils_begin(uvma_axis_drv_c)
@@ -53,9 +50,19 @@ class uvma_axis_drv_c extends uvml_drv_c#(
    extern virtual function void build_phase(uvm_phase phase);
    
    /**
-    * TODO Describe uvma_axis_drv_c::connect_phase()
+    * TODO Describe uvma_axis_drv_c::run_phase()
     */
-   extern virtual function void connect_phase(uvm_phase phase);
+   extern virtual task run_phase(uvm_phase phase);
+   
+   /**
+    * TODO Describe uvma_axis_drv_c::process_req()
+    */
+   extern virtual function void process_req(ref uvma_axis_slv_seq_item_c req);
+   
+   /**
+    * TODO Describe uvma_axis_drv_c::drv_req()
+    */
+   extern virtual task drv_req(ref uvma_axis_slv_seq_item_c req);
    
 endclass : uvma_axis_drv_c
 
@@ -83,25 +90,45 @@ function void uvma_axis_drv_c::build_phase(uvm_phase phase);
    end
    uvm_config_db#(uvma_axis_cntxt_c)::set(this, "*", "cntxt", cntxt);
    
-   // Create components
-   mstr_driver = uvma_axis_mstr_drv_c::type_id::create("mstr_driver", this);
-   slv_driver  = uvma_axis_slv_drv_c ::type_id::create("slv_driver" , this);
-   
-   // Create TLM Components
-   mstr_ap = new("mstr_ap", this);
-   slv_ap  = new("slv_ap" , this);
+   ap = new("ap", this);
+   mp = cntxt.vif.drv_slv_mp;
    
 endfunction : build_phase
 
 
-function void uvma_obi_drv_c::connect_phase(uvm_phase phase);
+task uvma_axis_drv_c::run_phase(uvm_phase phase);
    
-   super.connect_phase(phase);
+   super.run_phase(phase);
    
-   mstr_ap = mstr_driver.ap;
-   slv_ap  = slv_driver .ap;
+   if (cfg.enabled && cfg.is_active && (cfg.mode == UVMA_OBI_MODE_MSTR)) begin
+      forever begin
+         seq_item_port.get_next_item(req);
+         process_req                (req);
+         drv_req                    (req);
+         ap.write                   (req);
+         
+         seq_item_port.item_done();
+      end
+   end
    
-endfunction : connect_phase
+endtask : run_phase
 
 
-`endif // __UVMA_AXIS_DRV_SV__
+function void uvma_axis_drv_c::process_req(ref uvma_axis_slv_seq_item_c req);
+   
+   req.cfg = cfg;
+   `uvm_info("AXIS_MSTR_DRV", $sformatf("Got new req from the sequencer:\n%s", req.sprint()), UVM_HIGH)
+   
+endfunction: process_req
+
+
+task uvma_axis_drv_c::drv_req(ref uvma_axis_slv_seq_item_c req);
+   
+   @(mp.drv_slv_a_cb);
+   trn = uvma_axis_slv_mon_trn_c::type_id::create("trn");
+   trn.tready <= mp.mon_cb.tready;
+   
+endtask : drv_req
+
+
+`endif // __UVMA_AXIS_SLV_DRV_SV__

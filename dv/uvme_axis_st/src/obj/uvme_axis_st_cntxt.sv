@@ -25,7 +25,7 @@ class uvme_axis_st_cntxt_c extends uvml_cntxt_c;
    uvma_axis_cntxt_c  slave_cntxt;
    
    // Scoreboard context handle
-   uvml_sb_cntxt_c  sb_cntxt;
+   uvml_sb_simplex_cntxt_c  sb_cntxt;
    
    // Events
    uvm_event  sample_cfg_e  ;
@@ -57,7 +57,7 @@ function uvme_axis_st_cntxt_c::new(string name="uvme_axis_st_cntxt");
    
    master_cntxt = uvma_axis_cntxt_c::type_id::create("master_cntxt");
    slave_cntxt  = uvma_axis_cntxt_c::type_id::create("slave_cntxt" );
-   sb_cntxt     = uvml_sb_cntxt_c  ::type_id::create("sb_cntxt"    );
+   sb_cntxt     = uvml_sb_simplex_cntxt_c  ::type_id::create("sb_cntxt"    );
    
    sample_cfg_e   = new("sample_cfg_e"  );
    sample_cntxt_e = new("sample_cntxt_e");

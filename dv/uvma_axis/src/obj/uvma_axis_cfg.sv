@@ -14,26 +14,40 @@
 `define __UVMA_AXIS_CFG_SV__
 
 
+// Default sequences
+typedef class uvma_axis_mon_vseq_c ;
+typedef class uvma_axis_idle_vseq_c;
+typedef class uvma_axis_mstr_vseq_c;
+typedef class uvma_axis_slv_vseq_c ;
+
+
 /**
- * Object encapsulating all parameters for creating, connecting and running all
- * AMBA Advanced Extensible Interface Stream agent (uvma_axis_agent_c) components.
+ * Object encapsulating all parameters for creating, connecting and running all AMBA Advanced Extensible Interface
+ * Stream agent (uvma_axis_agent_c) components.
  */
 class uvma_axis_cfg_c extends uvml_cfg_c;
    
    // Generic options
-   rand bit                      enabled;
-   rand uvm_active_passive_enum  is_active;
-   rand uvm_sequencer_arb_mode   sqr_arb_mode;
+   rand bit                      enabled          ;
+   rand uvm_active_passive_enum  is_active        ;
+   rand uvm_sequencer_arb_mode   sqr_arb_mode     ;
    rand bit                      cov_model_enabled;
-   rand bit                      trn_log_enabled;
+   rand bit                      trn_log_enabled  ;
    
    // Protocol options
-   rand uvma_axis_mode_enum      mode          ; // Operational mode
-   rand int unsigned             data_bus_width; // Measured in bytes (B)
-   rand int unsigned             tid_width     ; // Measured in bits  (b)
-   rand int unsigned             tdest_width   ; // Measured in bits  (b)
-   rand int unsigned             tuser_width   ; // Measured in bits  (b)
-   rand uvma_axis_drv_idle_enum  drv_idle      ;
+   rand uvma_axis_mode_enum      drv_mode   ; ///< Operational mode
+   rand uvma_axis_drv_idle_enum  drv_idle   ; ///< 
+   rand int unsigned             tdata_width; ///< Measured in bytes (B)
+   rand int unsigned             tid_width  ; ///< Measured in bits  (b)
+   rand int unsigned             tkeep_width; ///< Measured in bits  (b)
+   rand int unsigned             tdest_width; ///< Measured in bits  (b)
+   rand int unsigned             tuser_width; ///< Measured in bits  (b)
+   
+   // Sequence Types
+   uvm_object_wrapper  monitor_vseq_type; ///< TODO Describe uvma_obi_cfg_c::monitor_vseq_type
+   uvm_object_wrapper  idle_vseq_type   ; ///< TODO Describe uvma_obi_cfg_c::idle_vseq_type
+   uvm_object_wrapper  mstr_vseq_type   ; ///< TODO Describe uvma_obi_cfg_c::mstr_vseq_type
+   uvm_object_wrapper  slv_vseq_type    ; ///< TODO Describe uvma_obi_cfg_c::slv_vseq_type
    
    
    `uvm_object_utils_begin(uvma_axis_cfg_c)
@@ -43,28 +57,36 @@ class uvma_axis_cfg_c extends uvml_cfg_c;
       `uvm_field_int (                         cov_model_enabled, UVM_DEFAULT)
       `uvm_field_int (                         trn_log_enabled  , UVM_DEFAULT)
       
-      `uvm_field_enum(uvma_axis_mode_enum    , mode          , UVM_DEFAULT          )
-      `uvm_field_int (                         data_bus_width, UVM_DEFAULT + UVM_DEC)
-      `uvm_field_int (                         tid_width     , UVM_DEFAULT + UVM_DEC)
-      `uvm_field_int (                         tdest_width   , UVM_DEFAULT + UVM_DEC)
-      `uvm_field_int (                         tuser_width   , UVM_DEFAULT + UVM_DEC)
-      `uvm_field_enum(uvma_axis_drv_idle_enum, drv_idle      , UVM_DEFAULT          )
+      `uvm_field_enum(uvma_axis_mode_enum    , drv_mode   , UVM_DEFAULT          )
+      `uvm_field_enum(uvma_axis_drv_idle_enum, drv_idle   , UVM_DEFAULT          )
+      `uvm_field_int (                         drv_slv_on , UVM_DEFAULT + UVM_DEC)
+      `uvm_field_int (                         tdata_width, UVM_DEFAULT + UVM_DEC)
+      `uvm_field_int (                         tid_width  , UVM_DEFAULT + UVM_DEC)
+      `uvm_field_int (                         tdest_width, UVM_DEFAULT + UVM_DEC)
+      `uvm_field_int (                         tuser_width, UVM_DEFAULT + UVM_DEC)
    `uvm_object_utils_end
    
    
    constraint defaults_cons {
-      /*soft*/ enabled           == 1;
-      /*soft*/ is_active         == UVM_PASSIVE;
-      /*soft*/ sqr_arb_mode      == UVM_SEQ_ARB_FIFO;
-      /*soft*/ cov_model_enabled == 0;
-      /*soft*/ trn_log_enabled   == 1;
+      soft enabled           == 1;
+      soft is_active         == UVM_PASSIVE;
+      soft sqr_arb_mode      == UVM_SEQ_ARB_FIFO;
+      soft cov_model_enabled == 0;
+      soft trn_log_enabled   == 1;
       
-      //soft     mode           == UVMA_AXIS_MODE_MASTER;
-      /*soft*/ data_bus_width == uvma_axis_default_data_bus_width;
-      /*soft*/ tid_width      == uvma_axis_default_tid_width     ;
-      /*soft*/ tdest_width    == uvma_axis_default_tdest_width   ;
-      /*soft*/ tuser_width    == uvma_axis_default_tuser_width   ;
-      /*soft*/ drv_idle       == UVMA_AXIS_DRV_IDLE_X;
+      soft tdata_width == uvma_axis_default_tdata_width;
+      soft tid_width   == uvma_axis_default_tid_width  ;
+      soft tdest_width == uvma_axis_default_tdest_width;
+      soft tuser_width == uvma_axis_default_tuser_width;
+      soft drv_idle    == UVMA_AXIS_DRV_IDLE_ZEROS;
+   }
+   
+   constraint limits_cons {
+      tdata_width  inside {[1:`UVMA_AXIS_TDATA_MAX_WIDTH ]};
+      tid_width    inside {[0:`UVMA_AXIS_TID_MAX_WIDTH   ]};
+      tdest_width  inside {[0:`UVMA_AXIS_TDEST_MAX_WIDTH ]};
+      tuser_width  inside {[0:`UVMA_AXIS_TUSER_MAX_WIDTH ]};
+      drv_slv_on   inside {[0:100]};
    }
    
    
@@ -79,6 +101,10 @@ endclass : uvma_axis_cfg_c
 function uvma_axis_cfg_c::new(string name="uvma_axis_cfg");
    
    super.new(name);
+   monitor_vseq_type = uvma_axis_mon_vseq_c ::type_id;
+   idle_vseq_type    = uvma_axis_idle_vseq_c::type_id;
+   mstr_vseq_type    = uvma_axis_mstr_vseq_c::type_id;
+   slv_vseq_type     = uvma_axis_slv_vseq_c ::type_id;
    
 endfunction : new
 

@@ -10,69 +10,56 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-`ifndef __UVMA_AXIS_SLV_RAND_RDY_SEQ_SV__
-`define __UVMA_AXIS_SLV_RAND_RDY_SEQ_SV__
+`ifndef __UVMA_AXIS_SLV_RAND_RDY_VSEQ_SV__
+`define __UVMA_AXIS_SLV_RAND_RDY_VSEQ_SV__
 
 
 /**
- * TODO Describe uvma_axis_slv_rand_rdy_seq_c
+ * TODO Describe uvma_axis_slv_rand_rdy_vseq_c
  */
-class uvma_axis_slv_rand_rdy_seq_c extends uvma_axis_slv_base_seq_c;
+class uvma_axis_slv_rand_rdy_vseq_c extends uvma_axis_slv_base_vseq_c;
    
-   rand int unsigned  pct_ton ;
-   rand int unsigned  pct_toff;
-   
-   
-   `uvm_object_utils_begin(uvma_axis_slv_rand_rdy_seq_c)
-      `uvm_field_int(pct_ton , UVM_DEFAULT + UVM_DEC)
-      `uvm_field_int(pct_toff, UVM_DEFAULT + UVM_DEC)
-   `uvm_object_utils_end
-   
-   
-   constraint limits_cons {
-      pct_ton > 0;
-      100 == (pct_ton + pct_toff);
-   }
+   `uvm_object_begin(uvma_axis_slv_rand_rdy_vseq_c)
    
    
    /**
     * Default constructor.
     */
-   extern function new(string name="uvma_axis_slv_rand_rdy_seq");
+   extern function new(string name="uvma_axis_slv_rand_rdy_vseq");
    
    /**
-    * TODO Describe uvma_axis_slv_rand_rdy_seq_c::body()
+    * TODO Describe uvma_axis_slv_rand_rdy_vseq_c::body()
     */
    extern virtual task body();
    
-endclass : uvma_axis_slv_rand_rdy_seq_c
+endclass : uvma_axis_slv_rand_rdy_vseq_c
 
 
-function uvma_axis_slv_rand_rdy_seq_c::new(string name="uvma_axis_slv_rand_rdy_seq");
+function uvma_axis_slv_rand_rdy_vseq_c::new(string name="uvma_axis_slv_rand_rdy_vseq");
    
    super.new(name);
    
 endfunction : new
 
 
-task uvma_axis_slv_rand_rdy_seq_c::body();
+task uvma_axis_slv_rand_rdy_vseq_c::body();
    
-   bit tready;
+   bit                       tready;
+   uvma_axis_slv_seq_item_c  req   ;
+   int unsigned              pct_off = 100 - cfg.drv_slv_on;
    
    forever begin
       randcase
-         pct_ton : tready = 1;
-         pct_toff: tready = 0;
+         cfg.drv_slv_on: tready = 1;
+         pct_toff      : tready = 0;
       endcase
       
-      `uvm_do_with(req, {
+      `uvm_do_with_on(req, p_sequencer.slv_sequencer, {
          req.tready == local::tready;
       })
-      
-      @(cntxt.vif.drv_slave_cb);
    end
    
 endtask : body
 
 
-`endif // __UVMA_AXIS_SLV_RAND_RDY_SEQ_SV__
+`endif // __UVMA_AXIS_SLV_RAND_RDY_VSEQ_SV__

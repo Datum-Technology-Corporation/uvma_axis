@@ -21,7 +21,7 @@
 class uvme_axis_st_env_c extends uvml_env_c;
    
    // Objects
-   uvme_axis_st_cfg_c    cfg;
+   uvme_axis_st_cfg_c    cfg  ;
    uvme_axis_st_cntxt_c  cntxt;
    
    // Agents
@@ -29,9 +29,9 @@ class uvme_axis_st_env_c extends uvml_env_c;
    uvma_axis_agent_c  slave_agent ;
    
    // Components
-   uvme_axis_st_cov_model_c   cov_model;
-   uvme_axis_st_prd_c         predictor;
-   uvme_axis_st_sb_simplex_c  sb;
+   uvme_axis_st_cov_model_c   cov_model ;
+   uvme_axis_st_prd_c         predictor ;
+   uvme_axis_st_sb_simplex_c  sb        ;
    uvme_axis_st_vsqr_c        vsequencer;
    
    
@@ -127,7 +127,7 @@ function void uvme_axis_st_env_c::build_phase(uvm_phase phase);
    super.build_phase(phase);
    
    void'(uvm_config_db#(uvme_axis_st_cfg_c)::get(this, "", "cfg", cfg));
-   if (!cfg) begin
+   if (cfg == null) begin
       `uvm_fatal("CFG", "Configuration handle is null")
    end
    else begin
@@ -136,7 +136,7 @@ function void uvme_axis_st_env_c::build_phase(uvm_phase phase);
    
    if (cfg.enabled) begin
       void'(uvm_config_db#(uvme_axis_st_cntxt_c)::get(this, "", "cntxt", cntxt));
-      if (!cntxt) begin
+      if (cntxt == null) begin
          `uvm_info("CNTXT", "Context handle is null; creating.", UVM_DEBUG)
          cntxt = uvme_axis_st_cntxt_c::type_id::create("cntxt");
       end
@@ -182,20 +182,20 @@ endfunction: connect_phase
 
 function void uvme_axis_st_env_c::assign_cfg();
    
-   uvm_config_db#(uvme_axis_st_cfg_c)::set(this, "*"           , "cfg", cfg           );
-   uvm_config_db#(uvma_axis_cfg_c   )::set(this, "master_agent", "cfg", cfg.master_cfg);
-   uvm_config_db#(uvma_axis_cfg_c   )::set(this, "slave_agent" , "cfg", cfg.slave_cfg );
-   uvm_config_db#(uvml_sb_cfg_c     )::set(this, "sb"          , "cfg", cfg.sb_cfg    );
+   uvm_config_db#(uvme_axis_st_cfg_c   )::set(this, "*"           , "cfg", cfg           );
+   uvm_config_db#(uvma_axis_cfg_c      )::set(this, "master_agent", "cfg", cfg.master_cfg);
+   uvm_config_db#(uvma_axis_cfg_c      )::set(this, "slave_agent" , "cfg", cfg.slave_cfg );
+   uvm_config_db#(uvml_sb_simplex_cfg_c)::set(this, "sb"          , "cfg", cfg.sb_cfg    );
    
 endfunction: assign_cfg
 
 
 function void uvme_axis_st_env_c::assign_cntxt();
    
-   uvm_config_db#(uvme_axis_st_cntxt_c)::set(this, "*"           , "cntxt", cntxt             );
-   uvm_config_db#(uvma_axis_cntxt_c   )::set(this, "master_agent", "cntxt", cntxt.master_cntxt);
-   uvm_config_db#(uvma_axis_cntxt_c   )::set(this, "slave_agent" , "cntxt", cntxt.slave_cntxt );
-   uvm_config_db#(uvml_sb_cntxt_c     )::set(this, "sb"           , "cntxt", cntxt.sb_cntxt   );
+   uvm_config_db#(uvme_axis_st_cntxt_c   )::set(this, "*"           , "cntxt", cntxt             );
+   uvm_config_db#(uvma_axis_cntxt_c      )::set(this, "master_agent", "cntxt", cntxt.master_cntxt);
+   uvm_config_db#(uvma_axis_cntxt_c      )::set(this, "slave_agent" , "cntxt", cntxt.slave_cntxt );
+   uvm_config_db#(uvml_sb_simplex_cntxt_c)::set(this, "sb"          , "cntxt", cntxt.sb_cntxt    );
    
 endfunction: assign_cntxt
 

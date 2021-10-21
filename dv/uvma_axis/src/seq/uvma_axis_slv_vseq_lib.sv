@@ -10,51 +10,42 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-`ifndef __UVMA_AXIS_SEQ_LIB_SV__
-`define __UVMA_AXIS_SEQ_LIB_SV__
+`ifndef __UVMA_AXIS_SLV_VSEQ_LIB_SV__
+`define __UVMA_AXIS_SLV_VSEQ_LIB_SV__
 
 
-// Cycle-based: convert payloads to cycles
-`include "uvma_axis_cycle_base_seq.sv"
-`include "uvma_axis_cycle_throttled_seq.sv"
-
-// Master/Slave
-`include "uvma_axis_base_seq.sv"
-`include "uvma_axis_mstr_base_seq.sv"
-`include "uvma_axis_mstr_object_seq.sv"
-`include "uvma_axis_mstr_rand_traffic_seq.sv"
-`include "uvma_axis_slv_base_seq.sv"
-`include "uvma_axis_slv_rand_rdy_seq.sv"
+`include "uvma_axis_slv_base_vseq.sv"
+`include "uvma_axis_slv_rand_rdy_vseq.sv"
 
 
 /**
  * Object holding sequence library for AMBA Advanced Extensible Interface Stream agent.
  */
-class uvma_axis_seq_lib_c extends uvml_seq_lib_c #(
+class uvma_axis_slv_vseq_lib_c extends uvml_vseq_lib_c #(
    .REQ(uvma_axis_seq_item_c),
    .RSP(uvma_axis_seq_item_c)
 );
    
-   `uvm_object_utils          (uvma_axis_seq_lib_c)
-   `uvm_sequence_library_utils(uvma_axis_seq_lib_c)
+   `uvm_object_utils          (uvma_axis_slv_vseq_lib_c)
+   `uvm_sequence_library_utils(uvma_axis_slv_vseq_lib_c)
    
    
    /**
     * Initializes sequence library
     */
-   extern function new(string name="uvma_axis_seq_lib");
+   extern function new(string name="uvma_axis_slv_vseq_lib");
    
-endclass : uvma_axis_seq_lib_c
+endclass : uvma_axis_slv_vseq_lib_c
 
 
-function uvma_axis_seq_lib_c::new(string name="uvma_axis_seq_lib");
+function uvma_axis_slv_vseq_lib_c::new(string name="uvma_axis_slv_vseq_lib");
    
    super.new(name);
    init_sequence_library();
    
-   add_sequence(uvma_axis_mstr_rand_traffic_seq_c::get_type());
+   add_sequence(uvma_axis_slv_rand_rdy_vseq_c::get_type());
    
 endfunction : new
 
 
-`endif // __UVMA_AXIS_SEQ_LIB_SV__
+`endif // __UVMA_AXIS_SLV_VSEQ_LIB_SV__

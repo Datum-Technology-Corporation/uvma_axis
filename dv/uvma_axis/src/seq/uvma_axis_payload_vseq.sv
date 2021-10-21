@@ -10,46 +10,50 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-`ifndef __UVMA_AXIS_MSTR_OBJECT_SEQ_SV__
-`define __UVMA_AXIS_MSTR_OBJECT_SEQ_SV__
+`ifndef __UVMA_AXIS_PAYLOAD_VSEQ_SV__
+`define __UVMA_AXIS_PAYLOAD_VSEQ_SV__
 
 
 /**
- * Base sequence for sequences that use the agent in 'layered' mode: where
- * higher-layer sequence items are fed to the AXIS sequencer (uvma_axis_sqr_c)
- * as payloads.
+ * TODO Describe uvma_axis_payload_vseq_c
  */
-class uvma_axis_mstr_object_seq_c extends uvma_axis_mstr_base_seq_c;
+class uvma_axis_payload_vseq_c extends uvma_axis_base_vseq_c;
    
-   uvm_object  payload;
+   uvm_object                payload; ///< 
+   rand uvma_axis_tid_b_t    tid    ; ///< 
+   rand uvma_axis_tdest_b_t  tdest  ; ///< 
+   rand uvma_axis_tuser_b_t  tuser  ; ///< 
    
    
-   `uvm_object_utils_begin(uvma_axis_mstr_object_seq_c)
+   `uvm_object_utils_begin(uvma_axis_payload_vseq_c)
       `uvm_field_object(payload, UVM_DEFAULT)
+      `uvm_field_int   (tid    , UVM_DEFAULT)
+      `uvm_field_int   (tdest  , UVM_DEFAULT)
+      `uvm_field_int   (tuser  , UVM_DEFAULT)
    `uvm_object_utils_end
    
    
    /**
     * Default constructor.
     */
-   extern function new(string name="uvma_axis_mstr_object_seq");
+   extern function new(string name="uvma_axis_payload_vseq");
    
    /**
     * Gets new higher-layer sequence items
     */
    extern virtual task body();
    
-endclass : uvma_axis_mstr_object_seq_c
+endclass : uvma_axis_payload_vseq_c
 
 
-function uvma_axis_mstr_object_seq_c::new(string name="uvma_axis_mstr_object_seq");
+function uvma_axis_payload_vseq_c::new(string name="uvma_axis_payload_vseq");
    
    super.new(name);
    
 endfunction : new
 
 
-task uvma_axis_mstr_object_seq_c::body();
+task uvma_axis_payload_vseq_c::body();
    
    bit [7:0]  payload_bytes[];
    void'(payload.pack_bytes(payload_bytes));
@@ -60,10 +64,13 @@ task uvma_axis_mstr_object_seq_c::body();
       foreach (req.data[ii]) {
          req.data[ii] == payload_bytes[ii];
       }
-      req.tuser == payload_bytes.size();
+      req.tid   == local::tid  ;
+      req.tdest == local::tdest;
+      req.tuser == local::tuser;
+      req.tkeep == payload_bytes.size()%cfg.tdata_width;
    })
    
 endtask : body
 
 
-`endif // __UVMA_AXIS_MSTR_OBJECT_SEQ_SV__
+`endif // __UVMA_AXIS_PAYLOAD_VSEQ_SV__

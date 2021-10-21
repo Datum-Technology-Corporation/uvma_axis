@@ -18,29 +18,34 @@
  * Encapsulates all signals and clocking of AMBA Advanced Extensible Interface Stream interface. Used by
  * monitor (uvma_axis_mon_c) and driver (uvma_axis_drv_c).
  */
-interface uvma_axis_if (
+interface uvma_axis_if #(
+   parameter TDATA_WIDTH  = `UVMA_AXIS_TDATA_DEFAULT_WIDTH, ///< 
+   parameter TUSER_WIDTH  = `UVMA_AXIS_TUSER_DEFAULT_WIDTH, ///< 
+   parameter TDEST_WIDTH  = `UVMA_AXIS_TDEST_DEFAULT_WIDTH, ///< 
+   parameter TID_WIDTH    = `UVMA_AXIS_TID_DEFAULT_WIDTH  , ///< 
+) (
    input logic clk    ,
    input logic reset_n
 );
    
    // Slave-out signals
-   wire                                         tready;
+   wire                           tready;
    
    // Master-out signals
-   wire                                         tvalid;
-   wire [(`UVMA_AXIS_TDATA_MAX_SIZE-1):0][7:0]  tdata ;
-   wire [(`UVMA_AXIS_TDATA_MAX_SIZE-1):0]       tstrb ;
-   wire [(`UVMA_AXIS_TDATA_MAX_SIZE-1):0]       tkeep ;
-   wire                                         tlast ;
-   wire [(  `UVMA_AXIS_TID_MAX_SIZE-1):0]       tid   ;
-   wire [(`UVMA_AXIS_TDEST_MAX_SIZE-1):0]       tdest ;
-   wire [(`UVMA_AXIS_TUSER_MAX_SIZE-1):0]       tuser ;
+   wire                           tvalid;
+   wire [(TDATA_WIDTH-1):0][7:0]  tdata ;
+   wire [(TDATA_WIDTH-1):0]       tstrb ;
+   wire [(TDATA_WIDTH-1):0]       tkeep ;
+   wire                           tlast ;
+   wire [(TID_WIDTH  -1):0]       tid   ;
+   wire [(TDEST_WIDTH-1):0]       tdest ;
+   wire [(TUSER_WIDTH-1):0]       tuser ;
    
    
    /**
-    * Used by DUT in 'master' mode.
+    * Used by DUT in 'mstr' mode.
     */
-   clocking dut_master_cb @(posedge clk);
+   clocking dut_mstr_cb @(posedge clk);
       input   tready;
       output  tvalid,
               tdata ,
@@ -50,12 +55,12 @@ interface uvma_axis_if (
               tid   ,
               tdest ,
               tuser ;
-   endclocking : dut_master_cb
+   endclocking : dut_mstr_cb
    
    /**
-    * Used by DUT in 'master' mode.
+    * Used by DUT in 'mstr' mode.
     */
-   clocking dut_slave_cb @(posedge clk);
+   clocking dut_slv_cb @(posedge clk);
       output  tready;
       input   tvalid,
               tdata ,
@@ -65,12 +70,12 @@ interface uvma_axis_if (
               tid   ,
               tdest ,
               tuser ;
-   endclocking : dut_slave_cb
+   endclocking : dut_slv_cb
    
    /**
     * Used by uvma_axis_drv_c.
     */
-   clocking drv_master_cb @(posedge clk);
+   clocking drv_mstr_cb @(posedge clk);
       input   tready;
       output  tvalid,
               tdata ,
@@ -80,12 +85,12 @@ interface uvma_axis_if (
               tid   ,
               tdest ,
               tuser ;
-   endclocking : drv_master_cb
+   endclocking : drv_mstr_cb
    
    /**
     * Used by uvma_axis_drv_c.
     */
-   clocking drv_slave_cb @(posedge clk);
+   clocking drv_slv_cb @(posedge clk);
       output  tready;
       input   tvalid,
               tdata ,
@@ -95,7 +100,7 @@ interface uvma_axis_if (
               tid   ,
               tdest ,
               tuser ;
-   endclocking : drv_slave_cb
+   endclocking : drv_slv_cb
    
    /**
     * Used by uvma_axis_mon_c.
@@ -113,11 +118,51 @@ interface uvma_axis_if (
    endclocking : mon_cb
    
    
-   modport dut_master_mp   (clocking dut_master_cb);
-   modport dut_slave_mp    (clocking dut_slave_cb );
-   modport active_master_mp(clocking drv_master_cb);
-   modport active_slave_mp (clocking drv_slave_cb );
-   modport passive_mp      (clocking mon_cb       );
+   /**
+    * 
+    */
+   modport dut_mstr_mp   (
+      clocking  dut_mstr_cb,
+      input     clk        ,
+      input     reset_n
+   );
+   
+   /**
+    * 
+    */
+   modport dut_slv_mp    (
+      clocking  dut_slv_cb,
+      input     clk       ,
+      input     reset_n
+   );
+   
+   /**
+    * 
+    */
+   modport active_mstr_mp(
+      clocking  drv_mstr_cb,
+      input     clk        ,
+      input     reset_n
+   );
+   
+      
+   /**
+    * 
+    */
+   modport active_slv_mp (
+      clocking  drv_slv_cb,
+      input     clk       ,
+      input     reset_n
+   );
+   
+   /**
+    * 
+    */
+   modport passive_mp (
+      clocking  mon_cb ,
+      input     clk    ,
+      input     reset_n
+   );
    
 endinterface : uvma_axis_if
 

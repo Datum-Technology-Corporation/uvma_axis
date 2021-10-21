@@ -10,31 +10,46 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-`ifndef __UVMA_AXIS_MSTR_BASE_SEQ_SV__
-`define __UVMA_AXIS_MSTR_BASE_SEQ_SV__
+`ifndef __UVMA_AXIS_VSEQ_LIB_SV__
+`define __UVMA_AXIS_VSEQ_LIB_SV__
+
+
+`include "uvma_axis_base_vseq.sv"
+`include "uvma_axis_idle_vseq.sv"
+`include "uvma_axis_payload_vseq.sv"
+`include "uvma_axis_rand_traffic_vseq.sv"
 
 
 /**
- * TODO Describe uvma_axis_mstr_base_seq_c
+ * Object holding sequence library for AMBA Advanced Extensible Interface Stream agent.
  */
-class uvma_axis_mstr_base_seq_c extends uvma_axis_base_seq_c;
+class uvma_axis_vseq_lib_c extends uvml_vseq_lib_c #(
+   .REQ(uvma_axis_seq_item_c),
+   .RSP(uvma_axis_seq_item_c)
+);
    
-   `uvm_object_utils(uvma_axis_mstr_base_seq_c)
+   `uvm_object_utils          (uvma_axis_vseq_lib_c)
+   `uvm_sequence_library_utils(uvma_axis_vseq_lib_c)
    
    
    /**
-    * Default constructor.
+    * Initializes sequence library
     */
-   extern function new(string name="uvma_axis_mstr_base_seq");
+   extern function new(string name="uvma_axis_vseq_lib");
    
-endclass : uvma_axis_mstr_base_seq_c
+endclass : uvma_axis_vseq_lib_c
 
 
-function uvma_axis_mstr_base_seq_c::new(string name="uvma_axis_mstr_base_seq");
+function uvma_axis_vseq_lib_c::new(string name="uvma_axis_vseq_lib");
    
    super.new(name);
+   init_sequence_library();
+   
+   add_sequence(uvma_axis_idle_vseq_c        ::get_type());
+   add_sequence(uvma_axis_payload_vseq_c     ::get_type());
+   add_sequence(uvma_axis_rand_traffic_vseq_c::get_type());
    
 endfunction : new
 
 
-`endif // __UVMA_AXIS_MSTR_BASE_SEQ_SV__
+`endif // __UVMA_AXIS_VSEQ_LIB_SV__

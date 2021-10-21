@@ -15,35 +15,28 @@
 
 
 /**
- * Object encapsulating all state variables for all AMBA Advanced Extensible
- * Interface Stream agent (uvma_axis_agent_c) components.
+ * Object encapsulating all state variables for all AMBA Advanced Extensible Interface Stream agent
+ * (uvma_axis_agent_c) components.
  */
 class uvma_axis_cntxt_c extends uvml_cntxt_c;
    
-   // Handle to agent interface
-   virtual uvma_axis_if  vif;
+   virtual uvma_axis_if  vif; ///< Handle to agent interface
    
    // Integrals
-   uvma_axis_reset_state_enum  reset_state = UVMA_AXIS_RESET_STATE_PRE_RESET;
-   bit                         ton         =                               0;
+   uvml_reset_state_enum  reset_state = UVML_RESET_STATE_PRE_RESET; ///< 
    
    // Current data transfer
-   logic [7:0]                              current_transfer_data[$];
-   logic [(  `UVMA_AXIS_TID_MAX_SIZE-1):0]  current_transfer_tid    ;
-   logic [(`UVMA_AXIS_TDEST_MAX_SIZE-1):0]  current_transfer_tdest  ;
-   logic [(`UVMA_AXIS_TUSER_MAX_SIZE-1):0]  current_transfer_tuser  ;
+   uvma_obi_mstr_mon_trn_c  mon_current_transfer[$]; ///< TODO Describe uvma_axis_cntxt_c::mon_current_transfer
    
    // Events
-   uvm_event  sample_cfg_e;
-   uvm_event  sample_cntxt_e;
+   uvm_event  sample_cfg_e  ; ///< 
+   uvm_event  sample_cntxt_e; ///< 
    
    
    `uvm_object_utils_begin(uvma_axis_cntxt_c)
-      `uvm_field_enum(uvma_axis_reset_state_enum, reset_state, UVM_DEFAULT)
-      `uvm_field_int (                            ton        , UVM_DEFAULT)
+      `uvm_field_enum(uvml_reset_state_enum, reset_state, UVM_DEFAULT)
       
-      `uvm_field_queue_int(current_transfer_data , UVM_DEFAULT)
-      `uvm_field_int      (current_transfer_tuser, UVM_DEFAULT)
+      `uvm_field_queue_object(mon_current_transfer , UVM_DEFAULT)
       
       `uvm_field_event(sample_cfg_e  , UVM_DEFAULT)
       `uvm_field_event(sample_cntxt_e, UVM_DEFAULT)
@@ -75,9 +68,7 @@ endfunction : new
 
 function void uvma_axis_cntxt_c::reset();
    
-   ton = 0;
-   current_transfer_data.delete();
-   current_transfer_tuser = '0;
+   mon_current_transfer.delete();
    
 endfunction : reset
 

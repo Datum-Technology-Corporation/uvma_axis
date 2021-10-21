@@ -29,9 +29,9 @@ class uvme_axis_st_cfg_c extends uvml_cfg_c;
    rand bit                      trn_log_enabled;
    
    // Objects
-   rand uvma_axis_cfg_c  master_cfg;
-   rand uvma_axis_cfg_c  slave_cfg ;
-   rand uvml_sb_cfg_c    sb_cfg    ;
+   rand uvma_axis_cfg_c        master_cfg;
+   rand uvma_axis_cfg_c        slave_cfg ;
+   rand uvml_sb_simplex_cfg_c  sb_cfg    ;
    
    
    `uvm_object_utils_begin(uvme_axis_st_cfg_c)
@@ -72,7 +72,7 @@ class uvme_axis_st_cfg_c extends uvml_cfg_c;
       }
       
       master_cfg.mode == UVMA_AXIS_MODE_MASTER;
-      master_cfg.mode == UVMA_AXIS_MODE_SLAVE ;
+      slave_cfg .mode == UVMA_AXIS_MODE_SLAVE ;
    }
    
    constraint sb_cfg_cons {
@@ -99,7 +99,7 @@ function uvme_axis_st_cfg_c::new(string name="uvme_axis_st_cfg");
    
    master_cfg = uvma_axis_cfg_c::type_id::create("master_cfg");
    slave_cfg  = uvma_axis_cfg_c::type_id::create("slave_cfg" );
-   sb_cfg     = uvml_sb_cfg_c  ::type_id::create("sb_cfg"    );
+   sb_cfg     = uvml_sb_simplex_cfg_c  ::type_id::create("sb_cfg"    );
    
 endfunction : new
 

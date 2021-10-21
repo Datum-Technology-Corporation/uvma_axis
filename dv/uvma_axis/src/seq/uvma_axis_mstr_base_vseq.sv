@@ -10,31 +10,31 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-`ifndef __UVMA_AXIS_SLV_BASE_SEQ_SV__
-`define __UVMA_AXIS_SLV_BASE_SEQ_SV__
+`ifndef __UVMA_AXIS_MSTR_BASE_VSEQ_SV__
+`define __UVMA_AXIS_MSTR_BASE_VSEQ_SV__
 
 
 /**
- * TODO Describe uvma_axis_slv_base_seq_c
+ * TODO Describe uvma_axis_mstr_base_vseq_c
  */
-class uvma_axis_slv_base_seq_c extends uvma_axis_cycle_base_seq_c;
+class uvma_axis_mstr_base_vseq_c extends uvma_axis_base_vseq_c;
    
-   `uvm_object_utils(uvma_axis_slv_base_seq_c)
+   `uvm_object_utils(uvma_axis_mstr_base_vseq_c)
    
    
    /**
     * Default constructor.
     */
-   extern function new(string name="uvma_axis_slv_base_seq");
+   extern function new(string name="uvma_axis_mstr_base_vseq");
    
-endclass : uvma_axis_slv_base_seq_c
+endclass : uvma_axis_mstr_base_vseq_c
 
 
-function uvma_axis_slv_base_seq_c::new(string name="uvma_axis_slv_base_seq");
+function uvma_axis_mstr_base_vseq_c::new(string name="uvma_axis_mstr_base_vseq");
    
    super.new(name);
    
 endfunction : new
 
 
-`endif // __UVMA_AXIS_SLV_BASE_SEQ_SV__
+`endif // __UVMA_AXIS_MSTR_BASE_VSEQ_SV__

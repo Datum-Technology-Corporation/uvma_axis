@@ -10,23 +10,31 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-// Libraries
--f ${DV_UVM_SRC_PATH}/uvm_pkg.flist
--f ${DV_UVML_SRC_PATH}/uvml_pkg.flist
--f ${DV_UVML_LOGS_SRC_PATH}/uvml_logs_pkg.flist
--f ${DV_UVML_SB_SRC_PATH}/uvml_sb_pkg.flist
+`ifndef __UVMA_AXIS_SLV_BASE_VSEQ_SV__
+`define __UVMA_AXIS_SLV_BASE_VSEQ_SV__
 
-// Agents
--f ${DV_UVMA_AXIS_SRC_PATH}/uvma_axis_pkg.flist
 
-// Environments
--f ${DV_UVME_AXIS_ST_SRC_PATH}/uvme_axis_st_pkg.flist
+/**
+ * TODO Describe uvma_axis_slv_base_vseq_c
+ */
+class uvma_axis_slv_base_vseq_c extends uvma_axis_base_vseq_c;
+   
+   `uvm_object_utils(uvma_axis_slv_base_vseq_c)
+   
+   
+   /**
+    * Default constructor.
+    */
+   extern function new(string name="uvma_axis_slv_base_vseq");
+   
+endclass : uvma_axis_slv_base_vseq_c
 
-// AMBA Advanced Extensible Interface Stream test bench directories
-+incdir+${DV_UVMT_AXIS_ST_SRC_PATH}
-+incdir+${DV_UVMT_AXIS_ST_SRC_PATH}/tb
-+incdir+${DV_UVMT_AXIS_ST_SRC_PATH}/tests
-+incdir+${DV_UVMT_AXIS_ST_SRC_PATH}/seq
 
-// AMBA Advanced Extensible Interface Stream test bench files
-${DV_UVMT_AXIS_ST_SRC_PATH}/uvmt_axis_st_pkg.sv
+function uvma_axis_slv_base_vseq_c::new(string name="uvma_axis_slv_base_vseq");
+   
+   super.new(name);
+   
+endfunction : new
+
+
+`endif // __UVMA_AXIS_SLV_BASE_VSEQ_SV__

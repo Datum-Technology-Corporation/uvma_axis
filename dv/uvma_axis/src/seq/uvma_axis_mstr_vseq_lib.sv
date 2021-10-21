@@ -10,23 +10,42 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-// Libraries
--f ${DV_UVM_SRC_PATH}/uvm_pkg.flist
--f ${DV_UVML_SRC_PATH}/uvml_pkg.flist
--f ${DV_UVML_LOGS_SRC_PATH}/uvml_logs_pkg.flist
--f ${DV_UVML_SB_SRC_PATH}/uvml_sb_pkg.flist
+`ifndef __UVMA_AXIS_MSTR_VSEQ_LIB_SV__
+`define __UVMA_AXIS_MSTR_VSEQ_LIB_SV__
 
-// Agents
--f ${DV_UVMA_AXIS_SRC_PATH}/uvma_axis_pkg.flist
 
-// Environments
--f ${DV_UVME_AXIS_ST_SRC_PATH}/uvme_axis_st_pkg.flist
+`include "uvma_axis_mstr_base_vseq.sv"
+`include "uvma_axis_mstr_drv_vseq.sv"
 
-// AMBA Advanced Extensible Interface Stream test bench directories
-+incdir+${DV_UVMT_AXIS_ST_SRC_PATH}
-+incdir+${DV_UVMT_AXIS_ST_SRC_PATH}/tb
-+incdir+${DV_UVMT_AXIS_ST_SRC_PATH}/tests
-+incdir+${DV_UVMT_AXIS_ST_SRC_PATH}/seq
 
-// AMBA Advanced Extensible Interface Stream test bench files
-${DV_UVMT_AXIS_ST_SRC_PATH}/uvmt_axis_st_pkg.sv
+/**
+ * Object holding sequence library for AMBA Advanced Extensible Interface Stream agent.
+ */
+class uvma_axis_mstr_vseq_lib_c extends uvml_vseq_lib_c #(
+   .REQ(uvma_axis_seq_item_c),
+   .RSP(uvma_axis_seq_item_c)
+);
+   
+   `uvm_object_utils          (uvma_axis_mstr_vseq_lib_c)
+   `uvm_sequence_library_utils(uvma_axis_mstr_vseq_lib_c)
+   
+   
+   /**
+    * Initializes sequence library
+    */
+   extern function new(string name="uvma_axis_mstr_vseq_lib");
+   
+endclass : uvma_axis_mstr_vseq_lib_c
+
+
+function uvma_axis_mstr_vseq_lib_c::new(string name="uvma_axis_mstr_vseq_lib");
+   
+   super.new(name);
+   init_sequence_library();
+   
+   add_sequence(uvma_axis_mstr_drv_vseq_c ::get_type());
+   
+endfunction : new
+
+
+`endif // __UVMA_AXIS_MSTR_VSEQ_LIB_SV__

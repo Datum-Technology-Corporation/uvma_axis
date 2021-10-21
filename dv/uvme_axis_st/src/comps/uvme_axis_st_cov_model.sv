@@ -133,12 +133,12 @@ function void uvme_axis_st_cov_model_c::build_phase(uvm_phase phase);
    super.build_phase(phase);
    
    void'(uvm_config_db#(uvme_axis_st_cfg_c)::get(this, "", "cfg", cfg));
-   if (!cfg) begin
+   if (cfg == null) begin
       `uvm_fatal("CFG", "Configuration handle is null")
    end
    
    void'(uvm_config_db#(uvme_axis_st_cntxt_c)::get(this, "", "cntxt", cntxt));
-   if (!cntxt) begin
+   if (cntxt == null) begin
       `uvm_fatal("CNTXT", "Context handle is null")
    end
    

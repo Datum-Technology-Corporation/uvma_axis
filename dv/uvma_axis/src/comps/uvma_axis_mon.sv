@@ -15,17 +15,19 @@
 
 
 /**
- * Component sampling transactions from a AMBA Advanced Extensible Interface Stream virtual interface (uvma_axis_if).
+ * Component sampling transactions from the AMBA Advanced Extensible Interface Stream virtual interface (uvma_axis_if).
  */
 class uvma_axis_mon_c extends uvml_mon_c;
    
+   virtual uvma_obi_if.mon_mp  mp; ///< Handle to modport
+   
    // Objects
-   uvma_axis_cfg_c    cfg;
-   uvma_axis_cntxt_c  cntxt;
+   uvma_axis_cfg_c    cfg  ; ///< 
+   uvma_axis_cntxt_c  cntxt; ///< 
    
    // TLM
-   uvm_analysis_port#(uvma_axis_mon_trn_c      )  ap      ;
-   uvm_analysis_port#(uvma_axis_cycle_mon_trn_c)  cycle_ap;
+   uvm_analysis_port#(uvma_axis_mstr_mon_trn_c)  mstr_ap; ///< 
+   uvm_analysis_port#(uvma_axis_sv_mon_trn_c  )  slv_ap ; ///< 
    
    
    `uvm_component_utils_begin(uvma_axis_mon_c)
@@ -56,34 +58,64 @@ class uvma_axis_mon_c extends uvml_mon_c;
    extern virtual task observe_reset();
    
    /**
+    * Synchronous reset thread.
+    */
+   extern virtual task observe_reset_sync();
+   
+   /**
+    * Asynchronous reset thread.
+    */
+   extern virtual task observe_reset_async();
+   
+   /**
     * Called by run_phase() while agent is in pre-reset state.
     */
-   extern virtual task mon_pre_reset();
+   extern virtual task mon_mstr_pre_reset();
+   
+   /**
+    * Called by run_phase() while agent is in pre-reset state.
+    */
+   extern virtual task mon_slv_pre_reset();
    
    /**
     * Called by run_phase() while agent is in reset state.
     */
-   extern virtual task mon_in_reset();
+   extern virtual task mon_mstr_in_reset();
+   
+   /**
+    * Called by run_phase() while agent is in reset state.
+    */
+   extern virtual task mon_slv_in_reset();
    
    /**
     * Called by run_phase() while agent is in post-reset state.
     */
-   extern virtual task mon_post_reset();
+   extern virtual task mon_mstr_post_reset();
    
    /**
-    * Creates trn by sampling the virtual interface's (cntxt.vif) signals.
+    * Called by run_phase() while agent is in post-reset state.
     */
-   extern virtual task sample_trn(output uvma_axis_cycle_mon_trn_c trn);
+   extern virtual task mon_slv_post_reset();
    
    /**
-    * Creates trn by sampling the virtual interface's (cntxt.vif) signals.
+    * TODO Describe uvma_axis_mstr_mon_trn_c::sample_mstr_trn()
     */
-   extern virtual task sample_signals(output uvma_axis_cycle_mon_trn_c trn);
+   extern virtual task sample_mstr_trn(output uvma_axis_mstr_mon_trn_c trn);
    
    /**
-    * TODO Describe uvma_axis_mon_c::process_trn()
+    * TODO Describe uvma_axis_mstr_mon_trn_c::sample_slv_trn()
     */
-   extern virtual function void process_trn(ref uvma_axis_cycle_mon_trn_c trn);
+   extern virtual task sample_slv_trn(output uvma_axis_slv_mon_trn_c trn);
+   
+   /**
+    * TODO Describe uvma_axis_mon_c::process_mstr_trn()
+    */
+   extern virtual function void process_mstr_trn(ref uvma_axis_mstr_mon_trn_c trn);
+   
+   /**
+    * TODO Describe uvma_axis_mon_c::process_slv_trn()
+    */
+   extern virtual function void process_slv_trn(ref uvma_axis_slv_mon_trn_c trn);
    
 endclass : uvma_axis_mon_c
 
@@ -100,17 +132,18 @@ function void uvma_axis_mon_c::build_phase(uvm_phase phase);
    super.build_phase(phase);
    
    void'(uvm_config_db#(uvma_axis_cfg_c)::get(this, "", "cfg", cfg));
-   if (!cfg) begin
+   if (cfg == null) begin
       `uvm_fatal("CFG", "Configuration handle is null")
    end
    
    void'(uvm_config_db#(uvma_axis_cntxt_c)::get(this, "", "cntxt", cntxt));
-   if (!cntxt) begin
+   if (cntxt == null) begin
       `uvm_fatal("CNTXT", "Context handle is null")
    end
    
-   ap       = new("ap"      , this);
-   cycle_ap = new("cycle_ap", this);
+   mp = cntxt.vif.mon_mp;
+   mstr_ap = new("mstr_ap", this);
+   slv_ap  = new("slv_ap" , this);
   
 endfunction : build_phase
 
@@ -123,12 +156,22 @@ task uvma_axis_mon_c::run_phase(uvm_phase phase);
       fork
          observe_reset();
          
-         begin
+         begin : mstr
             forever begin
                case (cntxt.reset_state)
-                  UVMA_AXIS_RESET_STATE_PRE_RESET : mon_pre_reset ();
-                  UVMA_AXIS_RESET_STATE_IN_RESET  : mon_in_reset  ();
-                  UVMA_AXIS_RESET_STATE_POST_RESET: mon_post_reset();
+                  UVML_RESET_STATE_PRE_RESET : mon_mstr_pre_reset ();
+                  UVML_RESET_STATE_IN_RESET  : mon_mstr_in_reset  ();
+                  UVML_RESET_STATE_POST_RESET: mon_mstr_post_reset();
+               endcase
+            end
+         end
+         
+         begin : slv
+            forever begin
+               case (cntxt.reset_state)
+                  UVML_RESET_STATE_PRE_RESET : mon_slv_pre_reset ();
+                  UVML_RESET_STATE_IN_RESET  : mon_slv_in_reset  ();
+                  UVML_RESET_STATE_POST_RESET: mon_slv_post_reset();
                endcase
             end
          end
@@ -140,158 +183,168 @@ endtask : run_phase
 
 task uvma_axis_mon_c::observe_reset();
    
-   if (cfg.enabled) begin
-      forever begin
-         wait (cntxt.vif.reset_n == 0);
-         cntxt.reset_state = UVMA_AXIS_RESET_STATE_IN_RESET;
-         wait (cntxt.vif.reset_n == 1);
-         cntxt.reset_state = UVMA_AXIS_RESET_STATE_POST_RESET;
-      end
+   forever begin
+      wait (cntxt.vif.reset_n === 0);
+      cntxt.reset_state = UVML_RESET_STATE_IN_RESET;
+      wait (cntxt.vif.reset_n === 1);
+      cntxt.reset_state = UVML_RESET_STATE_POST_RESET;
    end
+   
+   case (cfg.reset_mode)
+      UVML_RESET_MODE_SYNCHRONOUS : observe_reset_sync ();
+      UVML_RESET_MODE_ASYNCHRONOUS: observe_reset_async();
+      
+      default: begin
+         `uvm_fatal("AXIS_MON", $sformatf("Illegal cfg.reset_mode: %s", cfg.reset_mode.name()))
+      end
+   endcase
    
 endtask : observe_reset
 
 
-task uvma_axis_mon_c::mon_pre_reset();
+task uvma_axis_mon_c::observe_reset_sync();
    
-   @(cntxt.vif.passive_mp.mon_cb);
-   
-endtask : mon_pre_reset
-
-
-task uvma_axis_mon_c::mon_in_reset();
-   
-   @(cntxt.vif.passive_mp.mon_cb);
-   
-endtask : mon_in_reset
-
-
-task uvma_axis_mon_c::mon_post_reset();
-   
-   uvma_axis_cycle_mon_trn_c  trn;
-   
-   sample_trn    (trn);
-   process_trn   (trn);
-   cycle_ap.write(trn);
-   `uvml_hrtbt()
-   
-endtask : mon_post_reset
-
-
-task uvma_axis_mon_c::sample_trn(output uvma_axis_cycle_mon_trn_c trn);
-   
-   bit  sampled_trn = 0;
-   
-   do begin
-      @(cntxt.vif.passive_mp.mon_cb);
-      
-      if (cntxt.vif.reset_n === 1) begin
-         case (cfg.mode)
-            // Only sample when a data transfer is starting
-            UVMA_AXIS_MODE_MASTER: begin
-               if ((cntxt.vif.passive_mp.mon_cb.tvalid === 1) && (cntxt.vif.passive_mp.mon_cb.tready === 1)) begin
-                  sample_signals(trn);
-                  sampled_trn = 1;
-               end
-            end
-            
-            UVMA_AXIS_MODE_SLAVE: begin
-               // Sample both when tready is asserted/deasserted and when a data
-               // transfer begins
-               if (
-                  ((cntxt.vif.passive_mp.mon_cb.tvalid === 1) && (cntxt.vif.passive_mp.mon_cb.tready === 1)) ||
-                  (cntxt.vif.passive_mp.mon_cb.tready !== cntxt.ton)
-               ) begin
-                  sample_signals(trn);
-                  sampled_trn = 1;
-                  cntxt.ton = cntxt.vif.passive_mp.mon_cb.tready;
-               end
-            end
-            
-            default: `uvm_fatal("AXIS_MON", $sformatf("Invalid cfg.mode: %s", cfg.mode.name()))
-         endcase
+   forever begin
+      while (cntxt.vif.reset_n !== 1'b0) begin
+         wait (cntxt.vif.clk === 1);
+         wait (cntxt.vif.clk === 0);
       end
-   end while (!sampled_trn);
+      cntxt.reset_state = UVML_RESET_STATE_IN_RESET;
+      `uvm_info("AXIS_MON", "Entered IN_RESET state", UVM_MEDIUM)
+      
+      while (cntxt.vif.reset_n !== 1'b1) begin
+         wait (cntxt.vif.clk === 1);
+         wait (cntxt.vif.clk === 0);
+      end
+      cntxt.reset_state = UVML_RESET_STATE_POST_RESET;
+      `uvm_info("AXIS_MON", "Entered POST_RESET state", UVM_MEDIUM)
+   end
    
-endtask : sample_trn
+endtask : observe_reset_sync
 
 
-task uvma_axis_mon_c::sample_signals(output uvma_axis_cycle_mon_trn_c trn);
+task uvma_axis_mon_c::observe_reset_async();
    
-   // Create transaction and fill in metadata
-   trn = uvma_axis_cycle_mon_trn_c::type_id::create("trn");
+   forever begin
+      wait (cntxt.vif.reset_n === 0);
+      cntxt.reset_state = UVML_RESET_STATE_IN_RESET;
+      `uvm_info("AXIS_MON", "Entered IN_RESET state", UVM_MEDIUM)
+      
+      wait (cntxt.vif.reset_n === 1);
+      cntxt.reset_state = UVML_RESET_STATE_POST_RESET;
+      `uvm_info("AXIS_MON", "Entered POST_RESET state", UVM_MEDIUM)
+   end
+   
+endtask : observe_reset_async
+
+
+task uvma_axis_mon_c::mon_mstr_pre_reset();
+   
+   @(mp.mon_cb);
+   
+endtask : mon_mstr_pre_reset
+
+
+task uvma_axis_mon_c::mon_slv_pre_reset();
+   
+   @(mp.mon_cb);
+   
+endtask : mon_slv_pre_reset
+
+
+task uvma_axis_mon_c::mon_mstr_in_reset();
+   
+   @(mp.mon_cb);
+   
+endtask : mon_mstr_in_reset
+
+
+task uvma_axis_mon_c::mon_slv_in_reset();
+   
+   @(mp.mon_cb);
+   
+endtask : mon_slv_in_reset
+
+
+task uvma_axis_mon_c::mon_mstr_post_reset();
+   
+   uvma_axis_mstr_mon_trn_c  trn;
+   
+   sample_mstr_trn (trn);
+   process_mstr_trn(trn);
+   mstr_ap.write   (trn);
+   
+endtask : mon_mstr_post_reset
+
+
+task uvma_axis_mon_c::mon_slv_post_reset();
+   
+   uvma_axis_slv_mon_trn_c  trn;
+   
+   sample_slv_trn (trn);
+   process_slv_trn(trn);
+   slv_ap.write   (trn);
+   
+endtask : mon_slv_post_reset
+
+
+task uvma_axis_mon_c::sample_mstr_trn(output uvma_axis_mstr_mon_trn_c trn);
+   
+   @(mp.mon_cb);
+   trn = uvma_axis_mstr_mon_trn_c::type_id::create("trn");
+   
+   trn.tvalid = mp.mon_cb.tvalid;
+   trn.tlast  = mp.mon_cb.tlast ;
+   
+   for (int unsigned ii=0; ii<cfg.tdata_width; ii++) begin
+      trn.tdata[ii] = mp.mon_cb.tdata[ii];
+   end
+   for (int unsigned ii=0; ii<cfg.tdata_width; ii++) begin
+      trn.tstrb[ii] = mp.mon_cb.tstrb[ii];
+   end
+   for (int unsigned ii=0; ii<cfg.tdata_width; ii++) begin
+      trn.tkeep[ii] = mp.mon_cb.tkeep[ii];
+   end
+   for (int unsigned ii=0; ii<cfg.tid_width; ii++) begin
+      trn.tid[ii] = mp.mon_cb.tid[ii];
+   end
+   for (int unsigned ii=0; ii<cfg.tdest_width; ii++) begin
+      trn.tdest[ii] = mp.mon_cb.tdest[ii];
+   end
+   for (int unsigned ii=0; ii<cfg.tuser_width; ii++) begin
+      trn.tuser[ii] = mp.mon_cb.tuser[ii];
+   end
+   
+endtask : sample_mstr_trn
+
+
+task uvma_axis_mon_c::sample_slv_trn(output uvma_axis_slv_mon_trn_c trn);
+   
+   @(mp.mon_cb);
+   trn = uvma_axis_slv_mon_trn_c::type_id::create("trn");
+   trn.tready = mp.mon_cb.tready;
+   
+endtask : sample_slv_trn
+
+
+function void uvma_axis_mon_c::process_mstr_trn(ref uvma_axis_mstr_mon_trn_c trn);
+   
+   trn.cfg = cfg;
    trn.set_initiator(this);
-   trn.tid_width   = cfg.tid_width     ;
-   trn.tdest_width = cfg.tdest_width   ;
-   trn.tuser_width = cfg.tuser_width   ;
-   trn.set_timestamp_start($realtime());
-   trn.set_timestamp_end  ($realtime());
+   trn.set_timestamp_end($realtime());
+   `uvm_info("AXIS_MON", $sformatf("Sampled MSTR transaction from the virtual interface:\n%s", trn.sprint()), UVM_HIGH)
    
-   // Sample bus signals
-   trn.tready = cntxt.vif.passive_mp.mon_cb.tready;
-   trn.tstrb  = cntxt.vif.passive_mp.mon_cb.tstrb;
-   trn.tkeep  = cntxt.vif.passive_mp.mon_cb.tkeep;
-   trn.tlast  = cntxt.vif.passive_mp.mon_cb.tlast;
-   trn.tid    = cntxt.vif.passive_mp.mon_cb.tid  ;
-   trn.tdest  = cntxt.vif.passive_mp.mon_cb.tdest;
-   trn.tuser  = cntxt.vif.passive_mp.mon_cb.tuser;
-   
-   // Sample bus data
-   trn.tdata = new[cfg.data_bus_width];
-   foreach (trn.tdata[ii]) begin
-      trn.tdata[ii] = cntxt.vif.passive_mp.mon_cb.tdata[ii];
-   end
-   
-endtask : sample_signals
+endfunction : process_mstr_trn
 
 
-function void uvma_axis_mon_c::process_trn(ref uvma_axis_cycle_mon_trn_c trn);
+function void uvma_axis_mon_c::process_slv_trn(ref uvma_axis_slv_mon_trn_c trn);
    
-   uvma_axis_mon_trn_c  data_trn;
-   bit                  push_data;
+   trn.cfg = cfg;
+   trn.set_initiator(this);
+   trn.set_timestamp_end($realtime());
+   `uvm_info("AXIS_MON", $sformatf("Sampled MSTR transaction from the virtual interface:\n%s", trn.sprint()), UVM_HIGH)
    
-   // Only process data transfer transactions
-   if (trn.tready !== 1) begin
-      return;
-   end
-   
-   // Push sampled data onto cntxt
-   foreach (trn.tdata[ii]) begin
-      if ((trn.tkeep[ii] === 1) && (trn.tstrb[ii] === 1)) begin
-         cntxt.current_transfer_data.push_back(trn.tdata[ii]);
-      end
-   end
-   
-   // Assemble data transfer transaction
-   if (trn.tlast === 1) begin
-      // Create transaction and fill in metadata
-      data_trn = uvma_axis_mon_trn_c::type_id::create("data_trn");
-      data_trn.set_initiator(this);
-      data_trn.set_timestamp_end($realtime());
-      data_trn.tid_width   = cfg.tid_width  ;
-      data_trn.tdest_width = cfg.tdest_width;
-      data_trn.tuser_width = cfg.tuser_width;
-      
-      // Fill in data
-      data_trn.tid     = cntxt.current_transfer_tid;
-      data_trn.tdest   = cntxt.current_transfer_tdest;
-      data_trn.tuser   = cntxt.current_transfer_tuser;
-      data_trn.size    = cntxt.current_transfer_data.size();
-      data_trn.data    = new[data_trn.size];
-      foreach (data_trn.data[ii]) begin
-         data_trn.data[ii] = cntxt.current_transfer_data.pop_front();
-      end
-      
-      // Send out to analysis port
-      ap.write(data_trn);
-      
-      // Reset cntxt
-      cntxt.current_transfer_tid   = 'X;
-      cntxt.current_transfer_tdest = 'X;
-      cntxt.current_transfer_tuser = 'X;
-   end
-   
-endfunction : process_trn
+endfunction : process_slv_trn
 
 
 `endif // __UVMA_AXIS_MON_SV__

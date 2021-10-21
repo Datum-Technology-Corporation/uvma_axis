@@ -49,28 +49,34 @@ package uvma_axis_pkg;
    `include "uvma_axis_cfg.sv"
    `include "uvma_axis_cntxt.sv"
    
-   // High-level transactions
+   // Transactions
    `include "uvma_axis_mon_trn.sv"
-   `include "uvma_axis_mon_trn_logger.sv"
    `include "uvma_axis_seq_item.sv"
-   `include "uvma_axis_seq_item_logger.sv"
+   `include "uvma_axis_mstr_mon_trn.sv"
+   `include "uvma_axis_slv_mon_trn.sv"
+   `include "uvma_axis_mstr_seq_item.sv"
+   `include "uvma_axis_slv_seq_item.sv"
    
-   // Cycle transactions
-   `include "uvma_axis_cycle_mon_trn.sv"
-   `include "uvma_axis_cycle_mon_trn_logger.sv"
-   `include "uvma_axis_cycle_seq_item.sv"
-   `include "uvma_axis_cycle_seq_item_logger.sv"
+   // Driver
+   `include "uvma_axis_mstr_drv.sv"
+   `include "uvma_axis_slv_drv.sv"
    
-   // Agent components
+   // Virtual Sequencer
+   `include "uvma_axis_mstr_sqr.sv"
+   `include "uvma_axis_slv_sqr.sv"
+   
+   // Agent Components
    `include "uvma_axis_cov_model.sv"
+   `include "uvma_axis_logger.sv"
    `include "uvma_axis_drv.sv"
    `include "uvma_axis_mon.sv"
-   `include "uvma_axis_cycle_sqr.sv"
-   `include "uvma_axis_sqr.sv"
+   `include "uvma_axis_vsqr.sv"
    `include "uvma_axis_agent.sv"
    
    // Sequences
-   `include "uvma_axis_seq_lib.sv"
+   `include "uvma_axis_vseq_lib.sv"
+   `include "uvma_axis_mstr_vseq_lib.sv"
+   `include "uvma_axis_slv_vseq_lib.sv"
    
 endpackage : uvma_axis_pkg
 
