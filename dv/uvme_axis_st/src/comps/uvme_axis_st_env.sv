@@ -21,18 +21,18 @@
 class uvme_axis_st_env_c extends uvml_env_c;
    
    // Objects
-   uvme_axis_st_cfg_c    cfg  ;
-   uvme_axis_st_cntxt_c  cntxt;
+   uvme_axis_st_cfg_c    cfg  ; ///< 
+   uvme_axis_st_cntxt_c  cntxt; ///< 
    
    // Agents
-   uvma_axis_agent_c  master_agent;
-   uvma_axis_agent_c  slave_agent ;
+   uvma_axis_agent_c  mstr_agent; ///< 
+   uvma_axis_agent_c  slv_agent ; ///< 
    
    // Components
-   uvme_axis_st_cov_model_c   cov_model ;
-   uvme_axis_st_prd_c         predictor ;
-   uvme_axis_st_sb_simplex_c  sb        ;
-   uvme_axis_st_vsqr_c        vsequencer;
+   uvme_axis_st_cov_model_c   cov_model ; ///< 
+   uvme_axis_st_prd_c         predictor ; ///< 
+   uvme_axis_st_sb_simplex_c  sb        ; ///< 
+   uvme_axis_st_vsqr_c        vsequencer; ///< 
    
    
    `uvm_component_utils_begin(uvme_axis_st_env_c)
@@ -88,11 +88,6 @@ class uvme_axis_st_env_c extends uvml_env_c;
    extern virtual function void create_vsequencer();
    
    /**
-    * Creates environment's coverage model.
-    */
-   extern virtual function void create_cov_model();
-   
-   /**
     * Connects agents to predictor.
     */
    extern virtual function void connect_predictor();
@@ -107,17 +102,17 @@ class uvme_axis_st_env_c extends uvml_env_c;
     */
    extern virtual function void assemble_vsequencer();
    
-   /**
-    * Connects environment coverage model to agents/scoreboards/predictor.
-    */
-   extern virtual function void connect_coverage_model();
-   
 endclass : uvme_axis_st_env_c
 
 
 function uvme_axis_st_env_c::new(string name="uvme_axis_st_env", uvm_component parent=null);
    
    super.new(name, parent);
+   
+   set_type_override_by_type(
+      uvma_axis_cov_model_c   ::get_type(),
+      uvme_axis_st_cov_model_c::get_type(),
+   );
    
 endfunction : new
 
@@ -149,10 +144,6 @@ function void uvme_axis_st_env_c::build_phase(uvm_phase phase);
       if (cfg.is_active) begin
          create_vsequencer();
       end
-      
-      if (cfg.cov_model_enabled) begin
-         create_cov_model();
-      end
    end
    
 endfunction : build_phase
@@ -171,10 +162,6 @@ function void uvme_axis_st_env_c::connect_phase(uvm_phase phase);
       if (cfg.is_active) begin
          assemble_vsequencer();
       end
-      
-      if (cfg.cov_model_enabled) begin
-         connect_coverage_model();
-      end
    end
    
 endfunction: connect_phase
@@ -182,28 +169,28 @@ endfunction: connect_phase
 
 function void uvme_axis_st_env_c::assign_cfg();
    
-   uvm_config_db#(uvme_axis_st_cfg_c   )::set(this, "*"           , "cfg", cfg           );
-   uvm_config_db#(uvma_axis_cfg_c      )::set(this, "master_agent", "cfg", cfg.master_cfg);
-   uvm_config_db#(uvma_axis_cfg_c      )::set(this, "slave_agent" , "cfg", cfg.slave_cfg );
-   uvm_config_db#(uvml_sb_simplex_cfg_c)::set(this, "sb"          , "cfg", cfg.sb_cfg    );
+   uvm_config_db#(uvme_axis_st_cfg_c   )::set(this, "*"         , "cfg", cfg         );
+   uvm_config_db#(uvma_axis_cfg_c      )::set(this, "mstr_agent", "cfg", cfg.mstr_cfg);
+   uvm_config_db#(uvma_axis_cfg_c      )::set(this, "slv_agent" , "cfg", cfg.slv_cfg );
+   uvm_config_db#(uvml_sb_simplex_cfg_c)::set(this, "sb"        , "cfg", cfg.sb_cfg  );
    
 endfunction: assign_cfg
 
 
 function void uvme_axis_st_env_c::assign_cntxt();
    
-   uvm_config_db#(uvme_axis_st_cntxt_c   )::set(this, "*"           , "cntxt", cntxt             );
-   uvm_config_db#(uvma_axis_cntxt_c      )::set(this, "master_agent", "cntxt", cntxt.master_cntxt);
-   uvm_config_db#(uvma_axis_cntxt_c      )::set(this, "slave_agent" , "cntxt", cntxt.slave_cntxt );
-   uvm_config_db#(uvml_sb_simplex_cntxt_c)::set(this, "sb"          , "cntxt", cntxt.sb_cntxt    );
+   uvm_config_db#(uvme_axis_st_cntxt_c   )::set(this, "*"         , "cntxt", cntxt           );
+   uvm_config_db#(uvma_axis_cntxt_c      )::set(this, "mstr_agent", "cntxt", cntxt.mstr_cntxt);
+   uvm_config_db#(uvma_axis_cntxt_c      )::set(this, "slv_agent" , "cntxt", cntxt.slv_cntxt );
+   uvm_config_db#(uvml_sb_simplex_cntxt_c)::set(this, "sb"        , "cntxt", cntxt.sb_cntxt  );
    
 endfunction: assign_cntxt
 
 
 function void uvme_axis_st_env_c::create_agents();
    
-   master_agent = uvma_axis_agent_c::type_id::create("master_agent", this);
-   slave_agent  = uvma_axis_agent_c::type_id::create("slave_agent" , this);
+   mstr_agent = uvma_axis_agent_c::type_id::create("mstr_agent", this);
+   slv_agent  = uvma_axis_agent_c::type_id::create("slv_agent" , this);
    
 endfunction: create_agents
 
@@ -225,17 +212,10 @@ function void uvme_axis_st_env_c::create_vsequencer();
 endfunction: create_vsequencer
 
 
-function void uvme_axis_st_env_c::create_cov_model();
-   
-   cov_model = uvme_axis_st_cov_model_c::type_id::create("cov_model", this);
-   
-endfunction: create_cov_model
-
-
 function void uvme_axis_st_env_c::connect_predictor();
    
    // Connect agent -> predictor
-   master_agent.mon_ap.connect(predictor.in_export);
+   mstr_agent.mon_trn_ap.connect(predictor.in_export);
    
 endfunction: connect_predictor
 
@@ -243,7 +223,7 @@ endfunction: connect_predictor
 function void uvme_axis_st_env_c::connect_scoreboard();
    
    // Connect agent -> scoreboard
-   slave_agent.mon_ap.connect(sb.act_export);
+   slv_agent.mon_trn_ap.connect(sb.act_export);
    
    // Connect predictor -> scoreboard
    predictor.out_ap.connect(sb.exp_export);
@@ -253,18 +233,10 @@ endfunction: connect_scoreboard
 
 function void uvme_axis_st_env_c::assemble_vsequencer();
    
-   vsequencer.master_sequencer = master_agent.sequencer;
+   vsequencer.mstr_vsequencer = mstr_agent.vsequencer;
+   vsequencer.slv_sequencer   = slv_agent .vsequencer;
    
 endfunction: assemble_vsequencer
-
-
-function void uvme_axis_st_env_c::connect_coverage_model();
-   
-   master_agent.drv_ap.connect(cov_model.master_seq_item_export);
-   master_agent.mon_ap.connect(cov_model.master_mon_trn_export );
-   slave_agent .mon_ap.connect(cov_model.slave_mon_trn_export  );
-   
-endfunction: connect_coverage_model
 
 
 `endif // __UVME_AXIS_ST_ENV_SV__

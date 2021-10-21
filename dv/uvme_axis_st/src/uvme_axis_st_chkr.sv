@@ -18,8 +18,8 @@
  * TODO Describe uvme_axis_st_chkr
  */
 module uvme_axis_st_chkr (
-      uvma_axis_if  master_if,
-      uvma_axis_if  slave_if
+      uvma_axis_if  mstr_if,
+      uvma_axis_if  slv_if
 );
    
    // TODO Add assertions to uvme_axis_st_chkr

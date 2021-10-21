@@ -43,8 +43,7 @@ function uvme_axis_st_vseq_lib_c::new(string name="uvme_axis_st_vseq_lib");
    super.new(name);
    init_sequence_library();
    
-   // TODO Add sequences to uvme_axis_st_vseq_lib_c
-   //      Ex: add_sequence(uvme_axis_st_abc_vseq_c::get_type());
+   add_sequence(uvme_axis_st_rand_traffic_vseq_c::get_type());
    
 endfunction : new
 

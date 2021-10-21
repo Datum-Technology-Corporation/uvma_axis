@@ -31,7 +31,7 @@ typedef bit                                          uvma_axis_tvalid_b_t; ///<
 typedef bit [(`UVMA_AXIS_TDATA_MAX_WIDTH-1):0][7:0]  uvma_axis_tdata_b_t ; ///< 
 typedef bit [(`UVMA_AXIS_TDATA_MAX_WIDTH-1):0]       uvma_axis_tstrb_b_t ; ///< 
 typedef bit [(`UVMA_AXIS_TDATA_MAX_WIDTH-1):0]       uvma_axis_tkeep_b_t ; ///< 
-typedef bit                                          uvma_axis_tlast_l_t ; ///< 
+typedef bit                                          uvma_axis_tlast_b_t ; ///< 
 typedef bit [(`UVMA_AXIS_TID_MAX_WIDTH  -1):0]       uvma_axis_tid_b_t   ; ///< 
 typedef bit [(`UVMA_AXIS_TDEST_MAX_WIDTH-1):0]       uvma_axis_tdest_b_t ; ///< 
 typedef bit [(`UVMA_AXIS_TUSER_MAX_WIDTH-1):0]       uvma_axis_tuser_b_t ; ///< 
@@ -41,9 +41,9 @@ typedef bit [(`UVMA_AXIS_TUSER_MAX_WIDTH-1):0]       uvma_axis_tuser_b_t ; ///<
  * 
  */
 typedef enum {
-   UVMA_AXIS_MODE_MASTER, ///< 
-   UVMA_AXIS_MODE_SLAVE   ///< 
-} uvma_axis_mode_enum;
+   UVMA_AXIS_DRV_MODE_MSTR, ///< 
+   UVMA_AXIS_DRV_MODE_SLV   ///< 
+} uvma_axis_drv_mode_enum;
 
 /**
  * 

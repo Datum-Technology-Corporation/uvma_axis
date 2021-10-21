@@ -17,18 +17,15 @@
 /**
  * Component driving a AMBA Advanced Extensible Interface Stream virtual interface (uvma_axis_if).
  */
-class uvma_axis_drv_c extends uvml_drv_c#(
-   .REQ(uvma_axis_cycle_seq_item_c),
-   .RSP(uvma_axis_cycle_seq_item_c)
-);
+class uvma_axis_drv_c extends uvm_component;
    
    // Objects
    uvma_axis_cfg_c    cfg  ; ///< 
    uvma_axis_cntxt_c  cntxt; ///< 
    
    // Components
-   uvma_obi_mstr_drv_c  mstr_driver; ///< TODO Describe uvma_obi_drv_c::mstr_driver
-   uvma_obi_slv_drv_c   slv_driver ; ///< TODO Describe uvma_obi_drv_c::slv_driver
+   uvma_axis_mstr_drv_c  mstr_driver; ///< TODO Describe uvma_axis_drv_c::mstr_driver
+   uvma_axis_slv_drv_c   slv_driver ; ///< TODO Describe uvma_axis_drv_c::slv_driver
    
    // TLM
    uvm_analysis_port#(uvma_axis_mstr_seq_item_c)  mstr_ap; ///< 
@@ -94,7 +91,7 @@ function void uvma_axis_drv_c::build_phase(uvm_phase phase);
 endfunction : build_phase
 
 
-function void uvma_obi_drv_c::connect_phase(uvm_phase phase);
+function void uvma_axis_drv_c::connect_phase(uvm_phase phase);
    
    super.connect_phase(phase);
    

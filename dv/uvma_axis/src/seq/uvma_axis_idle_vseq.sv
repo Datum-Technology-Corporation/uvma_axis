@@ -27,7 +27,7 @@ class uvma_axis_idle_vseq_c extends uvma_axis_mstr_base_vseq_c;
    extern function new(string name="uvma_axis_idle_vseq");
    
    /**
-    * TODO Describe uvma_obi_idle_vseq_c::body()
+    * TODO Describe uvma_axis_idle_vseq_c::body()
     */
    extern virtual task body();
    
@@ -54,8 +54,8 @@ endfunction : new
 task uvma_axis_idle_vseq_c::body();
    
    case (cfg.mode)
-      UVMA_AXIS_MODE_MSTR: mstr();
-      UVMA_AXIS_MODE_SLV : slv ();
+      UVMA_AXIS_DRV_MODE_MSTR: mstr();
+      UVMA_AXIS_DRV_MODE_SLV : slv ();
    endcase
    
 endtask : body
@@ -78,7 +78,7 @@ endtask : mstr
 
 task uvma_axis_idle_vseq_c::slv();
    
-    uvma_obi_slv_seq_item_c  slv_seq_item;
+    uvma_axis_slv_seq_item_c  slv_seq_item;
    
    forever begin
       `uvm_create_on(slv_seq_item, p_sequencer.slv_sequencer)

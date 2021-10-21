@@ -111,19 +111,19 @@ function void uvma_axis_seq_item_c::do_print(uvm_printer printer);
    
    super.do_print(printer);
    
-   if (tid_width != 0) begin
+   if (cfg.tid_width != 0) begin
       printer.print_field("tid", tid, cfg.tid_width);
    end
    
-   if (tdest_width != 0) begin
+   if (cfg.tdest_width != 0) begin
       printer.print_field("tdest", tdest, cfg.tdest_width);
    end
    
-   if (tuser_width != 0) begin
+   if (cfg.tuser_width != 0) begin
       printer.print_field("tuser", tuser, cfg.tuser_width);
    end
    
-   if (tkeep_width != 0) begin
+   if (cfg.tkeep_width != 0) begin
       printer.print_field("tkeep", tkeep, cfg.tkeep_width);
    end
    
@@ -144,12 +144,10 @@ function uvml_metadata_t uvma_axis_seq_item_c::get_metadata();
    
    if (size > (uvma_axis_logging_num_data_bytes*2)) begin
       // Log first n bytes and last n bytes
-      lower_n_bytes = new[uvma_axis_logging_num_data_bytes];
-      foreach (lower_n_bytes[ii]) begin
+      for (int unsigned ii=0; ii<uvma_axis_logging_num_data_bytes; ii++) begin
          lower_n_bytes[ii] = data[ii];
       end
-      upper_n_bytes = new[uvma_axis_logging_num_data_bytes];
-      foreach (upper_n_bytes[ii]) begin
+      for (int unsigned ii=0; ii<uvma_axis_logging_num_data_bytes; ii++) begin
          upper_n_bytes[ii] = data[(size - uvma_axis_logging_num_data_bytes) + ii];
       end
       data_str = {log_bytes(upper_n_bytes), " ... ", log_bytes(lower_n_bytes)};

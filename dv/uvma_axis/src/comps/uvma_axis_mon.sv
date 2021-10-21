@@ -19,7 +19,7 @@
  */
 class uvma_axis_mon_c extends uvml_mon_c;
    
-   virtual uvma_obi_if.mon_mp  mp; ///< Handle to modport
+   virtual uvma_axis_if.mon_mp  mp; ///< Handle to modport
    
    // Objects
    uvma_axis_cfg_c    cfg  ; ///< 
@@ -27,7 +27,7 @@ class uvma_axis_mon_c extends uvml_mon_c;
    
    // TLM
    uvm_analysis_port#(uvma_axis_mstr_mon_trn_c)  mstr_ap; ///< 
-   uvm_analysis_port#(uvma_axis_sv_mon_trn_c  )  slv_ap ; ///< 
+   uvm_analysis_port#(uvma_axis_slv_mon_trn_c )  slv_ap ; ///< 
    
    
    `uvm_component_utils_begin(uvma_axis_mon_c)
@@ -183,16 +183,9 @@ endtask : run_phase
 
 task uvma_axis_mon_c::observe_reset();
    
-   forever begin
-      wait (cntxt.vif.reset_n === 0);
-      cntxt.reset_state = UVML_RESET_STATE_IN_RESET;
-      wait (cntxt.vif.reset_n === 1);
-      cntxt.reset_state = UVML_RESET_STATE_POST_RESET;
-   end
-   
-   case (cfg.reset_mode)
-      UVML_RESET_MODE_SYNCHRONOUS : observe_reset_sync ();
-      UVML_RESET_MODE_ASYNCHRONOUS: observe_reset_async();
+   case (cfg.reset_type)
+      UVML_RESET_TYPE_SYNCHRONOUS : observe_reset_sync ();
+      UVML_RESET_TYPE_ASYNCHRONOUS: observe_reset_async();
       
       default: begin
          `uvm_fatal("AXIS_MON", $sformatf("Illegal cfg.reset_mode: %s", cfg.reset_mode.name()))

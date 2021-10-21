@@ -27,8 +27,8 @@ class uvme_axis_st_vsqr_c extends uvml_vsqr_c #(
    uvme_axis_st_cntxt_c  cntxt;
    
    // Sequencer handles
-   uvma_axis_sqr_c  master_sequencer;
-   uvma_axis_sqr_c  slave_sequencer ;
+   uvma_axis_vsqr_c  mstr_vsequencer;
+   uvma_axis_vsqr_c  slv_vsequencer ;
    
    
    `uvm_component_utils_begin(uvme_axis_st_vsqr_c)

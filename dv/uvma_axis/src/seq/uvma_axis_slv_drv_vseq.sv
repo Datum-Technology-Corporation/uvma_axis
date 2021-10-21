@@ -10,39 +10,39 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-`ifndef __UVMA_AXIS_SLV_RAND_RDY_VSEQ_SV__
-`define __UVMA_AXIS_SLV_RAND_RDY_VSEQ_SV__
+`ifndef __UVMA_AXIS_SLV_DRV_VSEQ_SV__
+`define __UVMA_AXIS_SLV_DRV_VSEQ_SV__
 
 
 /**
- * TODO Describe uvma_axis_slv_rand_rdy_vseq_c
+ * TODO Describe uvma_axis_slv_drv_vseq_c
  */
-class uvma_axis_slv_rand_rdy_vseq_c extends uvma_axis_slv_base_vseq_c;
+class uvma_axis_slv_drv_vseq_c extends uvma_axis_slv_base_vseq_c;
    
-   `uvm_object_begin(uvma_axis_slv_rand_rdy_vseq_c)
+   `uvm_object_utils(uvma_axis_slv_drv_vseq_c)
    
    
    /**
     * Default constructor.
     */
-   extern function new(string name="uvma_axis_slv_rand_rdy_vseq");
+   extern function new(string name="uvma_axis_slv_drv_vseq");
    
    /**
-    * TODO Describe uvma_axis_slv_rand_rdy_vseq_c::body()
+    * TODO Describe uvma_axis_slv_drv_vseq_c::body()
     */
    extern virtual task body();
    
-endclass : uvma_axis_slv_rand_rdy_vseq_c
+endclass : uvma_axis_slv_drv_vseq_c
 
 
-function uvma_axis_slv_rand_rdy_vseq_c::new(string name="uvma_axis_slv_rand_rdy_vseq");
+function uvma_axis_slv_drv_vseq_c::new(string name="uvma_axis_slv_drv_vseq");
    
    super.new(name);
    
 endfunction : new
 
 
-task uvma_axis_slv_rand_rdy_vseq_c::body();
+task uvma_axis_slv_drv_vseq_c::body();
    
    bit                       tready;
    uvma_axis_slv_seq_item_c  req   ;
@@ -50,11 +50,11 @@ task uvma_axis_slv_rand_rdy_vseq_c::body();
    
    forever begin
       randcase
-         cfg.drv_slv_on: tready = 1;
-         pct_toff      : tready = 0;
+         cfg.drv_slv_on : tready = 1;
+         pct_off        : tready = 0;
       endcase
       
-      `uvm_do_with_on(req, p_sequencer.slv_sequencer, {
+      `uvm_do_on_with(req, p_sequencer.slv_sequencer, {
          req.tready == local::tready;
       })
    end
@@ -62,4 +62,4 @@ task uvma_axis_slv_rand_rdy_vseq_c::body();
 endtask : body
 
 
-`endif // __UVMA_AXIS_SLV_RAND_RDY_VSEQ_SV__
+`endif // __UVMA_AXIS_SLV_DRV_VSEQ_SV__

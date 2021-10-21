@@ -15,9 +15,9 @@
 
 
 /**
- * TODO Describe uvma_axis_drv_c
+ * TODO Describe uvma_axis_slv_drv_c
  */
-class uvma_axis_drv_c extends uvml_drv_c #(
+class uvma_axis_slv_drv_c extends uvml_drv_c #(
    .REQ(uvma_axis_slv_seq_item_c),
    .RSP(uvma_axis_slv_seq_item_c)
 );;
@@ -32,7 +32,7 @@ class uvma_axis_drv_c extends uvml_drv_c #(
    uvm_analysis_port#(uvma_axis_slv_seq_item_c)  ap; ///< 
    
    
-   `uvm_component_utils_begin(uvma_axis_drv_c)
+   `uvm_component_utils_begin(uvma_axis_slv_drv_c)
       `uvm_field_object(cfg  , UVM_DEFAULT)
       `uvm_field_object(cntxt, UVM_DEFAULT)
    `uvm_component_utils_end
@@ -41,7 +41,7 @@ class uvma_axis_drv_c extends uvml_drv_c #(
    /**
     * Default constructor.
     */
-   extern function new(string name="uvma_axis_drv", uvm_component parent=null);
+   extern function new(string name="uvma_axis_slv_drv", uvm_component parent=null);
    
    /**
     * 1. Ensures cfg & cntxt handles are not null.
@@ -50,31 +50,31 @@ class uvma_axis_drv_c extends uvml_drv_c #(
    extern virtual function void build_phase(uvm_phase phase);
    
    /**
-    * TODO Describe uvma_axis_drv_c::run_phase()
+    * TODO Describe uvma_axis_slv_drv_c::run_phase()
     */
    extern virtual task run_phase(uvm_phase phase);
    
    /**
-    * TODO Describe uvma_axis_drv_c::process_req()
+    * TODO Describe uvma_axis_slv_drv_c::process_req()
     */
    extern virtual function void process_req(ref uvma_axis_slv_seq_item_c req);
    
    /**
-    * TODO Describe uvma_axis_drv_c::drv_req()
+    * TODO Describe uvma_axis_slv_drv_c::drv_req()
     */
    extern virtual task drv_req(ref uvma_axis_slv_seq_item_c req);
    
-endclass : uvma_axis_drv_c
+endclass : uvma_axis_slv_drv_c
 
 
-function uvma_axis_drv_c::new(string name="uvma_axis_drv", uvm_component parent=null);
+function uvma_axis_slv_drv_c::new(string name="uvma_axis_slv_drv", uvm_component parent=null);
    
    super.new(name, parent);
    
 endfunction : new
 
 
-function void uvma_axis_drv_c::build_phase(uvm_phase phase);
+function void uvma_axis_slv_drv_c::build_phase(uvm_phase phase);
    
    super.build_phase(phase);
    
@@ -96,11 +96,11 @@ function void uvma_axis_drv_c::build_phase(uvm_phase phase);
 endfunction : build_phase
 
 
-task uvma_axis_drv_c::run_phase(uvm_phase phase);
+task uvma_axis_slv_drv_c::run_phase(uvm_phase phase);
    
    super.run_phase(phase);
    
-   if (cfg.enabled && cfg.is_active && (cfg.mode == UVMA_OBI_MODE_MSTR)) begin
+   if (cfg.enabled && cfg.is_active && (cfg.mode == UVMA_AXIS_DRV_MODE_MSTR)) begin
       forever begin
          seq_item_port.get_next_item(req);
          process_req                (req);
@@ -114,7 +114,7 @@ task uvma_axis_drv_c::run_phase(uvm_phase phase);
 endtask : run_phase
 
 
-function void uvma_axis_drv_c::process_req(ref uvma_axis_slv_seq_item_c req);
+function void uvma_axis_slv_drv_c::process_req(ref uvma_axis_slv_seq_item_c req);
    
    req.cfg = cfg;
    `uvm_info("AXIS_MSTR_DRV", $sformatf("Got new req from the sequencer:\n%s", req.sprint()), UVM_HIGH)
@@ -122,11 +122,10 @@ function void uvma_axis_drv_c::process_req(ref uvma_axis_slv_seq_item_c req);
 endfunction: process_req
 
 
-task uvma_axis_drv_c::drv_req(ref uvma_axis_slv_seq_item_c req);
+task uvma_axis_slv_drv_c::drv_req(ref uvma_axis_slv_seq_item_c req);
    
    @(mp.drv_slv_a_cb);
-   trn = uvma_axis_slv_mon_trn_c::type_id::create("trn");
-   trn.tready <= mp.mon_cb.tready;
+   mp.mon_cb.tready <= req.tready;
    
 endtask : drv_req
 

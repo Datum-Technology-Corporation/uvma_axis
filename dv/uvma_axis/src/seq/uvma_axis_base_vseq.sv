@@ -29,7 +29,7 @@ class uvma_axis_base_vseq_c extends uvml_vseq_c #(
    
    
    `uvm_object_utils(uvma_axis_base_vseq_c)
-   `uvm_declare_p_vsequencer(uvma_axis_vsqr_c)
+   `uvm_declare_p_sequencer(uvma_axis_vsqr_c)
    
    
    /**
@@ -99,7 +99,7 @@ task uvma_axis_base_vseq_c::get_mstr_mon_trn(output uvma_axis_mstr_mon_trn_c trn
 endtask : get_mstr_mon_trn
 
 
-task uvma_axis_base_vseq_c::peek_mstr_a_mon_trn(output uvma_axis_mstr_mon_trn_c trn);
+task uvma_axis_base_vseq_c::peek_mstr_mon_trn(output uvma_axis_mstr_mon_trn_c trn);
    
    p_sequencer.mstr_mon_trn_fifo.peek_next_item(trn);
    
@@ -117,7 +117,7 @@ task uvma_axis_base_vseq_c::peek_slv_mon_trn(output uvma_axis_slv_mon_trn_c trn)
    
    p_sequencer.slv_mon_trn_fifo.peek_next_item(trn);
    
-endtask : peek_mstr_a_mon_trn
+endtask : peek_slv_mon_trn
 
 
 `endif // __UVMA_AXIS_BASE_VSEQ_SV__

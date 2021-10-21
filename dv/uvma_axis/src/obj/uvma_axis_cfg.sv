@@ -15,10 +15,10 @@
 
 
 // Default sequences
-typedef class uvma_axis_mon_vseq_c ;
-typedef class uvma_axis_idle_vseq_c;
-typedef class uvma_axis_mstr_vseq_c;
-typedef class uvma_axis_slv_vseq_c ;
+typedef class uvma_axis_mon_vseq_c     ;
+typedef class uvma_axis_idle_vseq_c    ;
+typedef class uvma_axis_mstr_drv_vseq_c;
+typedef class uvma_axis_slv_drv_vseq_c ;
 
 
 /**
@@ -28,15 +28,17 @@ typedef class uvma_axis_slv_vseq_c ;
 class uvma_axis_cfg_c extends uvml_cfg_c;
    
    // Generic options
-   rand bit                      enabled          ;
-   rand uvm_active_passive_enum  is_active        ;
-   rand uvm_sequencer_arb_mode   sqr_arb_mode     ;
-   rand bit                      cov_model_enabled;
-   rand bit                      trn_log_enabled  ;
+   rand bit                      enabled          ; ///< 
+   rand uvm_active_passive_enum  is_active        ; ///< 
+   rand uvml_reset_type_enum     reset_type       ; ///< 
+   rand uvm_sequencer_arb_mode   sqr_arb_mode     ; ///< 
+   rand bit                      cov_model_enabled; ///< 
+   rand bit                      trn_log_enabled  ; ///< 
    
    // Protocol options
-   rand uvma_axis_mode_enum      drv_mode   ; ///< Operational mode
+   rand uvma_axis_drv_mode_enum  drv_mode   ; ///< Operational mode
    rand uvma_axis_drv_idle_enum  drv_idle   ; ///< 
+   rand int unsigned             drv_slv_on ; ///< 
    rand int unsigned             tdata_width; ///< Measured in bytes (B)
    rand int unsigned             tid_width  ; ///< Measured in bits  (b)
    rand int unsigned             tkeep_width; ///< Measured in bits  (b)
@@ -44,20 +46,21 @@ class uvma_axis_cfg_c extends uvml_cfg_c;
    rand int unsigned             tuser_width; ///< Measured in bits  (b)
    
    // Sequence Types
-   uvm_object_wrapper  monitor_vseq_type; ///< TODO Describe uvma_obi_cfg_c::monitor_vseq_type
-   uvm_object_wrapper  idle_vseq_type   ; ///< TODO Describe uvma_obi_cfg_c::idle_vseq_type
-   uvm_object_wrapper  mstr_vseq_type   ; ///< TODO Describe uvma_obi_cfg_c::mstr_vseq_type
-   uvm_object_wrapper  slv_vseq_type    ; ///< TODO Describe uvma_obi_cfg_c::slv_vseq_type
+   uvm_object_wrapper  mon_vseq_type     ; ///< 
+   uvm_object_wrapper  idle_vseq_type    ; ///< 
+   uvm_object_wrapper  mstr_drv_vseq_type; ///< 
+   uvm_object_wrapper  slv_drv_vseq_type ; ///< 
    
    
    `uvm_object_utils_begin(uvma_axis_cfg_c)
       `uvm_field_int (                         enabled          , UVM_DEFAULT)
       `uvm_field_enum(uvm_active_passive_enum, is_active        , UVM_DEFAULT)
+      `uvm_field_enum(uvml_reset_type_enum   , reset_type       , UVM_DEFAULT)
       `uvm_field_enum(uvm_sequencer_arb_mode , sqr_arb_mode     , UVM_DEFAULT)
       `uvm_field_int (                         cov_model_enabled, UVM_DEFAULT)
       `uvm_field_int (                         trn_log_enabled  , UVM_DEFAULT)
       
-      `uvm_field_enum(uvma_axis_mode_enum    , drv_mode   , UVM_DEFAULT          )
+      `uvm_field_enum(uvma_axis_drv_mode_enum, drv_mode   , UVM_DEFAULT          )
       `uvm_field_enum(uvma_axis_drv_idle_enum, drv_idle   , UVM_DEFAULT          )
       `uvm_field_int (                         drv_slv_on , UVM_DEFAULT + UVM_DEC)
       `uvm_field_int (                         tdata_width, UVM_DEFAULT + UVM_DEC)
@@ -101,10 +104,10 @@ endclass : uvma_axis_cfg_c
 function uvma_axis_cfg_c::new(string name="uvma_axis_cfg");
    
    super.new(name);
-   monitor_vseq_type = uvma_axis_mon_vseq_c ::type_id;
-   idle_vseq_type    = uvma_axis_idle_vseq_c::type_id;
-   mstr_vseq_type    = uvma_axis_mstr_vseq_c::type_id;
-   slv_vseq_type     = uvma_axis_slv_vseq_c ::type_id;
+   mon_vseq_type      = uvma_axis_mon_vseq_c     ::get_type();
+   idle_vseq_type     = uvma_axis_idle_vseq_c    ::get_type();
+   mstr_drv_vseq_type = uvma_axis_mstr_drv_vseq_c::get_type();
+   slv_drv_vseq_type  = uvma_axis_slv_drv_vseq_c ::get_type();
    
 endfunction : new
 

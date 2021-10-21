@@ -15,7 +15,7 @@
 
 
 `include "uvma_axis_slv_base_vseq.sv"
-`include "uvma_axis_slv_rand_rdy_vseq.sv"
+`include "uvma_axis_slv_drv_vseq.sv"
 
 
 /**
@@ -43,7 +43,7 @@ function uvma_axis_slv_vseq_lib_c::new(string name="uvma_axis_slv_vseq_lib");
    super.new(name);
    init_sequence_library();
    
-   add_sequence(uvma_axis_slv_rand_rdy_vseq_c::get_type());
+   add_sequence(uvma_axis_slv_drv_vseq_c::get_type());
    
 endfunction : new
 

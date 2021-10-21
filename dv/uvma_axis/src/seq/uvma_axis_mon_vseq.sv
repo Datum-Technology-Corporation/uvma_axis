@@ -34,9 +34,9 @@ class uvma_axis_mon_vseq_c extends uvma_axis_base_vseq_c;
    extern virtual task body();
    
    /**
-    * TODO Describe uvma_obi_mon_vseq_c::process_transfers()
+    * TODO Describe uvma_axis_mon_vseq_c::process_transfers()
     */
-   task uvma_obi_mon_vseq_c::process_transfers();
+   extern virtual task process_transfers();
    
 endclass : uvma_axis_mon_vseq_c
 
@@ -112,10 +112,10 @@ task uvma_axis_mon_vseq_c::process_transfers();
       // TODO Add mechanism for adding error checkers
       mon_trn.set_timestamp_end($realtime());
       mon_trn.size  = cntxt.mon_curent_transfer.size();
-      mon_trn.tid   = cntxt.mon_curent_transfer.[0].tid  ;
-      mon_trn.tdest = cntxt.mon_curent_transfer.[0].tdest;
-      mon_trn.tuser = cntxt.mon_curent_transfer.[0].tuser;
-      mon_trn.tkeep = cntxt.mon_curent_transfer.[$].tkeep;
+      mon_trn.tid   = cntxt.mon_curent_transfer[0].tid  ;
+      mon_trn.tdest = cntxt.mon_curent_transfer[0].tdest;
+      mon_trn.tuser = cntxt.mon_curent_transfer[0].tuser;
+      mon_trn.tkeep = cntxt.mon_curent_transfer[$].tkeep;
       foreach (cntxt.mon_curent_transfer[ii]) begin
          mstr_mon_trn = cntxt.mon_curent_transfer[ii];
          mon_trn.data.push_back(mstr_mon_trn.tdata);

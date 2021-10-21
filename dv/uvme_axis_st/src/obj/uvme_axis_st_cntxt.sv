@@ -21,8 +21,8 @@
 class uvme_axis_st_cntxt_c extends uvml_cntxt_c;
    
    // Agent context handles
-   uvma_axis_cntxt_c  master_cntxt;
-   uvma_axis_cntxt_c  slave_cntxt;
+   uvma_axis_cntxt_c  mstr_cntxt;
+   uvma_axis_cntxt_c  slv_cntxt;
    
    // Scoreboard context handle
    uvml_sb_simplex_cntxt_c  sb_cntxt;
@@ -33,8 +33,8 @@ class uvme_axis_st_cntxt_c extends uvml_cntxt_c;
    
    
    `uvm_object_utils_begin(uvme_axis_st_cntxt_c)
-      `uvm_field_object(master_cntxt, UVM_DEFAULT)
-      `uvm_field_object(slave_cntxt, UVM_DEFAULT)
+      `uvm_field_object(mstr_cntxt, UVM_DEFAULT)
+      `uvm_field_object(slv_cntxt, UVM_DEFAULT)
       
       //`uvm_field_object(sb_cntxt, UVM_DEFAULT)
       
@@ -55,8 +55,8 @@ function uvme_axis_st_cntxt_c::new(string name="uvme_axis_st_cntxt");
    
    super.new(name);
    
-   master_cntxt = uvma_axis_cntxt_c::type_id::create("master_cntxt");
-   slave_cntxt  = uvma_axis_cntxt_c::type_id::create("slave_cntxt" );
+   mstr_cntxt = uvma_axis_cntxt_c::type_id::create("mstr_cntxt");
+   slv_cntxt  = uvma_axis_cntxt_c::type_id::create("slv_cntxt" );
    sb_cntxt     = uvml_sb_simplex_cntxt_c  ::type_id::create("sb_cntxt"    );
    
    sample_cfg_e   = new("sample_cfg_e"  );

@@ -15,6 +15,7 @@
 
 
 `include "uvma_axis_base_vseq.sv"
+`include "uvma_axis_mon_vseq.sv"
 `include "uvma_axis_idle_vseq.sv"
 `include "uvma_axis_payload_vseq.sv"
 `include "uvma_axis_rand_traffic_vseq.sv"

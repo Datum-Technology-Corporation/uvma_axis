@@ -20,70 +20,30 @@
 class uvma_axis_cov_model_c extends uvm_component;
    
    // Objects
-   uvma_axis_cfg_c       cfg;
-   uvma_axis_cntxt_c     cntxt;
+   uvma_axis_cfg_c       cfg  ; ///< 
+   uvma_axis_cntxt_c     cntxt; ///< 
    
    // Covergroup variables
-   uvma_axis_mon_trn_c         mon_trn       ;
-   uvma_axis_seq_item_c        seq_item      ;
-   uvma_axis_cycle_mon_trn_c   cycle_mon_trn ;
-   uvma_axis_cycle_seq_item_c  cycle_seq_item;
+   uvma_axis_mon_trn_c        mon_trn      ; ///< 
+   uvma_axis_seq_item_c       seq_item     ; ///< 
+   uvma_axis_mstr_mon_trn_c   mstr_mon_trn ; ///< 
+   uvma_axis_mstr_seq_item_c  mstr_seq_item; ///< 
+   uvma_axis_slv_mon_trn_c    slv_mon_trn  ; ///< 
+   uvma_axis_slv_seq_item_c   slv_seq_item ; ///< 
    
    // TLM
-   uvm_tlm_analysis_fifo#(uvma_axis_mon_trn_c       )  mon_trn_fifo       ;
-   uvm_tlm_analysis_fifo#(uvma_axis_seq_item_c      )  seq_item_fifo      ;
-   uvm_tlm_analysis_fifo#(uvma_axis_cycle_mon_trn_c )  cycle_mon_trn_fifo ;
-   uvm_tlm_analysis_fifo#(uvma_axis_cycle_seq_item_c)  cycle_seq_item_fifo;
+   uvm_tlm_analysis_fifo#(uvma_axis_mon_trn_c      )  mon_trn_fifo      ; ///< 
+   uvm_tlm_analysis_fifo#(uvma_axis_seq_item_c     )  seq_item_fifo     ; ///< 
+   uvm_tlm_analysis_fifo#(uvma_axis_mstr_mon_trn_c )  mstr_mon_trn_fifo ; ///< 
+   uvm_tlm_analysis_fifo#(uvma_axis_mstr_seq_item_c)  mstr_seq_item_fifo; ///< 
+   uvm_tlm_analysis_fifo#(uvma_axis_slv_mon_trn_c  )  slv_mon_trn_fifo  ; ///< 
+   uvm_tlm_analysis_fifo#(uvma_axis_slv_seq_item_c )  slv_seq_item_fifo ; ///< 
    
    
    `uvm_component_utils_begin(uvma_axis_cov_model_c)
       `uvm_field_object(cfg  , UVM_DEFAULT)
       `uvm_field_object(cntxt, UVM_DEFAULT)
    `uvm_component_utils_end
-   
-   
-   // TODO Add covergroup(s) to uvma_axis_cov_model_c
-   //      Ex: covergroup axis_cfg_cg;
-   //             abc_cpt : coverpoint cfg.abc;
-   //             xyz_cpt : coverpoint cfg.xyz;
-   //          endgroup : axis_cfg_cg
-   //          
-   //          covergroup axis_cntxt_cg;
-   //             abc_cpt : coverpoint cntxt.abc;
-   //             xyz_cpt : coverpoint cntxt.xyz;
-   //          endgroup : axis_cntxt_cg
-   //          
-   //          covergroup axis_mon_trn_cg;
-   //             address : coverpoint mon_trn.address {
-   //                bins low   = {16'h0000_0000, 16'h4FFF_FFFF};
-   //                bins med   = {16'h5000_0000, 16'h9FFF_FFFF};
-   //                bins high  = {16'hA000_0000, 16'hFFFF_FFFF};
-   //             }
-   //          endgroup : axis_mon_trn_cg
-   //          
-   //          covergroup axis_seq_item_cg;
-   //             address : coverpoint seq_item.address {
-   //                bins low   = {16'h0000_0000, 16'h5FFF_FFFF};
-   //                bins med   = {16'h6000_0000, 16'hAFFF_FFFF};
-   //                bins high  = {16'hB000_0000, 16'hFFFF_FFFF};
-   //             }
-   //          endgroup : axis_seq_item_trn_cg
-   //          
-   //          covergroup axis_cycle_mon_trn_cg;
-   //             address : coverpoint cycle_mon_trn.address {
-   //                bins low   = {16'h0000_0000, 16'h4FFF_FFFF};
-   //                bins med   = {16'h5000_0000, 16'h9FFF_FFFF};
-   //                bins high  = {16'hA000_0000, 16'hFFFF_FFFF};
-   //             }
-   //          endgroup : axis_cycle_mon_trn_cg
-   //          
-   //          covergroup axis_cycle_seq_item_cg;
-   //             address : coverpoint cycle_seq_item.address {
-   //                bins low   = {16'h0000_0000, 16'h5FFF_FFFF};
-   //                bins med   = {16'h6000_0000, 16'hAFFF_FFFF};
-   //                bins high  = {16'hB000_0000, 16'hFFFF_FFFF};
-   //             }
-   //          endgroup : axis_cycle_seq_item_trn_cg
    
    
    /**
@@ -123,14 +83,24 @@ class uvma_axis_cov_model_c extends uvm_component;
    extern virtual function void sample_seq_item();
    
    /**
-    * TODO Describe uvma_axis_cov_model_c::sample_cycle_mon_trn()
+    * TODO Describe uvma_axis_cov_model_c::sample_mstr_mon_trn()
     */
-   extern virtual function void sample_cycle_mon_trn();
+   extern virtual function void sample_mstr_mon_trn();
    
    /**
-    * TODO Describe uvma_axis_cov_model_c::sample_cycle_seq_item()
+    * TODO Describe uvma_axis_cov_model_c::sample_mstr_seq_item()
     */
-   extern virtual function void sample_cycle_seq_item();
+   extern virtual function void sample_mstr_seq_item();
+   
+   /**
+    * TODO Describe uvma_axis_cov_model_c::sample_slv_mon_trn()
+    */
+   extern virtual function void sample_slv_mon_trn();
+   
+   /**
+    * TODO Describe uvma_axis_cov_model_c::sample_slv_seq_item()
+    */
+   extern virtual function void sample_slv_seq_item();
    
 endclass : uvma_axis_cov_model_c
 
@@ -156,10 +126,12 @@ function void uvma_axis_cov_model_c::build_phase(uvm_phase phase);
       `uvm_fatal("CNTXT", "Context handle is null")
    end
    
-   mon_trn_fifo        = new("mon_trn_fifo"       , this);
-   seq_item_fifo       = new("seq_item_fifo"      , this);
-   cycle_mon_trn_fifo  = new("cycle_mon_trn_fifo" , this);
-   cycle_seq_item_fifo = new("cycle_seq_item_fifo", this);
+   mon_trn_fifo       = new("mon_trn_fifo"      , this);
+   seq_item_fifo      = new("seq_item_fifo"     , this);
+   mstr_mon_trn_fifo  = new("mstr_mon_trn_fifo" , this);
+   mstr_seq_item_fifo = new("mstr_seq_item_fifo", this);
+   slv_mon_trn_fifo   = new("slv_mon_trn_fifo"  , this);
+   slv_seq_item_fifo  = new("slv_seq_item_fifo" , this);
    
 endfunction : build_phase
 
@@ -194,16 +166,28 @@ task uvma_axis_cov_model_c::run_phase(uvm_phase phase);
             sample_seq_item();
          end
          
-         // Monitor cycle transactions
+         // Monitor mstr transactions
          forever begin
-            cycle_mon_trn_fifo.get(cycle_mon_trn);
-            sample_cycle_mon_trn();
+            mstr_mon_trn_fifo.get(mstr_mon_trn);
+            sample_mstr_mon_trn();
          end
          
-         // Sequence cycle items
+         // Sequence mstr items
          forever begin
-            cycle_seq_item_fifo.get(cycle_seq_item);
-            sample_cycle_seq_item();
+            mstr_seq_item_fifo.get(mstr_seq_item);
+            sample_mstr_seq_item();
+         end
+         
+         // Monitor slv transactions
+         forever begin
+            slv_mon_trn_fifo.get(slv_mon_trn);
+            sample_slv_mon_trn();
+         end
+         
+         // Sequence slv items
+         forever begin
+            slv_seq_item_fifo.get(slv_seq_item);
+            sample_slv_seq_item();
          end
       join_none
    end
@@ -239,18 +223,32 @@ function void uvma_axis_cov_model_c::sample_seq_item();
 endfunction : sample_seq_item
 
 
-function void uvma_axis_cov_model_c::sample_cycle_mon_trn();
+function void uvma_axis_cov_model_c::sample_mstr_mon_trn();
    
-   // TODO Implement uvma_axis_cov_model_c::sample_cycle_mon_trn();
+   // TODO Implement uvma_axis_cov_model_c::sample_mstr_mon_trn();
    
-endfunction : sample_cycle_mon_trn
+endfunction : sample_mstr_mon_trn
 
 
-function void uvma_axis_cov_model_c::sample_cycle_seq_item();
+function void uvma_axis_cov_model_c::sample_mstr_seq_item();
    
-   // TODO Implement uvma_axis_cov_model_c::sample_cycle_seq_item();
+   // TODO Implement uvma_axis_cov_model_c::sample_mstr_seq_item();
    
-endfunction : sample_cycle_seq_item
+endfunction : sample_mstr_seq_item
+
+
+function void uvma_axis_cov_model_c::sample_slv_mon_trn();
+   
+   // TODO Implement uvma_axis_cov_model_c::sample_slv_mon_trn();
+   
+endfunction : sample_slv_mon_trn
+
+
+function void uvma_axis_cov_model_c::sample_slv_seq_item();
+   
+   // TODO Implement uvma_axis_cov_model_c::sample_slv_seq_item();
+   
+endfunction : sample_slv_seq_item
 
 
 `endif // __UVMA_AXIS_COV_MODEL_SV__

@@ -19,8 +19,8 @@
  * Self-Testing DUT wrapper (uvmt_axis_st_dut_wrap).
  */
 module uvmt_axis_st_dut_chkr(
-   uvma_axis_if  master_if,
-   uvma_axis_if  slave_if
+   uvma_axis_if  mstr_if,
+   uvma_axis_if  slv_if
 );
    
    `pragma protect begin

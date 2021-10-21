@@ -56,6 +56,11 @@ class uvma_axis_logger_c extends uvm_component;
     */
    extern virtual function void build_phase(uvm_phase phase);
    
+   /**
+    * TODO Describe uvma_axis_logger_c::connect_phase()
+    */
+   extern virtual function void connect_phase(uvm_phase phase);
+   
 endclass : uvma_axis_logger_c
 
 

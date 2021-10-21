@@ -29,8 +29,8 @@ module uvmt_axis_st_tb;
    uvmt_axis_st_clknrst_gen_if  clknrst_gen_if();
    
    // Agent interfaces
-   uvma_axis_if  master_if(.clk(clknrst_gen_if.clk), .reset_n(clknrst_gen_if.reset_n));
-   uvma_axis_if  slave_if (.clk(clknrst_gen_if.clk), .reset_n(clknrst_gen_if.reset_n));
+   uvma_axis_if  mstr_if(.clk(clknrst_gen_if.clk), .reset_n(clknrst_gen_if.reset_n));
+   uvma_axis_if  slv_if (.clk(clknrst_gen_if.clk), .reset_n(clknrst_gen_if.reset_n));
    
    // DUT instance
    uvmt_axis_st_dut_wrap  dut_wrap(.*);
@@ -45,8 +45,8 @@ module uvmt_axis_st_tb;
       
       // Add interfaces to uvm_config_db
       uvm_config_db#(virtual uvmt_axis_st_clknrst_gen_if)::set(null, "*"                 , "clknrst_gen_vif", clknrst_gen_if);
-      uvm_config_db#(virtual uvma_axis_if               )::set(null, "*.env.master_agent", "vif"            , master_if     );
-      uvm_config_db#(virtual uvma_axis_if               )::set(null, "*.env.slave_agent" , "vif"            , slave_if      );
+      uvm_config_db#(virtual uvma_axis_if               )::set(null, "*.env.mstr_agent", "vif"            , mstr_if     );
+      uvm_config_db#(virtual uvma_axis_if               )::set(null, "*.env.slv_agent" , "vif"            , slv_if      );
       
       // Run test
       uvm_top.enable_print_topology = 1;

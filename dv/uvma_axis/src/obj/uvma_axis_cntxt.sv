@@ -26,7 +26,7 @@ class uvma_axis_cntxt_c extends uvml_cntxt_c;
    uvml_reset_state_enum  reset_state = UVML_RESET_STATE_PRE_RESET; ///< 
    
    // Current data transfer
-   uvma_obi_mstr_mon_trn_c  mon_current_transfer[$]; ///< TODO Describe uvma_axis_cntxt_c::mon_current_transfer
+   uvma_axis_mstr_mon_trn_c  mon_current_transfer[$]; ///< TODO Describe uvma_axis_cntxt_c::mon_current_transfer
    
    // Events
    uvm_event  sample_cfg_e  ; ///< 

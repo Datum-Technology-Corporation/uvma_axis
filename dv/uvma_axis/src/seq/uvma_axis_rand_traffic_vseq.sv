@@ -82,7 +82,7 @@ task uvma_axis_rand_traffic_vseq_c::body();
       gap = $urandom_range(min_gap, max_gap);
       `uvm_info("AXIS_SEQ", $sformatf("Waiting %0d cycles before sending next segment", gap), UVM_MEDIUM)
       repeat (gap) begin
-         @(cntxt.vif.drv_master_cb);
+         @(cntxt.vif.drv_mstr_cb);
       end
    end
    

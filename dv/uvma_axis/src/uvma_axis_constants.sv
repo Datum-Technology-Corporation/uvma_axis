@@ -14,18 +14,15 @@
 `define __UVMA_AXIS_CONSTANTS_SV__
 
 
-const int unsigned  uvma_axis_default_data_bus_width  = `UVMA_AXIS_TDATA_DEFAULT_WIDTH; // Measured in bytes (B)
-const int unsigned  uvma_axis_default_tid_width       = `UVMA_AXIS_TID_DEFAULT_WIDTH  ; // Measured in bits  (b)
-const int unsigned  uvma_axis_default_tdest_width     = `UVMA_AXIS_TDEST_DEFAULT_WIDTH; // Measured in bits  (b)
-const int unsigned  uvma_axis_default_tuser_width     = `UVMA_AXIS_TUSER_DEFAULT_WIDTH; // Measured in bits  (b)
+const int unsigned  uvma_axis_default_tdata_width  = `UVMA_AXIS_TDATA_DEFAULT_WIDTH; // Measured in bytes (B)
+const int unsigned  uvma_axis_default_tid_width    = `UVMA_AXIS_TID_DEFAULT_WIDTH  ; // Measured in bits  (b)
+const int unsigned  uvma_axis_default_tdest_width  = `UVMA_AXIS_TDEST_DEFAULT_WIDTH; // Measured in bits  (b)
+const int unsigned  uvma_axis_default_tuser_width  = `UVMA_AXIS_TUSER_DEFAULT_WIDTH; // Measured in bits  (b)
 
 const int unsigned  uvma_axis_max_payload_size  = 32_768; // Measured in bytes (B)
 const int unsigned  uvma_axis_min_payload_size  =      8; // Measured in bytes (B)
 
 const int unsigned  uvma_axis_logging_num_data_bytes                       =   8; // Number of bytes logged at start and end of payload by transaction loggers
-const int unsigned  uvma_axis_cycle_throttle_seq_default_pct_bus_usage     =  90;
-const int unsigned  uvma_axis_mstr_rand_traffic_seq_default_num_pkts       = 100;
-const int unsigned  uvma_axis_mstr_rand_traffic_seq_default_pct_bus_usage  = 100;
 
 
 `endif // __UVMA_AXIS_CONSTANTS_SV__

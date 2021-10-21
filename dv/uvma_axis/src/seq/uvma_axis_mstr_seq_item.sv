@@ -76,20 +76,20 @@ function void uvma_axis_mstr_seq_item_c::do_print(uvm_printer printer);
    super.do_print(printer);
    
    printer.print_field("tvalid", tlast, $bits(tvalid));
-   printer.print_field("tdata" , tdata, cfg.tdata_width*8);
+   printer.print_field("tdata" , tdata, cfg.tdata_width*3);
    printer.print_field("tstrb" , tstrb, cfg.tdata_width, UVM_BIN);
-   printer.print_field("tkeep" , tkeep, cfg.tkeep_width, UVM_BIN);
+   printer.print_field("tkeep" , tkeep, cfg.tdata_width, UVM_BIN);
    printer.print_field("tlast" , tlast, $bits(tlast));
    
-   if (tid_width != 0) begin
+   if (cfg.tid_width != 0) begin
       printer.print_field("tid", tid, cfg.tid_width);
    end
    
-   if (tdest_width != 0) begin
+   if (cfg.tdest_width != 0) begin
       printer.print_field("tdest", tdest, cfg.tdest_width);
    end
    
-   if (tuser_width != 0) begin
+   if (cfg.tuser_width != 0) begin
       printer.print_field("tuser", tuser, cfg.tuser_width);
    end
    
@@ -98,13 +98,25 @@ endfunction : do_print
 
 function uvml_metadata_t uvma_axis_mstr_seq_item_c::get_metadata();
    
-   string tstatus_str = "";
-   string tdata_str   = $sformatf($sformatf("%%0dh", cfg.tdata_width*8), tdata);
-   string tstrb_str   = $sformatf($sformatf("%%0dh", cfg.tdata_width  ), tstrb);
-   string tkeep_str   = $sformatf($sformatf("%%0dh", cfg.tkeep_width  ), tkeep);
-   string tid_str     = $sformatf($sformatf("%%0dh", cfg.tid_width    ), tid  );
-   string tdest_str   = $sformatf($sformatf("%%0dh", cfg.tdest_width  ), tdest);
-   string tuser_str   = $sformatf($sformatf("%%0dh", cfg.tuser_width  ), tuser);
+   string status_str = "";
+   string tdata_str  = $sformatf($sformatf("%%0dh", cfg.tdata_width*8), tdata);
+   string tstrb_str  = $sformatf($sformatf("%%0dh", cfg.tdata_width  ), tstrb);
+   string tkeep_str  = $sformatf($sformatf("%%0dh", cfg.tkeep_width  ), tkeep);
+   string tid_str    = $sformatf($sformatf("%%0dh", cfg.tid_width    ), tid  );
+   string tdest_str  = $sformatf($sformatf("%%0dh", cfg.tdest_width  ), tdest);
+   string tuser_str  = $sformatf($sformatf("%%0dh", cfg.tuser_width  ), tuser);
+   
+   if (tvalid === 1'b1) begin
+      status_str = "V";
+      if (tlast === 1'b1) begin
+         status_str = {status_str, "L"};
+      end
+   end
+   else begin
+      if (tlast === 1'b1) begin
+         status_str = " L";
+      end
+   end
    
    get_metadata[0] = '{
       index     : 0,

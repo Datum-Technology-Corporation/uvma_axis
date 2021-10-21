@@ -29,8 +29,8 @@ class uvme_axis_st_cfg_c extends uvml_cfg_c;
    rand bit                      trn_log_enabled;
    
    // Objects
-   rand uvma_axis_cfg_c        master_cfg;
-   rand uvma_axis_cfg_c        slave_cfg ;
+   rand uvma_axis_cfg_c        mstr_cfg;
+   rand uvma_axis_cfg_c        slv_cfg ;
    rand uvml_sb_simplex_cfg_c  sb_cfg    ;
    
    
@@ -41,8 +41,8 @@ class uvme_axis_st_cfg_c extends uvml_cfg_c;
       `uvm_field_int (                         cov_model_enabled    , UVM_DEFAULT)
       `uvm_field_int (                         trn_log_enabled      , UVM_DEFAULT)
       
-      `uvm_field_object(master_cfg, UVM_DEFAULT)
-      `uvm_field_object(slave_cfg , UVM_DEFAULT)
+      `uvm_field_object(mstr_cfg, UVM_DEFAULT)
+      `uvm_field_object(slv_cfg , UVM_DEFAULT)
       `uvm_field_object(sb_cfg    , UVM_DEFAULT)
    `uvm_object_utils_end
    
@@ -57,22 +57,22 @@ class uvme_axis_st_cfg_c extends uvml_cfg_c;
    
    constraint agent_cfg_cons {
       if (enabled) {
-         master_cfg.enabled == 1;
-         slave_cfg .enabled == 1;
+         mstr_cfg.enabled == 1;
+         slv_cfg .enabled == 1;
       }
       
       if (is_active == UVM_ACTIVE) {
-         master_cfg.is_active == UVM_ACTIVE;
-         slave_cfg .is_active == UVM_ACTIVE;
+         mstr_cfg.is_active == UVM_ACTIVE;
+         slv_cfg .is_active == UVM_ACTIVE;
       }
       
       if (trn_log_enabled) {
-         /*soft */master_cfg.trn_log_enabled == 1;
-         /*soft */slave_cfg .trn_log_enabled == 1;
+         /*soft */mstr_cfg.trn_log_enabled == 1;
+         /*soft */slv_cfg .trn_log_enabled == 1;
       }
       
-      master_cfg.mode == UVMA_AXIS_MODE_MASTER;
-      slave_cfg .mode == UVMA_AXIS_MODE_SLAVE ;
+      mstr_cfg.mode == UVMA_AXIS_DRV_MODE_MSTR;
+      slv_cfg .mode == UVMA_AXIS_DRV_MODE_SLV ;
    }
    
    constraint sb_cfg_cons {
@@ -97,8 +97,8 @@ function uvme_axis_st_cfg_c::new(string name="uvme_axis_st_cfg");
    
    super.new(name);
    
-   master_cfg = uvma_axis_cfg_c::type_id::create("master_cfg");
-   slave_cfg  = uvma_axis_cfg_c::type_id::create("slave_cfg" );
+   mstr_cfg = uvma_axis_cfg_c::type_id::create("mstr_cfg");
+   slv_cfg  = uvma_axis_cfg_c::type_id::create("slv_cfg" );
    sb_cfg     = uvml_sb_simplex_cfg_c  ::type_id::create("sb_cfg"    );
    
 endfunction : new
