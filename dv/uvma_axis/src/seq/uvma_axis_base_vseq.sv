@@ -43,6 +43,16 @@ class uvma_axis_base_vseq_c extends uvml_vseq_c #(
    extern virtual task pre_start();
    
    /**
+    * TODO Describe uvma_axis_base_vseq_c::upstream_get_next_item()
+    */
+   extern task upstream_get_next_item(ref uvm_sequence_item);
+   
+   /**
+    * TODO Describe uvma_axis_base_vseq_c::upstream_item_done()
+    */
+   extern task upstream_item_done(ref uvm_sequence_item);
+   
+   /**
     * TODO Describe uvma_axis_base_vseq_c::write_mon_trn()
     */
    extern task write_mon_trn(ref uvma_axis_mon_trn_c trn);
@@ -73,6 +83,20 @@ task uvma_axis_base_vseq_c::pre_start();
    cntxt = p_sequencer.cntxt;
    
 endtask : pre_start
+
+
+task uvma_axis_base_vseq_c::upstream_get_next_item(ref uvm_sequence_item req);
+   
+   p_sequencer.upstream_sqr_port.get_next_item(req);
+   
+endtask : upstream_get_next_item
+
+
+task uvma_axis_base_vseq_c::upstream_item_done(ref uvm_sequence_item req);
+   
+   p_sequencer.upstream_sqr_port.item_done(req);
+   
+endtask : upstream_item_done
 
 
 task uvma_axis_base_vseq_c::write_mon_trn(ref uvma_axis_mon_trn_c trn);

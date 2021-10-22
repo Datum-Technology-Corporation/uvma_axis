@@ -31,12 +31,13 @@ class uvma_axis_vsqr_c extends uvml_vsqr_c #(
    uvma_axis_slv_sqr_c   slv_sequencer ; ///< 
    
    // TLM
-   uvm_analysis_port     #(uvma_axis_mon_trn_c     )  mon_trn_ap         ; ///< TODO Describe uvma_axis_vsqr_c::mon_trn_ap
-   uvm_analysis_port     #(uvma_axis_seq_item_c    )  seq_item_ap        ; ///< TODO Describe uvma_axis_vsqr_c::seq_item_ap
-   uvm_tlm_analysis_fifo #(uvma_axis_mstr_mon_trn_c)  mstr_mon_trn_fifo  ; ///< TODO Describe uvma_axis_vsqr_c::mstr_mon_trn_fifo
-   uvm_tlm_analysis_fifo #(uvma_axis_slv_mon_trn_c )  slv_mon_trn_fifo   ; ///< TODO Describe uvma_axis_vsqr_c::slv_mon_trn_fifo
-   uvm_analysis_export   #(uvma_axis_mstr_mon_trn_c)  mstr_mon_trn_export; ///< TODO Describe uvma_axis_vsqr_c::mstr_mon_trn_export
-   uvm_analysis_export   #(uvma_axis_slv_mon_trn_c )  slv_mon_trn_export ; ///< TODO Describe uvma_axis_vsqr_c::slv_mon_trn_export
+   uvm_seq_item_pull_port #(uvm_sequence_item       )  upstream_sqr_port  ; ///< TODO Describe uvma_axis_vsqr_c::upstream_sqr_port
+   uvm_analysis_port      #(uvma_axis_mon_trn_c     )  mon_trn_ap         ; ///< TODO Describe uvma_axis_vsqr_c::mon_trn_ap
+   uvm_analysis_port      #(uvma_axis_seq_item_c    )  seq_item_ap        ; ///< TODO Describe uvma_axis_vsqr_c::seq_item_ap
+   uvm_tlm_analysis_fifo  #(uvma_axis_mstr_mon_trn_c)  mstr_mon_trn_fifo  ; ///< TODO Describe uvma_axis_vsqr_c::mstr_mon_trn_fifo
+   uvm_tlm_analysis_fifo  #(uvma_axis_slv_mon_trn_c )  slv_mon_trn_fifo   ; ///< TODO Describe uvma_axis_vsqr_c::slv_mon_trn_fifo
+   uvm_analysis_export    #(uvma_axis_mstr_mon_trn_c)  mstr_mon_trn_export; ///< TODO Describe uvma_axis_vsqr_c::mstr_mon_trn_export
+   uvm_analysis_export    #(uvma_axis_slv_mon_trn_c )  slv_mon_trn_export ; ///< TODO Describe uvma_axis_vsqr_c::slv_mon_trn_export
    
    
    `uvm_component_utils_begin(uvma_axis_vsqr_c)
@@ -87,6 +88,7 @@ function void uvma_axis_vsqr_c::build_phase(uvm_phase phase);
    mstr_sequencer = uvma_axis_mstr_sqr_c::type_id::create("mstr_sequencer", this);
    slv_sequencer  = uvma_axis_slv_sqr_c ::type_id::create("slv_sequencer" , this);
    
+   upstream_sqr_port   = new("upstream_sqr_port"  , this);
    mon_trn_ap          = new("mon_trn_ap"         , this);
    seq_item_ap         = new("seq_item_ap"        , this);
    mstr_mon_trn_fifo   = new("mstr_mon_trn_fifo"  , this);

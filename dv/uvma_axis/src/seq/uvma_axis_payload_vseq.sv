@@ -19,7 +19,6 @@
  */
 class uvma_axis_payload_vseq_c extends uvma_axis_base_vseq_c;
    
-   uvm_object                payload; ///< 
    rand uvma_axis_tid_b_t    tid    ; ///< 
    rand uvma_axis_tdest_b_t  tdest  ; ///< 
    rand uvma_axis_tuser_b_t  tuser  ; ///< 
@@ -55,20 +54,26 @@ endfunction : new
 
 task uvma_axis_payload_vseq_c::body();
    
-   bit [7:0]  payload_bytes[];
-   void'(payload.pack_bytes(payload_bytes));
+   uvm_sequence_item  payload;
+   bit [7:0]          payload_bytes[];
    
-   // Create seq item
-   `uvm_do_with(req, {
-      req.size == payload_bytes.size();
-      foreach (req.data[ii]) {
-         req.data[ii] == payload_bytes[ii];
-      }
-      req.tid   == local::tid  ;
-      req.tdest == local::tdest;
-      req.tuser == local::tuser;
-      req.tkeep == payload_bytes.size()%cfg.tdata_width;
-   })
+   forever begin
+      upstream_get_next_item(payload);
+      void'(payload.pack_bytes(payload_bytes));
+      
+      // Create seq item
+      `uvm_do_with(req, {
+         req.size == payload_bytes.size();
+         foreach (req.data[ii]) {
+            req.data[ii] == payload_bytes[ii];
+         }
+         req.tid   == local::tid  ;
+         req.tdest == local::tdest;
+         req.tuser == local::tuser;
+         req.tkeep == payload_bytes.size()%cfg.tdata_width;
+      })
+      upstream_item_done(payload);
+   end
    
 endtask : body
 
