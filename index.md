@@ -1,25 +1,38 @@
-# About
-The Moore.io Arm® AMBA® IP Suite's Advanced eXtensible Interface (AXI)-Stream UVM Agent is a compact, sequence-based solution to Driving/Monitoring both sides of an AXI-Stream interface.  This project consists of the agent (`uvma_axis_pkg`), the self-testing UVM environment (`uvme_axis_st_pkg`) and the test bench (`uvmt_axis_st_pkg`) to verify the agent against itself.
+# Home Page
 
-# IP
-* [Download latest release (.tgz)](Todo)
-* [View latest documentation](Todo)
-* [Browse code](https://github.com/Datum-Technology-Corporation/uvma_axis/tree/main/dv/uvma_axis)
+## [Get Latest Release](TODO)
+### [View Documentation online](TODO)
 
-# Metrics
-## Stability
-Todo
+----------------
 
-## Coverage
-Todo
+## About
+The [Moore.io](https://www.mooreio.com) Arm® AMBA® IP Suite's Advanced eXtensible Interface-Stream (AXI-Stream) (AXI-S) (AXIS) UVM Agent is a compact, sequence-based solution to Driving/Monitoring both sides of an AXI-Stream interface.  This project consists of the agent (`uvma_axis_pkg`), the self-testing UVM environment (`uvme_axis_st_pkg`) and the test bench (`uvmt_axis_st_pkg`) to verify the agent against itself.
 
-# Management
-* [Issues](https://github.com/Datum-Technology-Corporation/uvma_axis/issues)
-* [Wiki](https://github.com/Datum-Technology-Corporation/uvma_axis/wiki)
-* [Discussions](https://github.com/Datum-Technology-Corporation/uvma_axis/discussions)
-* [Projects](https://github.com/Datum-Technology-Corporation/uvma_axis/projects)
-> * [uvma_axis](https://github.com/Datum-Technology-Corporation/uvma_axis/projects/1)
-> * [uvme_axis_st](https://github.com/Datum-Technology-Corporation/uvma_axis/projects/2)
-> * [uvmt_axis_st](https://github.com/Datum-Technology-Corporation/uvma_axis/projects/3)
-* Regressions
-> * Todo
+## Downloads
+
+| Latest Release (v1.0 Beta 0) | Stable (Nightly) | Stable (Weekly) |
+| --------------------- | ---------------- | --------------- |
+| [Source Code](TODO) | [Source Code](TODO) | [Source Code](TODO) |
+| [Documentation](TODO) | [Documentation](TODO) | [Documentation](TODO) |
+
+> **[View All Releases](TODO)**
+
+
+## Management
+
+| **[Issues](https://github.com/Datum-Technology-Corporation/uvma_axis/issues)** | **[Discussions](https://github.com/Datum-Technology-Corporation/uvma_axis/discussions)** |
+| **[Projects](https://github.com/Datum-Technology-Corporation/uvma_axis/projects)** | **[Wiki](https://github.com/Datum-Technology-Corporation/uvma_axis/wiki)** |
+
+
+## Metrics
+
+| Latest Release (v1.0 Beta 0) | Stable (Nightly) | Stable (Weekly) |
+| --------------------- | ---------------- | --------------- |
+| [Functional Coverage Report](TODO) | [Functional Coverage Report](TODO) | [Functional Coverage Report](TODO) |
+| [Release Regression Test Report](TODO) | [Regression Test Report](TODO) | [Regression Test Report](TODO) |
+
+----------------
+
+## News
+### 2021/10/22 - Hello, World!
+The Moore.io Core Libraries are being brought online for the very first time. Watch this space in the near future!
