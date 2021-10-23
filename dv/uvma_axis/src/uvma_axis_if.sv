@@ -29,17 +29,17 @@ interface uvma_axis_if #(
 );
    
    // Slave-out signals
-   wire                           tready;
+   wire                           tready; ///< 
    
    // Master-out signals
-   wire                           tvalid;
-   wire [(TDATA_WIDTH-1):0][7:0]  tdata ;
-   wire [(TDATA_WIDTH-1):0]       tstrb ;
-   wire [(TDATA_WIDTH-1):0]       tkeep ;
-   wire                           tlast ;
-   wire [(TID_WIDTH  -1):0]       tid   ;
-   wire [(TDEST_WIDTH-1):0]       tdest ;
-   wire [(TUSER_WIDTH-1):0]       tuser ;
+   wire                           tvalid; ///< 
+   wire [(TDATA_WIDTH-1):0][7:0]  tdata ; ///< 
+   wire [(TDATA_WIDTH-1):0]       tstrb ; ///< 
+   wire [(TDATA_WIDTH-1):0]       tkeep ; ///< 
+   wire                           tlast ; ///< 
+   wire [(TID_WIDTH  -1):0]       tid   ; ///< 
+   wire [(TDEST_WIDTH-1):0]       tdest ; ///< 
+   wire [(TUSER_WIDTH-1):0]       tuser ; ///< 
    
    
    /**

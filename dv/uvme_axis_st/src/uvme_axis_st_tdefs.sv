@@ -15,10 +15,7 @@
 `define __UVME_AXIS_ST_TDEFS_SV__
 
 
-// Scoreboard specialization
-typedef uvml_sb_simplex_c#(
-   .T_ACT_TRN(uvma_axis_mon_trn_c)
-) uvme_axis_st_sb_simplex_c;
+typedef uvml_sb_simplex_c #(uvma_axis_mon_trn_c)  uvme_axis_st_sb_simplex_c;
 
 
 `endif // __UVME_AXIS_ST_TDEFS_SV__

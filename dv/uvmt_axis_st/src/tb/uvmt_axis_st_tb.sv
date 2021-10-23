@@ -40,16 +40,21 @@ module uvmt_axis_st_tb;
     * Test bench entry point.
     */
    initial begin
-      // Specify time format for simulation (units_number, precision_number, suffix_string, minimum_field_width)
-      $timeformat(-9, 3, " ns", 18);
+      // Specify time format for simulation
+      $timeformat(
+         .units_number       (   -9),
+         .precision_number   (    3),
+         .suffix_string      (" ns"),
+         .minimum_field_width(   18) 
+      );
       
       // Add interfaces to uvm_config_db
-      uvm_config_db#(virtual uvmt_axis_st_clknrst_gen_if)::set(null, "*"                 , "clknrst_gen_vif", clknrst_gen_if);
+      uvm_config_db#(virtual uvmt_axis_st_clknrst_gen_if)::set(null, "*"               , "clknrst_gen_vif", clknrst_gen_if);
       uvm_config_db#(virtual uvma_axis_if               )::set(null, "*.env.mstr_agent", "vif"            , mstr_if     );
       uvm_config_db#(virtual uvma_axis_if               )::set(null, "*.env.slv_agent" , "vif"            , slv_if      );
       
       // Run test
-      uvm_top.enable_print_topology = 1;
+      uvm_top.enable_print_topology = 0;
       uvm_top.finish_on_completion  = 1;
       uvm_top.run_test();
    end

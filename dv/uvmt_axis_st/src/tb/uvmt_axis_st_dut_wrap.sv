@@ -21,8 +21,7 @@ module uvmt_axis_st_dut_wrap(
    uvma_axis_if  mstr_if,
    uvma_axis_if  slv_if
 );
-
-   // Connect the 2 interfaces
+   
    assign mstr_if.tready = slv_if .tready;
    assign slv_if .tvalid = mstr_if.tvalid;
    assign slv_if .tdata  = mstr_if.tdata ;

@@ -17,7 +17,7 @@
 /**
  * Encapsulates assertions targeting uvma_axis_if.
  */
-module uvma_axis_if_chkr(
+module uvma_axis_if_chkr (
    uvma_axis_if  axis_if
 );
    

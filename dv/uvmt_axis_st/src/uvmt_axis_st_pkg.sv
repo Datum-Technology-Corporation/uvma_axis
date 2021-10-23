@@ -19,9 +19,9 @@
 `include "uvml_macros.sv"
 `include "uvml_logs_macros.sv"
 `include "uvml_sb_macros.sv"
-`include "uvma_axis_macros.sv"
+/*`include "uvma_axis_macros.sv"
 `include "uvme_axis_st_macros.sv"
-`include "uvmt_axis_st_macros.sv"
+`include "uvmt_axis_st_macros.sv"*/
 
 // Time units and precision for this test bench
 timeunit       1ns;
@@ -63,7 +63,9 @@ endpackage : uvmt_axis_st_pkg
 
 // Module(s) / Checker(s)
 `include "uvmt_axis_st_dut_wrap.sv"
+`ifdef UVMT_AXIS_ST_INC_CHKR
 `include "uvmt_axis_st_dut_chkr.sv"
+`endif
 `include "uvmt_axis_st_tb.sv"
 
 

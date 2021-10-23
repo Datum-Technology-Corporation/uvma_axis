@@ -36,7 +36,7 @@ class uvma_axis_cntxt_c extends uvml_cntxt_c;
    `uvm_object_utils_begin(uvma_axis_cntxt_c)
       `uvm_field_enum(uvml_reset_state_enum, reset_state, UVM_DEFAULT)
       
-      `uvm_field_queue_object(mon_current_transfer , UVM_DEFAULT)
+      //`uvm_field_queue_object(mon_current_transfer , UVM_DEFAULT)
       
       `uvm_field_event(sample_cfg_e  , UVM_DEFAULT)
       `uvm_field_event(sample_cntxt_e, UVM_DEFAULT)

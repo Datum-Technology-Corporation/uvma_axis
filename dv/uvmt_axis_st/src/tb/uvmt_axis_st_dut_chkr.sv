@@ -15,19 +15,15 @@
 
 
 /**
- * Module encapsulating assertions for AMBA Advanced Extensible Interface Stream VIP
- * Self-Testing DUT wrapper (uvmt_axis_st_dut_wrap).
+ * Module encapsulating assertions for AMBA Advanced Extensible Interface Stream Agent Self-Testing DUT wrapper
+ * (uvmt_axis_st_dut_wrap).
  */
 module uvmt_axis_st_dut_chkr(
    uvma_axis_if  mstr_if,
    uvma_axis_if  slv_if
 );
    
-   `pragma protect begin
-   
    // TODO Add assertions to uvmt_axis_st_dut_chkr
-   
-   `pragma protect end
    
 endmodule : uvmt_axis_st_dut_chkr
 

@@ -187,7 +187,6 @@ endfunction : build_phase
 function void uvmt_axis_st_base_test_c::connect_phase(uvm_phase phase);
    
    super.connect_phase(phase);
-   
    vsequencer = env.vsequencer;
    
 endfunction : connect_phase
@@ -217,11 +216,8 @@ endtask : reset_phase
 
 function void uvmt_axis_st_base_test_c::phase_started(uvm_phase phase);
    
-   string  phase_name = phase.get_name();
-   
    super.phase_started(phase);
-   
-   print_banner($sformatf("start of %s phase", phase_name));
+   print_banner($sformatf("start of %s phase", phase.get_name()));
    
 endfunction : phase_started
 

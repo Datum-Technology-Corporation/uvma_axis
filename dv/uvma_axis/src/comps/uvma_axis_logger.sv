@@ -54,12 +54,12 @@ class uvma_axis_logger_c extends uvm_component;
    /**
     * TODO Describe uvma_axis_logger_c::build_phase()
     */
-   extern virtual function void build_phase(uvm_phase phase);
+   //extern virtual function void build_phase(uvm_phase phase);
    
    /**
     * TODO Describe uvma_axis_logger_c::connect_phase()
     */
-   extern virtual function void connect_phase(uvm_phase phase);
+   //extern virtual function void connect_phase(uvm_phase phase);
    
 endclass : uvma_axis_logger_c
 
@@ -71,56 +71,56 @@ function uvma_axis_logger_c::new(string name="uvma_axis_logger", uvm_component p
 endfunction : new
 
 
-function void uvma_axis_logger_c::build_phase(uvm_phase phase);
-   
-   super.build_phase(phase);
-   
-   void'(uvm_config_db#(uvma_axis_cfg_c)::get(this, "", "cfg", cfg));
-   if (cfg == null) begin
-      `uvm_fatal("CFG", "Configuration handle is null")
-   end
-   
-   void'(uvm_config_db#(uvma_axis_cntxt_c)::get(this, "", "cntxt", cntxt));
-   if (cntxt == null) begin
-      `uvm_fatal("CNTXT", "Context handle is null")
-   end
-   
-   mon_trn_logger       = uvml_logs_metadata_logger_c #(uvma_axis_mon_trn_c      )::type_id::create("mon_trn_logger"      , this);
-   seq_item_logger      = uvml_logs_metadata_logger_c #(uvma_axis_seq_item_c     )::type_id::create("seq_item_logger"     , this);
-   mstr_mon_trn_logger  = uvml_logs_metadata_logger_c #(uvma_axis_mstr_mon_trn_c )::type_id::create("mstr_mon_trn_logger" , this);
-   slv_mon_trn_logger   = uvml_logs_metadata_logger_c #(uvma_axis_slv_mon_trn_c  )::type_id::create("slv_mon_trn_logger"  , this);
-   mstr_seq_item_logger = uvml_logs_metadata_logger_c #(uvma_axis_mstr_seq_item_c)::type_id::create("mstr_seq_item_logger", this);
-   slv_seq_item_logger  = uvml_logs_metadata_logger_c #(uvma_axis_slv_seq_item_c )::type_id::create("slv_seq_item_logger" , this);
-   
-   mon_trn_logger_export       = new("mon_trn_logger_export"      );
-   seq_item_logger_export      = new("seq_item_logger_export"     );
-   mstr_mon_trn_logger_export  = new("mstr_mon_trn_logger_export" );
-   slv_mon_trn_logger_export   = new("slv_mon_trn_logger_export"  );
-   mstr_seq_item_logger_export = new("mstr_seq_item_logger_export");
-   slv_seq_item_logger_export  = new("slv_seq_item_logger_export" );
-   
-endfunction : build_phase
-
-
-function void uvma_axis_logger_c::connect_phase(uvm_phase phase);
-   
-   super.connect_phase(phase);
-   
-   mon_trn_logger      .set_file_name("mon_trn"      );
-   seq_item_logger     .set_file_name("seq_item"     );
-   mstr_mon_trn_logger .set_file_name("mstr.mon_trn" );
-   slv_mon_trn_logger  .set_file_name("slv.mon_trn"  );
-   mstr_seq_item_logger.set_file_name("mstr.seq_item");
-   slv_seq_item_logger .set_file_name("slv.seq_item" );
-   
-   mon_trn_logger_export       = mon_trn_logger      .analysis_export;
-   seq_item_logger_export      = seq_item_logger     .analysis_export;
-   mstr_mon_trn_logger_export  = mstr_mon_trn_logger .analysis_export;
-   slv_mon_trn_logger_export   = slv_mon_trn_logger  .analysis_export;
-   mstr_seq_item_logger_export = mstr_seq_item_logger.analysis_export;
-   slv_seq_item_logger_export  = slv_seq_item_logger .analysis_export;
-   
-endfunction : connect_phase
+//function void uvma_axis_logger_c::build_phase(uvm_phase phase);
+//   
+//   super.build_phase(phase);
+//   
+//   void'(uvm_config_db#(uvma_axis_cfg_c)::get(this, "", "cfg", cfg));
+//   if (cfg == null) begin
+//      `uvm_fatal("CFG", "Configuration handle is null")
+//   end
+//   
+//   void'(uvm_config_db#(uvma_axis_cntxt_c)::get(this, "", "cntxt", cntxt));
+//   if (cntxt == null) begin
+//      `uvm_fatal("CNTXT", "Context handle is null")
+//   end
+//   
+//   mon_trn_logger       = uvml_logs_metadata_logger_c #(uvma_axis_mon_trn_c      )::type_id::create("mon_trn_logger"      , this);
+//   seq_item_logger      = uvml_logs_metadata_logger_c #(uvma_axis_seq_item_c     )::type_id::create("seq_item_logger"     , this);
+//   mstr_mon_trn_logger  = uvml_logs_metadata_logger_c #(uvma_axis_mstr_mon_trn_c )::type_id::create("mstr_mon_trn_logger" , this);
+//   slv_mon_trn_logger   = uvml_logs_metadata_logger_c #(uvma_axis_slv_mon_trn_c  )::type_id::create("slv_mon_trn_logger"  , this);
+//   mstr_seq_item_logger = uvml_logs_metadata_logger_c #(uvma_axis_mstr_seq_item_c)::type_id::create("mstr_seq_item_logger", this);
+//   slv_seq_item_logger  = uvml_logs_metadata_logger_c #(uvma_axis_slv_seq_item_c )::type_id::create("slv_seq_item_logger" , this);
+//   
+//   mon_trn_logger_export       = new("mon_trn_logger_export"      );
+//   seq_item_logger_export      = new("seq_item_logger_export"     );
+//   mstr_mon_trn_logger_export  = new("mstr_mon_trn_logger_export" );
+//   slv_mon_trn_logger_export   = new("slv_mon_trn_logger_export"  );
+//   mstr_seq_item_logger_export = new("mstr_seq_item_logger_export");
+//   slv_seq_item_logger_export  = new("slv_seq_item_logger_export" );
+//   
+//endfunction : build_phase
+//
+//
+//function void uvma_axis_logger_c::connect_phase(uvm_phase phase);
+//   
+//   super.connect_phase(phase);
+//   
+//   mon_trn_logger      .set_file_name("mon_trn"      );
+//   seq_item_logger     .set_file_name("seq_item"     );
+//   mstr_mon_trn_logger .set_file_name("mstr.mon_trn" );
+//   slv_mon_trn_logger  .set_file_name("slv.mon_trn"  );
+//   mstr_seq_item_logger.set_file_name("mstr.seq_item");
+//   slv_seq_item_logger .set_file_name("slv.seq_item" );
+//   
+//   mon_trn_logger_export       = mon_trn_logger      .analysis_export;
+//   seq_item_logger_export      = seq_item_logger     .analysis_export;
+//   mstr_mon_trn_logger_export  = mstr_mon_trn_logger .analysis_export;
+//   slv_mon_trn_logger_export   = slv_mon_trn_logger  .analysis_export;
+//   mstr_seq_item_logger_export = mstr_seq_item_logger.analysis_export;
+//   slv_seq_item_logger_export  = slv_seq_item_logger .analysis_export;
+//   
+//endfunction : connect_phase
 
 
 `endif // __UVMA_AXIS_LOGGER_SV__

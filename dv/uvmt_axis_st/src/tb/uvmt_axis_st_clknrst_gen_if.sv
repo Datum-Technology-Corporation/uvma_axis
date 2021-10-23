@@ -15,9 +15,8 @@
 
 
 /**
- * Interface providing clock and reset signals to all other interfaces used by
- * AMBA Advanced Extensible Interface Stream VIP Self-Testing Test Bench
- * (uvmt_axis_st_tb). Managed by test cases.
+ * Interface providing clock and reset signals to all other interfaces used by AMBA Advanced Extensible Interface
+ * Stream VIP Self-Testing Test Bench (uvmt_axis_st_tb). Managed by test cases.
  */
 interface uvmt_axis_st_clknrst_gen_if;
    

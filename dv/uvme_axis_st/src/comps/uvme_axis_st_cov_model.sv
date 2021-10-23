@@ -24,64 +24,30 @@ class uvme_axis_st_cov_model_c extends uvma_axis_cov_model_c;
       `uvm_field_object(cntxt, UVM_DEFAULT)
    `uvm_component_utils_end
    
-   
+   /*
    covergroup cfg_cg;
-      /*abc_cpt : coverpoint cfg.abc;
-      xyz_cpt : coverpoint cfg.xyz;*/
    endgroup : cfg_cg
    
    covergroup cntxt_cg;
-      /*abc_cpt : coverpoint cntxt.abc;
-      xyz_cpt : coverpoint cntxt.xyz;*/
    endgroup : cntxt_cg
    
    covergroup mon_trn_cg;
-      /*address : coverpoint mon_trn.address {
-         bins low   = {16'h0000_0000, 16'h4FFF_FFFF};
-         bins med   = {16'h5000_0000, 16'h9FFF_FFFF};
-         bins high  = {16'hA000_0000, 16'hFFFF_FFFF};
-      }*/
    endgroup : mon_trn_cg
    
    covergroup seq_item_cg;
-      /*address : coverpoint seq_item.address {
-         bins low   = {16'h0000_0000, 16'h5FFF_FFFF};
-         bins med   = {16'h6000_0000, 16'hAFFF_FFFF};
-         bins high  = {16'hB000_0000, 16'hFFFF_FFFF};
-      }*/
    endgroup : seq_item_cg
    
    covergroup mstr_mon_trn_cg;
-      /*address : coverpoint mstr_mon_trn.address {
-         bins low   = {16'h0000_0000, 16'h4FFF_FFFF};
-         bins med   = {16'h5000_0000, 16'h9FFF_FFFF};
-         bins high  = {16'hA000_0000, 16'hFFFF_FFFF};
-      }*/
    endgroup : mstr_mon_trn_cg
    
    covergroup mstr_seq_item_cg;
-      /*address : coverpoint mstr_seq_item.address {
-         bins low   = {16'h0000_0000, 16'h5FFF_FFFF};
-         bins med   = {16'h6000_0000, 16'hAFFF_FFFF};
-         bins high  = {16'hB000_0000, 16'hFFFF_FFFF};
-      }*/
    endgroup : mstr_seq_item_cg
    
    covergroup slv_mon_trn_cg;
-      /*address : coverpoint slv_mon_trn.address {
-         bins low   = {16'h0000_0000, 16'h4FFF_FFFF};
-         bins med   = {16'h5000_0000, 16'h9FFF_FFFF};
-         bins high  = {16'hA000_0000, 16'hFFFF_FFFF};
-      }*/
    endgroup : slv_mon_trn_cg
    
    covergroup slv_seq_item_cg;
-      /*address : coverpoint slv_seq_item.address {
-         bins low   = {16'h0000_0000, 16'h5FFF_FFFF};
-         bins med   = {16'h6000_0000, 16'hAFFF_FFFF};
-         bins high  = {16'hB000_0000, 16'hFFFF_FFFF};
-      }*/
-   endgroup : slv_seq_item_cg
+   endgroup : slv_seq_item_cg*/
    
    
    /**
