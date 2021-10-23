@@ -49,6 +49,7 @@ function uvma_axis_payload_vseq_c::new(string name="uvma_axis_payload_vseq");
 endfunction : new
 
 
+// This code currently causes vivado 2021.1 to fail silently during elaboratin
 //task uvma_axis_payload_vseq_c::body();
 //   
 //   uvm_sequence_item  payload;

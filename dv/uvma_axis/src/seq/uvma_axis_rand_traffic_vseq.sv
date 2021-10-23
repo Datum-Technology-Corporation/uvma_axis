@@ -56,7 +56,7 @@ class uvma_axis_rand_traffic_vseq_c extends uvma_axis_base_vseq_c;
    /**
     * TODO Describe uvma_axis_rand_traffic_vseq_c::body()
     */
-   //extern virtual task body();
+   extern virtual task body();
    
 endclass : uvma_axis_rand_traffic_vseq_c
 
@@ -68,25 +68,25 @@ function uvma_axis_rand_traffic_vseq_c::new(string name="uvma_axis_rand_traffic_
 endfunction : new
 
 
-//task uvma_axis_rand_traffic_vseq_c::body();
-//   
-//   int unsigned          gap;
-//   uvma_axis_seq_item_c  req;
-//   
-//   for (int unsigned ii=0; ii<num_transfers; ii++) begin
-//      `uvm_info("AXIS_SEQ", $sformatf("Sending payload segment #%0d of %0d", ii+1, num_transfers), UVM_MEDIUM)
-//      `uvm_do_with(req, {
-//         req.size inside {[min_size:max_size]};
-//      })
-//      
-//      gap = $urandom_range(min_gap, max_gap);
-//      `uvm_info("AXIS_SEQ", $sformatf("Waiting %0d cycles before sending next segment", gap), UVM_MEDIUM)
-//      repeat (gap) begin
-//         @(cntxt.vif.drv_mstr_cb);
-//      end
-//   end
-//   
-//endtask : body
+task uvma_axis_rand_traffic_vseq_c::body();
+   
+   int unsigned          gap;
+   uvma_axis_seq_item_c  req;
+   
+   for (int unsigned ii=0; ii<num_transfers; ii++) begin
+      `uvm_info("AXIS_SEQ", $sformatf("Sending payload segment #%0d of %0d", ii+1, num_transfers), UVM_MEDIUM)
+      `uvm_do_with(req, {
+         req.size inside {[min_size:max_size]};
+      })
+      
+      gap = $urandom_range(min_gap, max_gap);
+      `uvm_info("AXIS_SEQ", $sformatf("Waiting %0d cycles before sending next segment", gap), UVM_MEDIUM)
+      repeat (gap) begin
+         @(cntxt.vif.drv_mstr_cb);
+      end
+   end
+   
+endtask : body
 
 
 `endif // __UVMA_AXIS_RAND_TRAFFIC_SEQ_SV__

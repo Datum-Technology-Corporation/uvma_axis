@@ -29,17 +29,17 @@ class uvma_axis_idle_vseq_c extends uvma_axis_mstr_base_vseq_c;
    /**
     * TODO Describe uvma_axis_idle_vseq_c::body()
     */
-   //extern virtual task body();
+   extern virtual task body();
    
    /**
     * TODO Describe uvma_axis_idle_vseq_c::mstr()
     */
-   //extern task mstr();
+   extern task mstr();
    
    /**
     * TODO Describe uvma_axis_idle_vseq_c::slv()
     */
-   //extern task slv();
+   extern task slv();
    
 endclass : uvma_axis_idle_vseq_c
 
@@ -51,41 +51,41 @@ function uvma_axis_idle_vseq_c::new(string name="uvma_axis_idle_vseq");
 endfunction : new
 
 
-//task uvma_axis_idle_vseq_c::body();
-//   
-//   case (cfg.drv_mode)
-//      UVMA_AXIS_DRV_MODE_MSTR: mstr();
-//      UVMA_AXIS_DRV_MODE_SLV : slv ();
-//   endcase
-//   
-//endtask : body
-//
-//
-//task uvma_axis_idle_vseq_c::mstr();
-//   
-//   uvma_axis_mstr_seq_item_c  mstr_seq_item;
-//   
-//   forever begin
-//      `uvm_create_on(mstr_seq_item, p_sequencer.slv_sequencer)
-//      // TODO Add support for cfg.drv_idle
-//      `uvm_rand_send_pri_with(mstr_seq_item, 0, {
-//         tvalid == 0;
-//      })
-//   end
-//   
-//endtask : mstr
-//
-//
-//task uvma_axis_idle_vseq_c::slv();
-//   
-//    uvma_axis_slv_seq_item_c  slv_seq_item;
-//   
-//   forever begin
-//      `uvm_create_on(slv_seq_item, p_sequencer.slv_sequencer)
-//      `uvm_rand_send_pri(slv_seq_item, 0)
-//   end
-//   
-//endtask : slv
+task uvma_axis_idle_vseq_c::body();
+   
+   case (cfg.drv_mode)
+      UVMA_AXIS_DRV_MODE_MSTR: mstr();
+      UVMA_AXIS_DRV_MODE_SLV : slv ();
+   endcase
+   
+endtask : body
+
+
+task uvma_axis_idle_vseq_c::mstr();
+   
+   uvma_axis_mstr_seq_item_c  mstr_seq_item;
+   
+   forever begin
+      `uvm_create_on(mstr_seq_item, p_sequencer.slv_sequencer)
+      // TODO Add support for cfg.drv_idle
+      `uvm_rand_send_pri_with(mstr_seq_item, 0, {
+         tvalid == 0;
+      })
+   end
+   
+endtask : mstr
+
+
+task uvma_axis_idle_vseq_c::slv();
+   
+    uvma_axis_slv_seq_item_c  slv_seq_item;
+   
+   forever begin
+      `uvm_create_on(slv_seq_item, p_sequencer.slv_sequencer)
+      `uvm_rand_send_pri(slv_seq_item, 0)
+   end
+   
+endtask : slv
 
 
 `endif // __UVMA_AXIS_IDLE_VSEQ_SV__

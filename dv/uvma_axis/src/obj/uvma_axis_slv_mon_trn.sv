@@ -38,7 +38,7 @@ class uvma_axis_slv_mon_trn_c extends uvml_mon_trn_c;
    /**
     * TODO Describe uvma_axis_slv_mon_trn_c::get_metadata()
     */
-   //extern function uvml_metadata_t get_metadata();
+   extern function uvml_metadata_t get_metadata();
    
 endclass : uvma_axis_slv_mon_trn_c
 
@@ -50,24 +50,24 @@ function uvma_axis_slv_mon_trn_c::new(string name="uvma_axis_slv_mon_trn");
 endfunction : new
 
 
-//function uvml_metadata_t uvma_axis_slv_mon_trn_c::get_metadata();
-//   
-//   string tready_str = "";
-//   
-//   if (tready === 1'b1) begin
-//      tready_str = "ASSERTED";
-//   end
-//   
-//   get_metadata[0] = '{
-//      index     : 0,
-//      value     : tready_str,
-//      col_name  : "tready",
-//      col_width : 10,
-//      col_align : UVML_TEXT_ALIGN_RIGHT,
-//      data_type : UVML_FIELD_INT
-//   };
-//   
-//endfunction : get_metadata
+function uvml_metadata_t uvma_axis_slv_mon_trn_c::get_metadata();
+   
+   string tready_str = "";
+   
+   if (tready === 1'b1) begin
+      tready_str = "ASSERTED";
+   end
+   
+   get_metadata[0] = '{
+      index     : 0,
+      value     : tready_str,
+      col_name  : "tready",
+      col_width : 10,
+      col_align : UVML_TEXT_ALIGN_RIGHT,
+      data_type : UVML_FIELD_INT
+   };
+   
+endfunction : get_metadata
 
 
 `endif // __UVMA_AXIS_SLV_MON_TRN_SV__

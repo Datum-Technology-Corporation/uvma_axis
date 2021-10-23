@@ -30,7 +30,7 @@ class uvma_axis_slv_drv_vseq_c extends uvma_axis_slv_base_vseq_c;
    /**
     * TODO Describe uvma_axis_slv_drv_vseq_c::body()
     */
-   //extern virtual task body();
+   extern virtual task body();
    
 endclass : uvma_axis_slv_drv_vseq_c
 
@@ -42,24 +42,24 @@ function uvma_axis_slv_drv_vseq_c::new(string name="uvma_axis_slv_drv_vseq");
 endfunction : new
 
 
-//task uvma_axis_slv_drv_vseq_c::body();
-//   
-//   bit                       tready;
-//   uvma_axis_slv_seq_item_c  req   ;
-//   int unsigned              pct_off = 100 - cfg.drv_slv_on;
-//   
-//   forever begin
-//      randcase
-//         cfg.drv_slv_on : tready = 1;
-//         pct_off        : tready = 0;
-//      endcase
-//      
-//      `uvm_do_on_with(req, p_sequencer.slv_sequencer, {
-//         req.tready == local::tready;
-//      })
-//   end
-//   
-//endtask : body
+task uvma_axis_slv_drv_vseq_c::body();
+   
+   bit                       tready;
+   uvma_axis_slv_seq_item_c  req   ;
+   int unsigned              pct_off = 100 - cfg.drv_slv_on;
+   
+   forever begin
+      randcase
+         cfg.drv_slv_on : tready = 1;
+         pct_off        : tready = 0;
+      endcase
+      
+      `uvm_do_on_with(req, p_sequencer.slv_sequencer, {
+         req.tready == local::tready;
+      })
+   end
+   
+endtask : body
 
 
 `endif // __UVMA_AXIS_SLV_DRV_VSEQ_SV__

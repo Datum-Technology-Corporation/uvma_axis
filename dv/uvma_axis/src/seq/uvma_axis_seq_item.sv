@@ -66,22 +66,22 @@ class uvma_axis_seq_item_c extends uvml_seq_item_c;
    /**
     * TODO Describe uvma_axis_seq_item_c::post_randomize()
     */
-   //extern function void post_randomize();
-   //
-   ///**
-   // * TODO Describe uvma_axis_seq_item_c::do_print()
-   // */
-   //extern virtual function void do_print(uvm_printer printer);
-   //
-   ///**
-   // * TODO Describe uvma_axis_seq_item_c::get_metadata()
-   // */
-   //extern function uvml_metadata_t get_metadata();
-   //
-   ///**
-   // * Returns string of byte array in 'xxxx_xxxx' format.
-   // */
-   //extern function string log_bytes(ref bit [7:0] bytes[]);
+   extern function void post_randomize();
+   
+   /**
+    * TODO Describe uvma_axis_seq_item_c::do_print()
+    */
+   extern virtual function void do_print(uvm_printer printer);
+   
+   /**
+    * TODO Describe uvma_axis_seq_item_c::get_metadata()
+    */
+   extern function uvml_metadata_t get_metadata();
+   
+   /**
+    * Returns string of byte array in 'xxxx_xxxx' format.
+    */
+   extern function string log_bytes(ref bit [7:0] bytes[]);
    
 endclass : uvma_axis_seq_item_c
 
@@ -93,137 +93,137 @@ function uvma_axis_seq_item_c::new(string name="uvma_axis_seq_item");
 endfunction : new
 
 
-//function void uvma_axis_seq_item_c::post_randomize();
-//   
-//   foreach (data[ii]) begin
-//      case (pattern)
-//         UVMA_AXIS_DATA_PATTERN_COUNTING: data[ii] = ii[7:0];
-//         UVMA_AXIS_DATA_PATTERN_ZEROS   : data[ii] =      '0;
-//         UVMA_AXIS_DATA_PATTERN_AAAA    : data[ii] =   8'hAA;
-//         UVMA_AXIS_DATA_PATTERN_5555    : data[ii] =   8'h55;
-//      endcase
-//   end
-//   
-//endfunction : post_randomize
-//
-//
-//function void uvma_axis_seq_item_c::do_print(uvm_printer printer);
-//   
-//   super.do_print(printer);
-//   
-//   if (cfg.tid_width != 0) begin
-//      printer.print_field("tid", tid, cfg.tid_width);
-//   end
-//   
-//   if (cfg.tdest_width != 0) begin
-//      printer.print_field("tdest", tdest, cfg.tdest_width);
-//   end
-//   
-//   if (cfg.tuser_width != 0) begin
-//      printer.print_field("tuser", tuser, cfg.tuser_width);
-//   end
-//   
-//   if (cfg.tkeep_width != 0) begin
-//      printer.print_field("tkeep", tkeep, cfg.tkeep_width);
-//   end
-//   
-//endfunction : do_print
-//
-//
-//function uvml_metadata_t uvma_axis_seq_item_c::get_metadata();
-//   
-//   string data_str  = "";
-//   string size_str  = $sformatf("%d", size);
-//   string tid_str   = $sformatf($sformatf("%%0dh", cfg.tid_width  ), tid  );
-//   string tdest_str = $sformatf($sformatf("%%0dh", cfg.tdest_width), tdest);
-//   string tuser_str = $sformatf($sformatf("%%0dh", cfg.tuser_width), tuser);
-//   string tkeep_str = $sformatf($sformatf("%%0dh", cfg.tkeep_width), tkeep);
-//   
-//   bit [7:0]  lower_n_bytes[];
-//   bit [7:0]  upper_n_bytes[];
-//   
-//   if (size > (uvma_axis_logging_num_data_bytes*2)) begin
-//      // Log first n bytes and last n bytes
-//      for (int unsigned ii=0; ii<uvma_axis_logging_num_data_bytes; ii++) begin
-//         lower_n_bytes[ii] = data[ii];
-//      end
-//      for (int unsigned ii=0; ii<uvma_axis_logging_num_data_bytes; ii++) begin
-//         upper_n_bytes[ii] = data[(size - uvma_axis_logging_num_data_bytes) + ii];
-//      end
-//      data_str = {log_bytes(upper_n_bytes), " ... ", log_bytes(lower_n_bytes)};
-//   end
-//   else begin
-//      // Log all data bytes
-//      data_str = log_bytes(data);
-//   end
-//   
-//   get_metadata[0] = '{
-//      index     : 0,
-//      value     : tid_str,
-//      col_name  : "tid",
-//      col_width :  6,
-//      col_align : UVML_TEXT_ALIGN_RIGHT,
-//      data_type : UVML_FIELD_INT
-//   };
-//   
-//   get_metadata[1] = '{
-//      index     : 1,
-//      value     : tdest_str,
-//      col_name  : "tdest",
-//      col_width : 7,
-//      col_align : UVML_TEXT_ALIGN_RIGHT,
-//      data_type : UVML_FIELD_INT
-//   };
-//   
-//   get_metadata[2] = '{
-//      index     : 2,
-//      value     : tuser_str,
-//      col_name  : "tuser",
-//      col_width :  7,
-//      col_align : UVML_TEXT_ALIGN_RIGHT,
-//      data_type : UVML_FIELD_INT
-//   };
-//   
-//   get_metadata[3] = '{
-//      index     : 3,
-//      value     : size_str,
-//      col_name  : "size",
-//      col_width :  6,
-//      col_align : UVML_TEXT_ALIGN_RIGHT,
-//      data_type : UVML_FIELD_INT
-//   };
-//   
-//   get_metadata[4] = '{
-//      index     : 4,
-//      value     : tkeep_str,
-//      col_name  : "tkeep",
-//      col_width :  7,
-//      col_align : UVML_TEXT_ALIGN_RIGHT,
-//      data_type : UVML_FIELD_INT
-//   };
-//   
-//   get_metadata[5] = '{
-//      index     : 5,
-//      value     : data_str,
-//      col_name  : "data",
-//      col_width : 25,
-//      col_align : UVML_TEXT_ALIGN_RIGHT,
-//      data_type : UVML_FIELD_QUEUE_INT
-//   };
-//   
-//endfunction : get_metadata
-//
-//
-//function string uvma_axis_seq_item_c::log_bytes(ref bit [7:0] bytes[]);
-//   
-//   foreach (bytes[ii]) begin
-//      log_bytes = {$sformatf("%h", bytes[ii]), log_bytes};
-//      if ((ii % 2) && (ii != (bytes.size()-1))) begin
-//         log_bytes = {"_", log_bytes};
-//      end
-//   end
-//   
-//endfunction : log_bytes
+function void uvma_axis_seq_item_c::post_randomize();
+   
+   foreach (data[ii]) begin
+      case (pattern)
+         UVMA_AXIS_DATA_PATTERN_COUNTING: data[ii] = ii[7:0];
+         UVMA_AXIS_DATA_PATTERN_ZEROS   : data[ii] =      '0;
+         UVMA_AXIS_DATA_PATTERN_AAAA    : data[ii] =   8'hAA;
+         UVMA_AXIS_DATA_PATTERN_5555    : data[ii] =   8'h55;
+      endcase
+   end
+   
+endfunction : post_randomize
+
+
+function void uvma_axis_seq_item_c::do_print(uvm_printer printer);
+   
+   super.do_print(printer);
+   
+   if (cfg.tid_width != 0) begin
+      printer.print_field("tid", tid, cfg.tid_width);
+   end
+   
+   if (cfg.tdest_width != 0) begin
+      printer.print_field("tdest", tdest, cfg.tdest_width);
+   end
+   
+   if (cfg.tuser_width != 0) begin
+      printer.print_field("tuser", tuser, cfg.tuser_width);
+   end
+   
+   if (cfg.tkeep_width != 0) begin
+      printer.print_field("tkeep", tkeep, cfg.tkeep_width);
+   end
+   
+endfunction : do_print
+
+
+function uvml_metadata_t uvma_axis_seq_item_c::get_metadata();
+   
+   string data_str  = "";
+   string size_str  = $sformatf("%d", size);
+   string tid_str   = $sformatf($sformatf("%%0dh", cfg.tid_width  ), tid  );
+   string tdest_str = $sformatf($sformatf("%%0dh", cfg.tdest_width), tdest);
+   string tuser_str = $sformatf($sformatf("%%0dh", cfg.tuser_width), tuser);
+   string tkeep_str = $sformatf($sformatf("%%0dh", cfg.tkeep_width), tkeep);
+   
+   bit [7:0]  lower_n_bytes[];
+   bit [7:0]  upper_n_bytes[];
+   
+   if (size > (uvma_axis_logging_num_data_bytes*2)) begin
+      // Log first n bytes and last n bytes
+      for (int unsigned ii=0; ii<uvma_axis_logging_num_data_bytes; ii++) begin
+         lower_n_bytes[ii] = data[ii];
+      end
+      for (int unsigned ii=0; ii<uvma_axis_logging_num_data_bytes; ii++) begin
+         upper_n_bytes[ii] = data[(size - uvma_axis_logging_num_data_bytes) + ii];
+      end
+      data_str = {log_bytes(upper_n_bytes), " ... ", log_bytes(lower_n_bytes)};
+   end
+   else begin
+      // Log all data bytes
+      data_str = log_bytes(data);
+   end
+   
+   get_metadata[0] = '{
+      index     : 0,
+      value     : tid_str,
+      col_name  : "tid",
+      col_width :  6,
+      col_align : UVML_TEXT_ALIGN_RIGHT,
+      data_type : UVML_FIELD_INT
+   };
+   
+   get_metadata[1] = '{
+      index     : 1,
+      value     : tdest_str,
+      col_name  : "tdest",
+      col_width : 7,
+      col_align : UVML_TEXT_ALIGN_RIGHT,
+      data_type : UVML_FIELD_INT
+   };
+   
+   get_metadata[2] = '{
+      index     : 2,
+      value     : tuser_str,
+      col_name  : "tuser",
+      col_width :  7,
+      col_align : UVML_TEXT_ALIGN_RIGHT,
+      data_type : UVML_FIELD_INT
+   };
+   
+   get_metadata[3] = '{
+      index     : 3,
+      value     : size_str,
+      col_name  : "size",
+      col_width :  6,
+      col_align : UVML_TEXT_ALIGN_RIGHT,
+      data_type : UVML_FIELD_INT
+   };
+   
+   get_metadata[4] = '{
+      index     : 4,
+      value     : tkeep_str,
+      col_name  : "tkeep",
+      col_width :  7,
+      col_align : UVML_TEXT_ALIGN_RIGHT,
+      data_type : UVML_FIELD_INT
+   };
+   
+   get_metadata[5] = '{
+      index     : 5,
+      value     : data_str,
+      col_name  : "data",
+      col_width : 25,
+      col_align : UVML_TEXT_ALIGN_RIGHT,
+      data_type : UVML_FIELD_QUEUE_INT
+   };
+   
+endfunction : get_metadata
+
+
+function string uvma_axis_seq_item_c::log_bytes(ref bit [7:0] bytes[]);
+   
+   foreach (bytes[ii]) begin
+      log_bytes = {$sformatf("%h", bytes[ii]), log_bytes};
+      if ((ii % 2) && (ii != (bytes.size()-1))) begin
+         log_bytes = {"_", log_bytes};
+      end
+   end
+   
+endfunction : log_bytes
 
 
 `endif // __UVMA_AXIS_SEQ_ITEM_SV__

@@ -42,7 +42,7 @@ class uvma_axis_slv_sqr_c extends uvml_sqr_c #(
    /**
     * Ensures cfg & cntxt handles are not null
     */
-   //extern virtual function void build_phase(uvm_phase phase);
+   extern virtual function void build_phase(uvm_phase phase);
    
 endclass : uvma_axis_slv_sqr_c
 
@@ -54,21 +54,21 @@ function uvma_axis_slv_sqr_c::new(string name="uvma_axis_slv_sqr", uvm_component
 endfunction : new
 
 
-//function void uvma_axis_slv_sqr_c::build_phase(uvm_phase phase);
-//   
-//   super.build_phase(phase);
-//   
-//   void'(uvm_config_db#(uvma_axis_cfg_c)::get(this, "", "cfg", cfg));
-//   if (cfg == null) begin
-//      `uvm_fatal("CFG", "Configuration handle is null")
-//   end
-//   
-//   void'(uvm_config_db#(uvma_axis_cntxt_c)::get(this, "", "cntxt", cntxt));
-//   if (cntxt == null) begin
-//      `uvm_fatal("CNTXT", "Context handle is null")
-//   end
-//   
-//endfunction : build_phase
+function void uvma_axis_slv_sqr_c::build_phase(uvm_phase phase);
+   
+   super.build_phase(phase);
+   
+   void'(uvm_config_db#(uvma_axis_cfg_c)::get(this, "", "cfg", cfg));
+   if (cfg == null) begin
+      `uvm_fatal("CFG", "Configuration handle is null")
+   end
+   
+   void'(uvm_config_db#(uvma_axis_cntxt_c)::get(this, "", "cntxt", cntxt));
+   if (cntxt == null) begin
+      `uvm_fatal("CNTXT", "Context handle is null")
+   end
+   
+endfunction : build_phase
 
 
 `endif // __UVMA_AXIS_SLV_SQR_SV__
