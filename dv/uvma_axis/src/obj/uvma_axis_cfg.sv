@@ -72,7 +72,7 @@ class uvma_axis_cfg_c extends uvml_cfg_c;
    `uvm_object_utils_end
    
    
-   /*constraint defaults_cons {
+   constraint defaults_cons {
       soft enabled           == 1;
       soft is_active         == UVM_PASSIVE;
       soft sqr_arb_mode      == UVM_SEQ_ARB_FIFO;
@@ -92,7 +92,7 @@ class uvma_axis_cfg_c extends uvml_cfg_c;
       tdest_width  inside {[0:`UVMA_AXIS_TDEST_MAX_WIDTH ]};
       tuser_width  inside {[0:`UVMA_AXIS_TUSER_MAX_WIDTH ]};
       drv_slv_on   inside {[0:100]};
-   }*/
+   }
    
    
    /**

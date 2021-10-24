@@ -92,13 +92,6 @@ function void uvma_axis_logger_c::build_phase(uvm_phase phase);
    mstr_seq_item_logger = uvml_logs_metadata_logger_c #(uvma_axis_mstr_seq_item_c)::type_id::create("mstr_seq_item_logger", this);
    slv_seq_item_logger  = uvml_logs_metadata_logger_c #(uvma_axis_slv_seq_item_c )::type_id::create("slv_seq_item_logger" , this);
    
-   mon_trn_logger_export       = new("mon_trn_logger_export"      );
-   seq_item_logger_export      = new("seq_item_logger_export"     );
-   mstr_mon_trn_logger_export  = new("mstr_mon_trn_logger_export" );
-   slv_mon_trn_logger_export   = new("slv_mon_trn_logger_export"  );
-   mstr_seq_item_logger_export = new("mstr_seq_item_logger_export");
-   slv_seq_item_logger_export  = new("slv_seq_item_logger_export" );
-   
 endfunction : build_phase
 
 

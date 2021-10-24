@@ -310,19 +310,21 @@ endfunction : connect_trn_loggers
 
 task uvma_axis_agent_c::start_mon_vseq();
    
-   uvm_sequence  mon_vseq;
-   uvm_object    temp_obj;
-   temp_obj = cfg.mon_vseq_type.create_object("mon_vseq");
-   if (!$cast(mon_vseq, temp_obj)) begin
-      `uvm_fatal("AXIS_AGENT", $sformatf("Could not cast 'temp_obj' (%s) to 'mon_vseq' (%s)", $typename(temp_obj), $typename(mon_vseq)))
+   uvm_coreservice_t cs = uvm_coreservice_t::get();
+   uvm_factory       f  = cs.get_factory();
+   uvm_object        temp_obj;
+   
+   temp_obj = f.create_object_by_type(cfg.mon_vseq_type, get_full_name(), cfg.mon_vseq_type.get_type_name());
+   if (!$cast(cntxt.mon_vseq, temp_obj)) begin
+      `uvm_fatal("AXIS_AGENT", $sformatf("Could not cast 'temp_obj' (%s) to 'cntxt.mon_vseq' (%s)", $typename(temp_obj), $typename(cntxt.mon_vseq)))
    end
    
-   if (!mon_vseq.randomize()) begin
-      `uvm_fatal("AXIS_AGENT", "Failed to randomize mon_vseq")
+   if (!cntxt.mon_vseq.randomize()) begin
+      `uvm_fatal("AXIS_AGENT", "Failed to randomize cntxt.mon_vseq")
    end
    
    fork
-      mon_vseq.start(vsequencer);
+      cntxt.mon_vseq.start(vsequencer);
    join_none
    
 endtask : start_mon_vseq
@@ -330,20 +332,21 @@ endtask : start_mon_vseq
 
 task uvma_axis_agent_c::start_idle_vseq();
    
-   uvm_sequence  idle_vseq;
-   uvm_object    temp_obj;
+   uvm_coreservice_t cs = uvm_coreservice_t::get();
+   uvm_factory       f  = cs.get_factory();
+   uvm_object        temp_obj;
    
-   temp_obj = cfg.idle_vseq_type.create_object("idle_vseq");
-   if (!$cast(idle_vseq, temp_obj)) begin
-      `uvm_fatal("AXIS_AGENT", $sformatf("Could not cast 'temp_obj' (%s) to 'idle_vseq' (%s)", $typename(temp_obj), $typename(idle_vseq)))
+   temp_obj = f.create_object_by_type(cfg.mon_vseq_type, get_full_name(), cfg.mon_vseq_type.get_type_name());
+   if (!$cast(cntxt.idle_vseq, temp_obj)) begin
+      `uvm_fatal("AXIS_AGENT", $sformatf("Could not cast 'temp_obj' (%s) to 'cntxt.idle_vseq' (%s)", $typename(temp_obj), $typename(cntxt.idle_vseq)))
    end
    
-   if (!idle_vseq.randomize()) begin
-      `uvm_fatal("AXIS_AGENT", "Failed to randomize idle_vseq")
+   if (!cntxt.idle_vseq.randomize()) begin
+      `uvm_fatal("AXIS_AGENT", "Failed to randomize cntxt.idle_vseq")
    end
    
    fork
-      idle_vseq.start(vsequencer);
+      cntxt.idle_vseq.start(vsequencer);
    join_none
    
 endtask : start_idle_vseq
@@ -351,20 +354,21 @@ endtask : start_idle_vseq
 
 task uvma_axis_agent_c::start_mstr_vseq();
    
-   uvm_sequence  mstr_vseq;
-   uvm_object    temp_obj;
+   uvm_coreservice_t cs = uvm_coreservice_t::get();
+   uvm_factory       f  = cs.get_factory();
+   uvm_object        temp_obj;
    
-   temp_obj = cfg.mstr_drv_vseq_type.create_object("mstr_drv_vseq");
-   if (!$cast(mstr_vseq, temp_obj)) begin
-      `uvm_fatal("AXIS_AGENT", $sformatf("Could not cast 'temp_obj' (%s) to 'mstr_vseq' (%s)", $typename(temp_obj), $typename(mstr_vseq)))
+   temp_obj = f.create_object_by_type(cfg.mon_vseq_type, get_full_name(), cfg.mon_vseq_type.get_type_name());
+   if (!$cast(cntxt.mstr_vseq, temp_obj)) begin
+      `uvm_fatal("AXIS_AGENT", $sformatf("Could not cast 'temp_obj' (%s) to 'cntxt.mstr_vseq' (%s)", $typename(temp_obj), $typename(cntxt.mstr_vseq)))
    end
    
-   if (!mstr_vseq.randomize()) begin
-      `uvm_fatal("AXIS_AGENT", "Failed to randomize mstr_vseq")
+   if (!cntxt.mstr_vseq.randomize()) begin
+      `uvm_fatal("AXIS_AGENT", "Failed to randomize cntxt.mstr_vseq")
    end
    
    fork
-      mstr_vseq.start(vsequencer);
+      cntxt.mstr_vseq.start(vsequencer);
    join_none
    
 endtask : start_mstr_vseq
@@ -372,20 +376,21 @@ endtask : start_mstr_vseq
 
 task uvma_axis_agent_c::start_slv_vseq();
    
-   uvm_sequence  slv_vseq;
-   uvm_object    temp_obj;
+   uvm_coreservice_t cs = uvm_coreservice_t::get();
+   uvm_factory       f  = cs.get_factory();
+   uvm_object        temp_obj;
    
-   temp_obj = cfg.slv_drv_vseq_type.create_object("slv_drv_vseq");
-   if (!$cast(slv_vseq, temp_obj)) begin
-      `uvm_fatal("AXIS_AGENT", $sformatf("Could not cast 'temp_obj' (%s) to 'slv_vseq' (%s)", $typename(temp_obj), $typename(slv_vseq)))
+   temp_obj = f.create_object_by_type(cfg.mon_vseq_type, get_full_name(), cfg.mon_vseq_type.get_type_name());
+   if (!$cast(cntxt.slv_vseq, temp_obj)) begin
+      `uvm_fatal("AXIS_AGENT", $sformatf("Could not cast 'temp_obj' (%s) to 'cntxt.slv_vseq' (%s)", $typename(temp_obj), $typename(cntxt.slv_vseq)))
    end
    
-   if (!slv_vseq.randomize()) begin
-      `uvm_fatal("AXIS_AGENT", "Failed to randomize slv_vseq")
+   if (!cntxt.slv_vseq.randomize()) begin
+      `uvm_fatal("AXIS_AGENT", "Failed to randomize cntxt.slv_vseq")
    end
    
    fork
-      slv_vseq.start(vsequencer);
+      cntxt.slv_vseq.start(vsequencer);
    join_none
    
 endtask : start_slv_vseq

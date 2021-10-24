@@ -20,13 +20,14 @@
  */
 class uvma_axis_cntxt_c extends uvml_cntxt_c;
    
-   virtual uvma_axis_if  vif; ///< Handle to agent interface
-   
-   // Integrals
+   virtual uvma_axis_if   vif; ///< Handle to agent interface
    uvml_reset_state_enum  reset_state = UVML_RESET_STATE_PRE_RESET; ///< 
+   uvma_axis_mstr_mon_trn_c  mon_current_transfer[$]; ///< Current data transfer
    
-   // Current data transfer
-   uvma_axis_mstr_mon_trn_c  mon_current_transfer[$]; ///< TODO Describe uvma_axis_cntxt_c::mon_current_transfer
+   uvm_sequence_base  mon_vseq ;
+   uvm_sequence_base  idle_vseq;
+   uvm_sequence_base  mstr_vseq;
+   uvm_sequence_base  slv_vseq ;
    
    // Events
    uvm_event  sample_cfg_e  ; ///< 
