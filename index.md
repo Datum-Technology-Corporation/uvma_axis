@@ -12,7 +12,7 @@ The [Moore.io](https://www.mooreio.com) Arm® AMBA® IP Suite's Advanced eXtensi
 ## Management
 
 | **[Issues](https://github.com/Datum-Technology-Corporation/uvma_axis/issues)** | **[Discussions](https://github.com/Datum-Technology-Corporation/uvma_axis/discussions)** |
-| **[Projects](https://github.com/Datum-Technology-Corporation/uvma_axis/projects)** | **[Wiki](https://github.com/Datum-Technology-Corporation/uvma_axis/wiki)** |
+| **[Sub-Projects](https://github.com/Datum-Technology-Corporation/uvma_axis/projects)** | **[Wiki](https://github.com/Datum-Technology-Corporation/uvma_axis/wiki)** |
 
 
 ## Downloads
