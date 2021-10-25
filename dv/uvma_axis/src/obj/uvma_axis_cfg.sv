@@ -42,7 +42,6 @@ class uvma_axis_cfg_c extends uvml_cfg_c;
    rand int unsigned             drv_slv_on ; ///< 
    rand int unsigned             tdata_width; ///< Measured in bytes (B)
    rand int unsigned             tid_width  ; ///< Measured in bits  (b)
-   rand int unsigned             tkeep_width; ///< Measured in bits  (b)
    rand int unsigned             tdest_width; ///< Measured in bits  (b)
    rand int unsigned             tuser_width; ///< Measured in bits  (b)
    

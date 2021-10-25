@@ -261,13 +261,18 @@ endfunction : create_analysis_ports
 
 function void uvma_axis_agent_c::connect_sequencer();
    
-   vsequencer.set_arbitration(cfg.sqr_arb_mode);
-   driver.mstr_driver.seq_item_port.connect(vsequencer.mstr_sequencer.seq_item_export);
-   driver.slv_driver .seq_item_port.connect(vsequencer.slv_sequencer .seq_item_export);
-   monitor.mstr_ap.connect(vsequencer.mstr_mon_trn_export);
-   monitor.mstr_ap.connect(vsequencer.mstr_mon_trn_export);
-   monitor.slv_ap .connect(vsequencer.slv_mon_trn_export );
-   monitor.slv_ap .connect(vsequencer.slv_mon_trn_export );
+   vsequencer               .set_arbitration(cfg.sqr_arb_mode);
+   vsequencer.mstr_sequencer.set_arbitration(UVM_SEQ_ARB_STRICT_FIFO);
+   vsequencer.slv_sequencer .set_arbitration(UVM_SEQ_ARB_STRICT_FIFO);
+   
+   if (!cfg.bypass_mode) begin
+      driver.mstr_driver.seq_item_port.connect(vsequencer.mstr_sequencer.seq_item_export);
+      driver.slv_driver .seq_item_port.connect(vsequencer.slv_sequencer .seq_item_export);
+      monitor.mstr_ap.connect(vsequencer.mstr_mon_trn_export);
+      monitor.mstr_ap.connect(vsequencer.mstr_mon_trn_export);
+      monitor.slv_ap .connect(vsequencer.slv_mon_trn_export );
+      monitor.slv_ap .connect(vsequencer.slv_mon_trn_export );
+   end
    
 endfunction : connect_sequencer
 
@@ -298,12 +303,12 @@ endfunction : connect_cov_model
 
 function void uvma_axis_agent_c::connect_trn_loggers();
    
-   seq_item_ap.connect(logger.seq_item_logger_export     );
+   /*seq_item_ap.connect(logger.seq_item_logger_export     );
    mon_trn_ap .connect(logger.mon_trn_logger_export      );
    drv_mstr_ap.connect(logger.mstr_seq_item_logger_export);
    drv_slv_ap .connect(logger.slv_seq_item_logger_export );
    mon_mstr_ap.connect(logger.mstr_mon_trn_logger_export );
-   mon_slv_ap .connect(logger.slv_mon_trn_logger_export  );
+   mon_slv_ap .connect(logger.slv_mon_trn_logger_export  );*/
    
 endfunction : connect_trn_loggers
 
@@ -336,7 +341,7 @@ task uvma_axis_agent_c::start_idle_vseq();
    uvm_factory       f  = cs.get_factory();
    uvm_object        temp_obj;
    
-   temp_obj = f.create_object_by_type(cfg.mon_vseq_type, get_full_name(), cfg.mon_vseq_type.get_type_name());
+   temp_obj = f.create_object_by_type(cfg.idle_vseq_type, get_full_name(), cfg.idle_vseq_type.get_type_name());
    if (!$cast(cntxt.idle_vseq, temp_obj)) begin
       `uvm_fatal("AXIS_AGENT", $sformatf("Could not cast 'temp_obj' (%s) to 'cntxt.idle_vseq' (%s)", $typename(temp_obj), $typename(cntxt.idle_vseq)))
    end
@@ -345,9 +350,9 @@ task uvma_axis_agent_c::start_idle_vseq();
       `uvm_fatal("AXIS_AGENT", "Failed to randomize cntxt.idle_vseq")
    end
    
-   fork
-      cntxt.idle_vseq.start(vsequencer);
-   join_none
+   //fork
+   //   cntxt.idle_vseq.start(vsequencer);
+   //join_none
    
 endtask : start_idle_vseq
 
@@ -358,7 +363,7 @@ task uvma_axis_agent_c::start_mstr_vseq();
    uvm_factory       f  = cs.get_factory();
    uvm_object        temp_obj;
    
-   temp_obj = f.create_object_by_type(cfg.mon_vseq_type, get_full_name(), cfg.mon_vseq_type.get_type_name());
+   temp_obj = f.create_object_by_type(cfg.mstr_drv_vseq_type, get_full_name(), cfg.mstr_drv_vseq_type.get_type_name());
    if (!$cast(cntxt.mstr_vseq, temp_obj)) begin
       `uvm_fatal("AXIS_AGENT", $sformatf("Could not cast 'temp_obj' (%s) to 'cntxt.mstr_vseq' (%s)", $typename(temp_obj), $typename(cntxt.mstr_vseq)))
    end
@@ -380,7 +385,7 @@ task uvma_axis_agent_c::start_slv_vseq();
    uvm_factory       f  = cs.get_factory();
    uvm_object        temp_obj;
    
-   temp_obj = f.create_object_by_type(cfg.mon_vseq_type, get_full_name(), cfg.mon_vseq_type.get_type_name());
+   temp_obj = f.create_object_by_type(cfg.slv_drv_vseq_type, get_full_name(), cfg.slv_drv_vseq_type.get_type_name());
    if (!$cast(cntxt.slv_vseq, temp_obj)) begin
       `uvm_fatal("AXIS_AGENT", $sformatf("Could not cast 'temp_obj' (%s) to 'cntxt.slv_vseq' (%s)", $typename(temp_obj), $typename(cntxt.slv_vseq)))
    end

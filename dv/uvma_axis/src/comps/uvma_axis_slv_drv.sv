@@ -100,7 +100,7 @@ task uvma_axis_slv_drv_c::run_phase(uvm_phase phase);
    
    super.run_phase(phase);
    
-   if (cfg.enabled && cfg.is_active && (cfg.drv_mode == UVMA_AXIS_DRV_MODE_MSTR)) begin
+   if (cfg.enabled && cfg.is_active && (cfg.drv_mode == UVMA_AXIS_DRV_MODE_SLV)) begin
       forever begin
          seq_item_port.get_next_item(req);
          process_req                (req);
@@ -117,7 +117,7 @@ endtask : run_phase
 function void uvma_axis_slv_drv_c::process_req(ref uvma_axis_slv_seq_item_c req);
    
    req.cfg = cfg;
-   `uvm_info("AXIS_MSTR_DRV", $sformatf("Got new req from the sequencer:\n%s", req.sprint()), UVM_HIGH)
+   `uvm_info("AXIS_MSTR_DRV", $sformatf("Got new req from the sequencer:\n%s", req.sprint()), UVM_DEBUG)
    
 endfunction: process_req
 

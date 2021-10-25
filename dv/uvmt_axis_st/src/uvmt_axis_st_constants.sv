@@ -22,7 +22,7 @@ const int unsigned uvmt_axis_st_default_simulation_timeout  = 10_000_000; // 10 
 
 const int unsigned uvmt_axis_st_default_num_transfers      =   100;
 const int unsigned uvmt_axis_st_default_min_transfer_size  =    64;
-const int unsigned uvmt_axis_st_default_max_transfer_size  = 1_024;
+const int unsigned uvmt_axis_st_default_max_transfer_size  = 256;
 const int unsigned uvmt_axis_st_default_min_gap            =     0;
 const int unsigned uvmt_axis_st_default_max_gap            =     8;
 const int unsigned uvmt_axis_st_default_pct_ton            =    85;

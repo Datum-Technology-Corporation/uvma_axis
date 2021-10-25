@@ -88,8 +88,8 @@ function void uvma_axis_mon_trn_c::do_print(uvm_printer printer);
       printer.print_field("tuser", tuser, cfg.tuser_width);
    end
    
-   if (cfg.tkeep_width != 0) begin
-      printer.print_field("tkeep", tkeep, cfg.tkeep_width);
+   if (cfg.tdata_width != 0) begin
+      printer.print_field("tkeep", tkeep, cfg.tdata_width);
    end
    
 endfunction : do_print
@@ -99,13 +99,18 @@ function uvml_metadata_t uvma_axis_mon_trn_c::get_metadata();
    
    string data_str  = "";
    string size_str  = $sformatf("%d", size);
-   string tid_str   = $sformatf($sformatf("%%0dh", cfg.tid_width  ), tid  );
-   string tdest_str = $sformatf($sformatf("%%0dh", cfg.tdest_width), tdest);
-   string tuser_str = $sformatf($sformatf("%%0dh", cfg.tuser_width), tuser);
-   string tkeep_str = $sformatf($sformatf("%%0dh", cfg.tkeep_width), tkeep);
+   string tkeep_str = {"%0", $sformatf("%0d", cfg.tdata_width  ), "h"};
+   string tid_str   = {"%0", $sformatf("%0d", cfg.tid_width    ), "h"};
+   string tdest_str = {"%0", $sformatf("%0d", cfg.tdest_width  ), "h"};
+   string tuser_str = {"%0", $sformatf("%0d", cfg.tuser_width  ), "h"};
    
    logic [7:0]  lower_n_bytes[$];
    logic [7:0]  upper_n_bytes[$];
+   
+   tkeep_str = $sformatf(tkeep_str, tkeep);
+   tid_str   = $sformatf(tid_str  , tid  );
+   tdest_str = $sformatf(tdest_str, tdest);
+   tuser_str = $sformatf(tuser_str, tuser);
    
    if (size > (uvma_axis_logging_num_data_bytes*2)) begin
       // Log first n bytes and last n bytes

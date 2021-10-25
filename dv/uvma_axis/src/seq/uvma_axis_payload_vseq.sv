@@ -37,7 +37,7 @@ class uvma_axis_payload_vseq_c extends uvma_axis_base_vseq_c;
    /**
     * Gets new higher-layer sequence items
     */
-   //extern virtual task body();
+   extern virtual task body();
    
 endclass : uvma_axis_payload_vseq_c
 
@@ -49,30 +49,32 @@ function uvma_axis_payload_vseq_c::new(string name="uvma_axis_payload_vseq");
 endfunction : new
 
 
-// This code currently causes vivado 2021.1 to fail silently during elaboratin
-//task uvma_axis_payload_vseq_c::body();
-//   
-//   uvm_sequence_item  payload;
-//   bit [7:0]          payload_bytes[];
-//   
-//   forever begin
-//      upstream_get_next_item(payload);
-//      void'(payload.pack_bytes(payload_bytes));
-//      
-//      // Create seq item
-//      `uvm_do_with(req, {
-//         req.size == payload_bytes.size();
-//         foreach (req.data[ii]) {
-//            req.data[ii] == payload_bytes[ii];
-//         }
-//         req.tdest == local::tdest;
-//         req.tuser == local::tuser;
-//         req.tkeep == payload_bytes.size()%cfg.tdata_width;
-//      })
-//      upstream_item_done(payload);
-//   end
-//   
-//endtask : body
+task uvma_axis_payload_vseq_c::body();
+   
+   uvm_sequence_item  payload;
+   bit [7:0]          payload_bytes[];
+   
+   `uvm_info("AXIS_PAYLOAD_VSEQ", "Payload virtual sequence has started", UVM_HIGH)
+   forever begin
+      upstream_get_next_item(payload);
+      void'(payload.pack_bytes(payload_bytes));
+      
+      // Create seq item
+      `uvm_create_on(req, p_sequencer)
+      req.tdest = tdest;
+      foreach (req.data[ii]) begin
+         req.data[ii] = payload_bytes[ii];
+      end
+      req.tuser = tuser;
+      req.size  = payload_bytes.size();
+      req.tkeep = payload_bytes.size() % cfg.tdata_width;
+      req.tid   = $urandom();
+      
+      `uvm_send(req)
+      upstream_item_done(payload);
+   end
+   
+endtask : body
 
 
 `endif // __UVMA_AXIS_PAYLOAD_VSEQ_SV__

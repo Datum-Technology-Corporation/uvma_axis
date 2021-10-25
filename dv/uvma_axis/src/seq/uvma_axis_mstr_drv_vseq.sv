@@ -51,11 +51,17 @@ task uvma_axis_mstr_drv_vseq_c::body();
    
    uvma_axis_seq_item_c  seq_item;
    
+   `uvm_info("AXIS_MSTR_DRV_VSEQ", "MSTR driver virtual sequence has started", UVM_HIGH)
    forever begin
       fork
          begin
+            `uvm_info("AXIS_MSTR_DRV_VSEQ", "Waiting for post_reset", UVM_DEBUG)
             wait (cntxt.reset_state == UVML_RESET_STATE_POST_RESET) begin
+               `uvm_info("AXIS_MSTR_DRV_VSEQ", "Waiting for next item", UVM_DEBUG)
                p_sequencer.get_next_item    (seq_item);
+               seq_item.cfg = cfg;
+               `uvm_info("AXIS_MSTR_DRV_VSEQ", $sformatf("Got item:\n%s", seq_item.sprint()), UVM_MEDIUM)
+               `uvml_hrtbt_owner(p_sequencer)
                drv                          (seq_item);
                p_sequencer.seq_item_ap.write(seq_item);
                p_sequencer.item_done();
@@ -76,23 +82,33 @@ endtask : body
 task uvma_axis_mstr_drv_vseq_c::drv(ref uvma_axis_seq_item_c seq_item);
    
    uvma_axis_mstr_seq_item_c  mstr_seq_item;
+   bit [7:0]                  data_q[$]    ;
+   uvma_axis_tdata_b_t        data         ;
    
    // Assert tvalid
+   `uvm_info("AXIS_MSTR_DRV_VSEQ", $sformatf("Waiting on SLV for transfer:\n%s", seq_item.sprint()), UVM_HIGH)
    do begin
       `uvm_create_on(mstr_seq_item, p_sequencer.mstr_sequencer)
-      `uvm_rand_send_with(mstr_seq_item, {
+      `uvm_rand_send_pri_with(mstr_seq_item, `UVMA_AXIS_MSTR_DRV_SEQ_ITEM_PRI, {
          tvalid  == 1'b1;
       })
    end while (cntxt.vif.tready !== 1'b1);
+   `uvm_info("AXIS_MSTR_DRV_VSEQ", $sformatf("Data transfer has begun for seq_item:\n%s", seq_item.sprint()), UVM_HIGH)
    
    // Transfer data
-   for (int unsigned ii=0; ii<seq_item.size; ii++) begin
+   foreach (seq_item.data[ii]) begin
+      data_q.push_back(seq_item.data[ii]);
+   end
+   while (data_q.size()) begin
       wait (cntxt.vif.tready === 1'b1);
       `uvm_create_on(mstr_seq_item, p_sequencer.mstr_sequencer)
-      
-      if (ii == (seq_item.size-1)) begin
-         `uvm_rand_send_with(mstr_seq_item, {
+      for (int unsigned ii=0; ii<cfg.tdata_width; ii++) begin
+         data[ii] = data_q.pop_front();
+      end
+      if (data_q.size()) begin
+         `uvm_rand_send_pri_with(mstr_seq_item, `UVMA_AXIS_MSTR_DRV_SEQ_ITEM_PRI, {
             tvalid == 1'b1;
+            tdata  == data;
             tid    == seq_item.tid  ;
             tdest  == seq_item.tdest;
             tuser  == seq_item.tuser;
@@ -102,8 +118,9 @@ task uvma_axis_mstr_drv_vseq_c::drv(ref uvma_axis_seq_item_c seq_item);
          })
       end
       else begin
-         `uvm_rand_send_with(mstr_seq_item, {
+         `uvm_rand_send_pri_with(mstr_seq_item, `UVMA_AXIS_MSTR_DRV_SEQ_ITEM_PRI, {
             tvalid == 1'b1;
+            tdata  == data;
             tid    == seq_item.tid  ;
             tdest  == seq_item.tdest;
             tuser  == seq_item.tuser;
@@ -113,8 +130,11 @@ task uvma_axis_mstr_drv_vseq_c::drv(ref uvma_axis_seq_item_c seq_item);
          })
       end
    end
+   `uvm_info("AXIS_MSTR_DRV_VSEQ", $sformatf("Data transfer has ended for seq_item:\n%s", seq_item.sprint()), UVM_MEDIUM/*HIGH*/)
    
-   `uvml_hrtbt_owner(p_sequencer)
+   `uvm_rand_send_pri_with(mstr_seq_item, `UVMA_AXIS_MSTR_DRV_SEQ_ITEM_PRI, {
+      tvalid == 1'b0;
+   })
    
 endtask : drv
 

@@ -199,15 +199,15 @@ task uvma_axis_mon_c::observe_reset_sync();
    
    forever begin
       while (cntxt.vif.reset_n !== 1'b0) begin
-         wait (cntxt.vif.clk === 1);
-         wait (cntxt.vif.clk === 0);
+         wait (cntxt.vif.clk === 1'b0);
+         wait (cntxt.vif.clk === 1'b1);
       end
       cntxt.reset_state = UVML_RESET_STATE_IN_RESET;
       `uvm_info("AXIS_MON", "Entered IN_RESET state", UVM_MEDIUM)
       
       while (cntxt.vif.reset_n !== 1'b1) begin
-         wait (cntxt.vif.clk === 1);
-         wait (cntxt.vif.clk === 0);
+         wait (cntxt.vif.clk === 1'b0);
+         wait (cntxt.vif.clk === 1'b1);
       end
       cntxt.reset_state = UVML_RESET_STATE_POST_RESET;
       `uvm_info("AXIS_MON", "Entered POST_RESET state", UVM_MEDIUM)
@@ -219,11 +219,11 @@ endtask : observe_reset_sync
 task uvma_axis_mon_c::observe_reset_async();
    
    forever begin
-      wait (cntxt.vif.reset_n === 0);
+      wait (cntxt.vif.reset_n === 1'b0);
       cntxt.reset_state = UVML_RESET_STATE_IN_RESET;
       `uvm_info("AXIS_MON", "Entered IN_RESET state", UVM_MEDIUM)
       
-      wait (cntxt.vif.reset_n === 1);
+      wait (cntxt.vif.reset_n === 1'b1);
       cntxt.reset_state = UVML_RESET_STATE_POST_RESET;
       `uvm_info("AXIS_MON", "Entered POST_RESET state", UVM_MEDIUM)
    end

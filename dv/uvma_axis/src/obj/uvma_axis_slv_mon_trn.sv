@@ -56,16 +56,16 @@ function uvml_metadata_t uvma_axis_slv_mon_trn_c::get_metadata();
    
    if (tready === 1'b1) begin
       tready_str = "ASSERTED";
+      
+      get_metadata[0] = '{
+         index     : 0,
+         value     : tready_str,
+         col_name  : "tready",
+         col_width : 10,
+         col_align : UVML_TEXT_ALIGN_RIGHT,
+         data_type : UVML_FIELD_INT
+      };
    end
-   
-   get_metadata[0] = '{
-      index     : 0,
-      value     : tready_str,
-      col_name  : "tready",
-      col_width : 10,
-      col_align : UVML_TEXT_ALIGN_RIGHT,
-      data_type : UVML_FIELD_INT
-   };
    
 endfunction : get_metadata
 

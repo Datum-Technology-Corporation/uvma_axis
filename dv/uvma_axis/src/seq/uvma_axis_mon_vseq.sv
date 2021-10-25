@@ -50,6 +50,7 @@ endfunction : new
 
 task uvma_axis_mon_vseq_c::body();
    
+   `uvm_info("AXIS_MON_VSEQ", "Monitor virtual sequence has started", UVM_HIGH)
    forever begin
       fork
          begin : transfer
@@ -82,6 +83,7 @@ task uvma_axis_mon_vseq_c::process_transfers();
             get_mstr_mon_trn(mstr_mon_trn);
          join
       end while (((slv_mon_trn.tready !== 1'b1)) || (mstr_mon_trn.tvalid !== 1'b1));
+      cntxt.mon_current_transfer.push_back(mstr_mon_trn);
       
       // Create transaction
       mon_trn = uvma_axis_mon_trn_c::type_id::create("mon_trn");
@@ -90,22 +92,11 @@ task uvma_axis_mon_vseq_c::process_transfers();
       
       // Accumulate transfer data
       do begin
-         fork
-            begin
-               get_slv_mon_trn(slv_mon_trn);
-            end
-            
-            begin
-               get_mstr_mon_trn(mstr_mon_trn);
-               if ((slv_mon_trn.tready === 1'b1) && (mstr_mon_trn.tvalid === 1'b1)) begin
-                  cntxt.mon_current_transfer.push_back(mstr_mon_trn);
-               end
-            end
-            
-            begin
-               // TODO Implement monitor timeout
-            end
-         join
+         get_slv_mon_trn (slv_mon_trn);
+         get_mstr_mon_trn(mstr_mon_trn);
+         if ((slv_mon_trn.tready === 1'b1) && (mstr_mon_trn.tvalid === 1'b1)) begin
+            cntxt.mon_current_transfer.push_back(mstr_mon_trn);
+         end
       end while (mstr_mon_trn.tlast !== 1'b1);
       
       // Process queue of transactions into final monitor transaction

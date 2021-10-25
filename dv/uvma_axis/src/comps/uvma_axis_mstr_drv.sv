@@ -117,7 +117,7 @@ endtask : run_phase
 function void uvma_axis_mstr_drv_c::process_req(ref uvma_axis_mstr_seq_item_c req);
    
    req.cfg = cfg;
-   `uvm_info("AXIS_MSTR_DRV", $sformatf("Got new req from the sequencer:\n%s", req.sprint()), UVM_HIGH)
+   `uvm_info("AXIS_MSTR_DRV", $sformatf("Got new req from the sequencer:\n%s", req.sprint()), UVM_DEBUG)
    
 endfunction: process_req
 
@@ -138,12 +138,12 @@ task uvma_axis_mstr_drv_c::drv_req(ref uvma_axis_mstr_seq_item_c req);
    for (int unsigned ii=0; ii<cfg.tdata_width; ii++) begin
       cntxt.vif.drv_mstr_cb.tkeep[ii] <= req.tkeep[ii]; //mp.drv_mstr_cb.tkeep[ii] <= req.tkeep[ii];
    end
-   for (int unsigned ii=0; ii<cfg.tid_width; ii++) begin
-      cntxt.vif.drv_mstr_cb.tid[ii] <= req.tid[ii]; //mp.drv_mstr_cb.tid[ii] <= req.tid[ii];
-   end
-   for (int unsigned ii=0; ii<cfg.tdest_width; ii++) begin
-      cntxt.vif.drv_mstr_cb.tdest[ii] <= req.tdest[ii]; //mp.drv_mstr_cb.tdest[ii] <= req.tdest[ii];
-   end
+   //for (int unsigned ii=0; ii<cfg.tid_width; ii++) begin
+      cntxt.vif.drv_mstr_cb.tid/*[ii]*/ <= req.tid/*[ii]*/; //mp.drv_mstr_cb.tid[ii] <= req.tid[ii];
+   //end
+   //for (int unsigned ii=0; ii<cfg.tdest_width; ii++) begin
+      cntxt.vif.drv_mstr_cb.tdest/*[ii]*/ <= req.tdest/*[ii]*/; //mp.drv_mstr_cb.tdest[ii] <= req.tdest[ii];
+   //end
    for (int unsigned ii=0; ii<cfg.tuser_width; ii++) begin
       cntxt.vif.drv_mstr_cb.tuser[ii] <= req.tuser[ii]; //mp.drv_mstr_cb.tuser[ii] <= req.tuser[ii];
    end

@@ -77,8 +77,8 @@ function void uvma_axis_mstr_mon_trn_c::do_print(uvm_printer printer);
    
    printer.print_field("tvalid", tlast, $bits(tvalid));
    printer.print_field("tdata" , tdata, cfg.tdata_width*8);
-   printer.print_field("tstrb" , tstrb, cfg.tdata_width, UVM_BIN);
-   printer.print_field("tkeep" , tkeep, cfg.tkeep_width, UVM_BIN);
+   printer.print_field("tstrb" , tstrb, cfg.tdata_width);
+   printer.print_field("tkeep" , tkeep, cfg.tdata_width);
    printer.print_field("tlast" , tlast, $bits(tlast));
    
    if (cfg.tid_width != 0) begin
@@ -99,87 +99,89 @@ endfunction : do_print
 function uvml_metadata_t uvma_axis_mstr_mon_trn_c::get_metadata();
    
    string status_str = "";
-   string tdata_str  = $sformatf($sformatf("%%0dh", cfg.tdata_width*8), tdata);
-   string tstrb_str  = $sformatf($sformatf("%%0dh", cfg.tdata_width  ), tstrb);
-   string tkeep_str  = $sformatf($sformatf("%%0dh", cfg.tkeep_width  ), tkeep);
-   string tid_str    = $sformatf($sformatf("%%0dh", cfg.tid_width    ), tid  );
-   string tdest_str  = $sformatf($sformatf("%%0dh", cfg.tdest_width  ), tdest);
-   string tuser_str  = $sformatf($sformatf("%%0dh", cfg.tuser_width  ), tuser);
+   string tdata_str  = {"%", $sformatf("%0d", cfg.tdata_width*8), "h"};
+   string tstrb_str  = {"%", $sformatf("%0d", cfg.tdata_width  ), "h"};
+   string tkeep_str  = {"%", $sformatf("%0d", cfg.tdata_width  ), "h"};
+   string tid_str    = {"%", $sformatf("%0d", cfg.tid_width    ), "h"};
+   string tdest_str  = {"%", $sformatf("%0d", cfg.tdest_width  ), "h"};
+   string tuser_str  = {"%", $sformatf("%0d", cfg.tuser_width  ), "h"};
+   
+   tdata_str  = $sformatf(tdata_str, tdata);
+   tstrb_str  = $sformatf(tstrb_str, tstrb);
+   tkeep_str  = $sformatf(tkeep_str, tkeep);
+   tid_str    = $sformatf(tid_str  , tid  );
+   tdest_str  = $sformatf(tdest_str, tdest);
+   tuser_str  = $sformatf(tuser_str, tuser);
    
    if (tvalid === 1'b1) begin
       status_str = "V";
       if (tlast === 1'b1) begin
          status_str = {status_str, "L"};
       end
+      
+      get_metadata[0] = '{
+         index     : 0,
+         value     : status_str,
+         col_name  : "status",
+         col_width :  8,
+         col_align : UVML_TEXT_ALIGN_RIGHT,
+         data_type : UVML_FIELD_INT
+      };
+      
+      get_metadata[1] = '{
+         index     : 1,
+         value     : tid_str,
+         col_name  : "tid",
+         col_width : 5,
+         col_align : UVML_TEXT_ALIGN_RIGHT,
+         data_type : UVML_FIELD_INT
+      };
+      
+      get_metadata[2] = '{
+         index     : 2,
+         value     : tdest_str,
+         col_name  : "tdest",
+         col_width :  7,
+         col_align : UVML_TEXT_ALIGN_RIGHT,
+         data_type : UVML_FIELD_INT
+      };
+      
+      get_metadata[3] = '{
+         index     : 3,
+         value     : tuser_str,
+         col_name  : "tuser",
+         col_width :  7,
+         col_align : UVML_TEXT_ALIGN_RIGHT,
+         data_type : UVML_FIELD_INT
+      };
+      
+      get_metadata[4] = '{
+         index     : 4,
+         value     : tstrb_str,
+         col_name  : "tstrb",
+         col_width :  7,
+         col_align : UVML_TEXT_ALIGN_RIGHT,
+         data_type : UVML_FIELD_INT
+      };
+      
+      get_metadata[5] = '{
+         index     : 5,
+         value     : tkeep_str,
+         col_name  : "tkeep",
+         col_width : 7,
+         col_align : UVML_TEXT_ALIGN_RIGHT,
+         data_type : UVML_FIELD_QUEUE_INT
+      };
+      
+      get_metadata[6] = '{
+         index     : 6,
+         value     : tdata_str,
+         col_name  : "data",
+         col_width : 25,
+         col_align : UVML_TEXT_ALIGN_RIGHT,
+         data_type : UVML_FIELD_QUEUE_INT
+      };
    end
-   else begin
-      if (tlast === 1'b1) begin
-         status_str = " L";
-      end
-   end
-   
-   get_metadata[0] = '{
-      index     : 0,
-      value     : status_str,
-      col_name  : "status",
-      col_width :  8,
-      col_align : UVML_TEXT_ALIGN_RIGHT,
-      data_type : UVML_FIELD_INT
-   };
-   
-   get_metadata[1] = '{
-      index     : 1,
-      value     : tid_str,
-      col_name  : "tid",
-      col_width : 5,
-      col_align : UVML_TEXT_ALIGN_RIGHT,
-      data_type : UVML_FIELD_INT
-   };
-   
-   get_metadata[2] = '{
-      index     : 2,
-      value     : tdest_str,
-      col_name  : "tdest",
-      col_width :  7,
-      col_align : UVML_TEXT_ALIGN_RIGHT,
-      data_type : UVML_FIELD_INT
-   };
-   
-   get_metadata[3] = '{
-      index     : 3,
-      value     : tuser_str,
-      col_name  : "tuser",
-      col_width :  7,
-      col_align : UVML_TEXT_ALIGN_RIGHT,
-      data_type : UVML_FIELD_INT
-   };
-   
-   get_metadata[4] = '{
-      index     : 4,
-      value     : tstrb_str,
-      col_name  : "tstrb",
-      col_width :  7,
-      col_align : UVML_TEXT_ALIGN_RIGHT,
-      data_type : UVML_FIELD_INT
-   };
-   
-   get_metadata[5] = '{
-      index     : 5,
-      value     : tkeep_str,
-      col_name  : "tkeep",
-      col_width : 7,
-      col_align : UVML_TEXT_ALIGN_RIGHT,
-      data_type : UVML_FIELD_QUEUE_INT
-   };
-   
-   get_metadata[6] = '{
-      index     : 6,
-      value     : tdata_str,
-      col_name  : "data",
-      col_width : 25,
-      col_align : UVML_TEXT_ALIGN_RIGHT,
-      data_type : UVML_FIELD_QUEUE_INT
-   };
    
 endfunction : get_metadata
 

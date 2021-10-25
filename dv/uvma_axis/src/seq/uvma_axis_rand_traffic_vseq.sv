@@ -38,14 +38,15 @@ class uvma_axis_rand_traffic_vseq_c extends uvma_axis_base_vseq_c;
    
    /*constraint defaults_cons {
       //soft num_transfers == uvma_axis_rand_traffic_vseq_default_num_transfers;
-   }
+   }*/
    
    constraint limits_cons {
       min_size >  0;
-      max_size <= `UVM_PACKER_MAX_BYTES;
+      max_size <= 256;
       min_gap  <= max_gap ;
       min_size <= max_size;
-   }*/
+      num_transfers <= 100;
+   }
    
    
    /**

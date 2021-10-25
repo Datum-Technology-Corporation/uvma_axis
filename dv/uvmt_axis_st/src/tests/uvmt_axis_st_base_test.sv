@@ -45,7 +45,7 @@ class uvmt_axis_st_base_test_c extends uvml_test_c;
    constraint env_cfg_cons {
       env_cfg.enabled               == 1;
       env_cfg.is_active             == UVM_ACTIVE;
-      env_cfg.trn_log_enabled       == 1;
+      env_cfg.trn_log_enabled       == 0;
       env_cfg.scoreboarding_enabled == 1;
    }
    

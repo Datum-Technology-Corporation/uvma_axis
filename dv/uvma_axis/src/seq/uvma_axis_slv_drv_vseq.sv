@@ -48,13 +48,14 @@ task uvma_axis_slv_drv_vseq_c::body();
    uvma_axis_slv_seq_item_c  req   ;
    int unsigned              pct_off = 100 - cfg.drv_slv_on;
    
+   `uvm_info("AXIS_SLV_DRV_VSEQ", "SLV driver virtual sequence has started", UVM_HIGH)
    forever begin
       randcase
          cfg.drv_slv_on : tready = 1;
          pct_off        : tready = 0;
       endcase
       
-      `uvm_do_on_with(req, p_sequencer.slv_sequencer, {
+      `uvm_do_on_pri_with(req, p_sequencer.slv_sequencer, `UVMA_AXIS_SLV_DRV_SEQ_ITEM_PRI, {
          req.tready == local::tready;
       })
    end

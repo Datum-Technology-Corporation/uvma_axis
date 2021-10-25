@@ -53,6 +53,7 @@ endfunction : new
 
 task uvma_axis_idle_vseq_c::body();
    
+   `uvm_info("AXIS_IDLE_VSEQ", "Idle virtual sequence has started", UVM_HIGH)
    case (cfg.drv_mode)
       UVMA_AXIS_DRV_MODE_MSTR: mstr();
       UVMA_AXIS_DRV_MODE_SLV : slv ();
@@ -66,9 +67,9 @@ task uvma_axis_idle_vseq_c::mstr();
    uvma_axis_mstr_seq_item_c  mstr_seq_item;
    
    forever begin
-      `uvm_create_on(mstr_seq_item, p_sequencer.slv_sequencer)
+      `uvm_create_on(mstr_seq_item, p_sequencer.mstr_sequencer)
       // TODO Add support for cfg.drv_idle
-      `uvm_rand_send_pri_with(mstr_seq_item, 0, {
+      `uvm_rand_send_pri_with(mstr_seq_item, `UVMA_AXIS_MSTR_IDLE_SEQ_ITEM_PRI, {
          tvalid == 0;
       })
    end
@@ -82,7 +83,7 @@ task uvma_axis_idle_vseq_c::slv();
    
    forever begin
       `uvm_create_on(slv_seq_item, p_sequencer.slv_sequencer)
-      `uvm_rand_send_pri(slv_seq_item, 0)
+      `uvm_rand_send_pri(slv_seq_item, `UVMA_AXIS_SLV_IDLE_SEQ_ITEM_PRI)
    end
    
 endtask : slv

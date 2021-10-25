@@ -47,14 +47,6 @@ class uvme_axis_st_cfg_c extends uvml_cfg_c;
    `uvm_object_utils_end
    
    
-   constraint defaults_cons {
-      //soft enabled                == 0;
-      //soft is_active              == UVM_PASSIVE;
-      //soft scoreboarding_enabled  == 1;
-      //soft cov_model_enabled      == 0;
-      //soft trn_log_enabled        == 1;
-   }
-   
    constraint agent_cfg_cons {
       if (enabled) {
          mstr_cfg.enabled == 1;
@@ -73,6 +65,14 @@ class uvme_axis_st_cfg_c extends uvml_cfg_c;
       
       mstr_cfg.drv_mode == UVMA_AXIS_DRV_MODE_MSTR;
       slv_cfg .drv_mode == UVMA_AXIS_DRV_MODE_SLV ;
+      
+      mstr_cfg.bypass_mode == 0;
+      slv_cfg .bypass_mode == 0;
+      mstr_cfg.reset_type  == slv_cfg.reset_type;
+      mstr_cfg.tdata_width == slv_cfg.tdata_width;
+      mstr_cfg.tid_width   == slv_cfg.tid_width  ;
+      mstr_cfg.tdest_width == slv_cfg.tdest_width;
+      mstr_cfg.tuser_width == slv_cfg.tuser_width;
    }
    
    constraint sb_cfg_cons {
