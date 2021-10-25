@@ -14,7 +14,7 @@
 # Launched from uvml project sim dir
 ./setup_project.py
 source ./setup_terminal.sh
-../tools/dvm/src/dvm.py cpel uvmt_axis_st
-../tools/dvm/src/dvm.py sim uvmt_axis_st -t rand_traffic -s 1 -c
-../tools/dvm/src/dvm.py results uvmt_axis_st results
-#../tools/dvm/src/dvm.py cov uvmt_axis_st
+../tools/.imports/dvm/src/dvm.py cpel uvmt_axis_st
+../tools/.imports/dvm/src/dvm.py sim uvmt_axis_st -t rand_traffic -s 1 -c
+../tools/.imports/dvm/src/dvm.py results uvmt_axis_st results
+#../tools/.imports/dvm/src/dvm.py cov uvmt_axis_st
