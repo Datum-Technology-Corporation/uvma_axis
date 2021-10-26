@@ -99,12 +99,12 @@ function void uvma_axis_logger_c::connect_phase(uvm_phase phase);
    
    super.connect_phase(phase);
    
-   mon_trn_logger      .set_file_name("mon_trn"      );
-   seq_item_logger     .set_file_name("seq_item"     );
-   mstr_mon_trn_logger .set_file_name("mstr.mon_trn" );
-   slv_mon_trn_logger  .set_file_name("slv.mon_trn"  );
-   mstr_seq_item_logger.set_file_name("mstr.seq_item");
-   slv_seq_item_logger .set_file_name("slv.seq_item" );
+   mon_trn_logger      .set_file_name({get_parent().get_full_name(), ".mon_trn"      });
+   seq_item_logger     .set_file_name({get_parent().get_full_name(), ".seq_item"     });
+   mstr_mon_trn_logger .set_file_name({get_parent().get_full_name(), ".mstr.mon_trn" });
+   slv_mon_trn_logger  .set_file_name({get_parent().get_full_name(), ".slv.mon_trn"  });
+   mstr_seq_item_logger.set_file_name({get_parent().get_full_name(), ".mstr.seq_item"});
+   slv_seq_item_logger .set_file_name({get_parent().get_full_name(), ".slv.seq_item" });
    
    mon_trn_logger_export       = mon_trn_logger      .analysis_export;
    seq_item_logger_export      = seq_item_logger     .analysis_export;

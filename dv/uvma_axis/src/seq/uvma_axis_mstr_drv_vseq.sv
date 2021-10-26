@@ -57,73 +57,80 @@ endtask : body
 
 task uvma_axis_mstr_drv_vseq_c::drv(ref uvma_axis_seq_item_c seq_item);
    
-   bit                        skip_next = 0;
-   uvma_axis_mstr_seq_item_c  mstr_seq_item;
-   bit [7:0]                  data_q[$]    ;
-   uvma_axis_tdata_b_t        data         ;
+   bit                        repeat_req = 0;
+   uvma_axis_mstr_seq_item_c  mstr_seq_item ;
+   bit [7:0]                  data_q[$]     ;
+   uvma_axis_tdata_b_t        data          ;
+   uvma_axis_tkeep_b_t        keep          ;
    
-   // Assert tvalid
-   `uvm_info("AXIS_MSTR_DRV_VSEQ", $sformatf("Waiting on SLV for transfer:\n%s", seq_item.sprint()), UVM_DEBUG)
-   do begin
-      `uvm_create_on(mstr_seq_item, p_sequencer.mstr_sequencer)
-      `uvm_rand_send_pri_with(mstr_seq_item, `UVMA_AXIS_MSTR_DRV_SEQ_ITEM_PRI, {
-         tvalid  == 1'b1;
-      })
-   end while (cntxt.vif.tready !== 1'b1);
-   `uvm_info("AXIS_MSTR_DRV_VSEQ", $sformatf("Data transfer has begun for seq_item:\n%s", seq_item.sprint()), UVM_DEBUG)
-   
-   // Transfer data
    foreach (seq_item.data[ii]) begin
       data_q.push_back(seq_item.data[ii]);
    end
-   while (data_q.size()) begin
-      if (!skip_next) begin
-         `uvm_create_on(mstr_seq_item, p_sequencer.mstr_sequencer)
-         for (int unsigned ii=0; ii<cfg.tdata_width; ii++) begin
-            data[ii] = data_q.pop_front();
-         end
-         if (data_q.size()) begin
-            `uvm_rand_send_pri_with(mstr_seq_item, `UVMA_AXIS_MSTR_DRV_SEQ_ITEM_PRI, {
-               tvalid == 1'b1;
-               tdata  == data;
-               tid    == seq_item.tid  ;
-               tdest  == seq_item.tdest;
-               tuser  == seq_item.tuser;
-               tkeep  == seq_item.tkeep;
-               tstrb  == seq_item.tkeep;
-               tlast  == 1;
-            })
-         end
-         else begin
-            `uvm_rand_send_pri_with(mstr_seq_item, `UVMA_AXIS_MSTR_DRV_SEQ_ITEM_PRI, {
-               tvalid == 1'b1;
-               tdata  == data;
-               tid    == seq_item.tid  ;
-               tdest  == seq_item.tdest;
-               tuser  == seq_item.tuser;
-               tkeep  == '1;
-               tstrb  == '1;
-               tlast  ==  0;
-            })
-         end
+   
+   // First cycle
+   `uvm_create_on(mstr_seq_item, p_sequencer.mstr_sequencer)
+   keep = {`UVMA_AXIS_TDATA_MAX_WIDTH{1'b1}};
+   for (int unsigned ii=0; ii<cfg.tdata_width; ii++) begin
+      if (data_q.size()) begin
+         data[ii] = data_q.pop_front();
       end
       else begin
-         wait (cntxt.vif.clk === 1'b0);
-         wait (cntxt.vif.clk === 1'b1);
-      end
-      
-      if (cntxt.vif.tready === 1'b1) begin
-         skip_next = 0;
-      end
-      else begin
-         skip_next = 1;
+         keep[ii] = 1'b0;
       end
    end
-   `uvm_info("AXIS_MSTR_DRV_VSEQ", $sformatf("Data transfer has ended for seq_item:\n%s", seq_item.sprint()), UVM_HIGH)
+   mstr_seq_item.tvalid = 1;
+   mstr_seq_item.tdata  = data;
+   mstr_seq_item.tid    = seq_item.tid  ;
+   mstr_seq_item.tdest  = seq_item.tdest;
+   mstr_seq_item.tuser  = seq_item.tuser;
+   mstr_seq_item.tkeep  = keep;
+   mstr_seq_item.tstrb  = keep;
+   mstr_seq_item.tlast  = 0;
+   do begin
+      `uvm_send_pri(mstr_seq_item, `UVMA_AXIS_MSTR_DRV_SEQ_ITEM_PRI)
+   end while (cntxt.vif.tready !== 1'b1);
    
-   `uvm_rand_send_pri_with(mstr_seq_item, `UVMA_AXIS_MSTR_DRV_SEQ_ITEM_PRI, {
-      tvalid == 1'b0;
-   })
+   // Transfer rest of data (if any)
+   while (data_q.size()) begin
+      `uvm_create_on(mstr_seq_item, p_sequencer.mstr_sequencer)
+      keep = {`UVMA_AXIS_TDATA_MAX_WIDTH{1'b0}};
+      for (int unsigned ii=0; ii<cfg.tdata_width; ii++) begin
+         if (data_q.size()) begin
+            data[ii] = data_q.pop_front();
+            keep[ii] = 1'b1;
+         end
+      end
+      if (data_q.size()) begin
+         mstr_seq_item.tvalid = 1'b1;
+         mstr_seq_item.tdata  = data;
+         mstr_seq_item.tid    = seq_item.tid  ;
+         mstr_seq_item.tdest  = seq_item.tdest;
+         mstr_seq_item.tuser  = seq_item.tuser;
+         mstr_seq_item.tkeep  = {`UVMA_AXIS_TDATA_MAX_WIDTH{1'b1}};
+         mstr_seq_item.tstrb  = {`UVMA_AXIS_TDATA_MAX_WIDTH{1'b1}};
+         mstr_seq_item.tlast  = 0;
+      end
+      else begin
+         mstr_seq_item.tvalid = 1'b1;
+         mstr_seq_item.tdata  = data;
+         mstr_seq_item.tid    = seq_item.tid  ;
+         mstr_seq_item.tdest  = seq_item.tdest;
+         mstr_seq_item.tuser  = seq_item.tuser;
+         mstr_seq_item.tkeep  = keep;
+         mstr_seq_item.tstrb  = keep;
+         mstr_seq_item.tlast  =  1;
+      end
+      
+      do begin
+         `uvm_send_pri(mstr_seq_item, `UVMA_AXIS_MSTR_DRV_SEQ_ITEM_PRI)
+      end while (cntxt.vif.tready !== 1'b1);
+   end
+   
+   repeat (100) begin
+      `uvm_create_on(mstr_seq_item, p_sequencer.mstr_sequencer)
+      mstr_seq_item.tvalid = 0;
+      `uvm_send_pri(mstr_seq_item, `UVMA_AXIS_MSTR_DRV_SEQ_ITEM_PRI)
+   end
    
 endtask : drv
 

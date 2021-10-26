@@ -20,7 +20,7 @@ const int unsigned uvmt_axis_st_default_startup_timeout     =   100_000; //  .1 
 const int unsigned uvmt_axis_st_default_heartbeat_period    =     2_000; //  .02 us
 const int unsigned uvmt_axis_st_default_simulation_timeout  = 1_000_000; //   1 ms
 
-const int unsigned uvmt_axis_st_default_num_transfers      = 100;
+const int unsigned uvmt_axis_st_default_num_transfers      = 10;
 const int unsigned uvmt_axis_st_default_min_transfer_size  =  64;
 const int unsigned uvmt_axis_st_default_max_transfer_size  = 512;
 const int unsigned uvmt_axis_st_default_min_gap            =   0;

@@ -67,7 +67,6 @@ task uvma_axis_transport_vseq_c::body();
       end
       req.tuser = tuser;
       req.size  = payload_bytes.size();
-      req.tkeep = payload_bytes.size() % cfg.tdata_width;
       req.tid   = $urandom();
       
       `uvm_send(req)

@@ -21,22 +21,24 @@
 class uvme_axis_st_cntxt_c extends uvml_cntxt_c;
    
    // Agent context handles
-   uvma_axis_cntxt_c  mstr_cntxt;
-   uvma_axis_cntxt_c  slv_cntxt;
+   uvma_axis_cntxt_c  mstr_cntxt; ///< 
+   uvma_axis_cntxt_c  slv_cntxt ; ///< 
    
    // Scoreboard context handle
-   uvml_sb_simplex_cntxt_c  sb_cntxt;
+   uvml_sb_simplex_cntxt_c  mstr_sb_cntxt; ///< 
+   uvml_sb_simplex_cntxt_c  e2e_sb_cntxt ; ///< 
    
    // Events
-   uvm_event  sample_cfg_e  ;
-   uvm_event  sample_cntxt_e;
+   uvm_event  sample_cfg_e  ; ///< 
+   uvm_event  sample_cntxt_e; ///< 
    
    
    `uvm_object_utils_begin(uvme_axis_st_cntxt_c)
       `uvm_field_object(mstr_cntxt, UVM_DEFAULT)
       `uvm_field_object(slv_cntxt, UVM_DEFAULT)
       
-      //`uvm_field_object(sb_cntxt, UVM_DEFAULT)
+      `uvm_field_object(mstr_sb_cntxt, UVM_DEFAULT)
+      `uvm_field_object(e2e_sb_cntxt , UVM_DEFAULT)
       
       `uvm_field_event(sample_cfg_e  , UVM_DEFAULT)
       `uvm_field_event(sample_cntxt_e, UVM_DEFAULT)
@@ -55,9 +57,10 @@ function uvme_axis_st_cntxt_c::new(string name="uvme_axis_st_cntxt");
    
    super.new(name);
    
-   mstr_cntxt = uvma_axis_cntxt_c::type_id::create("mstr_cntxt");
-   slv_cntxt  = uvma_axis_cntxt_c::type_id::create("slv_cntxt" );
-   sb_cntxt     = uvml_sb_simplex_cntxt_c  ::type_id::create("sb_cntxt"    );
+   mstr_cntxt    = uvma_axis_cntxt_c      ::type_id::create("mstr_cntxt"   );
+   slv_cntxt     = uvma_axis_cntxt_c      ::type_id::create("slv_cntxt"    );
+   mstr_sb_cntxt = uvml_sb_simplex_cntxt_c::type_id::create("mstr_sb_cntxt");
+   e2e_sb_cntxt  = uvml_sb_simplex_cntxt_c::type_id::create("e2e_sb_cntxt" );
    
    sample_cfg_e   = new("sample_cfg_e"  );
    sample_cntxt_e = new("sample_cntxt_e");

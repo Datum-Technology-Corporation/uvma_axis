@@ -68,10 +68,27 @@ task uvma_axis_idle_vseq_c::mstr();
    
    forever begin
       `uvm_create_on(mstr_seq_item, p_sequencer.mstr_sequencer)
-      // TODO Add support for cfg.drv_idle
-      `uvm_rand_send_pri_with(mstr_seq_item, `UVMA_AXIS_MSTR_IDLE_SEQ_ITEM_PRI, {
-         tvalid == 0;
-      })
+      // TODO Add support for cfg.drv_slv_valid_ton
+      case (cfg.drv_idle)
+         UVMA_AXIS_DRV_IDLE_ZEROS: begin
+            `uvm_rand_send_pri_with(mstr_seq_item, `UVMA_AXIS_MSTR_IDLE_SEQ_ITEM_PRI, {
+               tvalid == 0;
+               tdata  == 0;
+               tstrb  == 0;
+               tkeep  == 0;
+               tlast  == 0;
+               tid    == 0;
+               tdest  == 0;
+               tuser  == 0;
+            })
+         end
+         
+         UVMA_AXIS_DRV_IDLE_RANDOM: begin
+            `uvm_rand_send_pri_with(mstr_seq_item, `UVMA_AXIS_MSTR_IDLE_SEQ_ITEM_PRI, {
+               tvalid == 0;
+            })
+         end
+      endcase
    end
    
 endtask : mstr

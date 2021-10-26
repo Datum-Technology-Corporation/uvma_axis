@@ -69,7 +69,6 @@ typedef enum {
  * 
  */
 typedef enum {
-   UVMA_AXIS_DRV_IDLE_SAME  , ///< 
    UVMA_AXIS_DRV_IDLE_ZEROS , ///< 
    UVMA_AXIS_DRV_IDLE_RANDOM  ///< 
 } uvma_axis_drv_idle_enum;
