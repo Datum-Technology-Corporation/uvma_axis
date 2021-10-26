@@ -62,6 +62,10 @@ class uvme_axis_st_cfg_c extends uvml_cfg_c;
          /*soft */mstr_cfg.trn_log_enabled == 1;
          /*soft */slv_cfg .trn_log_enabled == 1;
       }
+      else {
+         mstr_cfg.trn_log_enabled == 0;
+         slv_cfg .trn_log_enabled == 0;
+      }
       
       mstr_cfg.drv_mode == UVMA_AXIS_DRV_MODE_MSTR;
       slv_cfg .drv_mode == UVMA_AXIS_DRV_MODE_SLV ;

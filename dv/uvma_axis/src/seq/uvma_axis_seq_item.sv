@@ -130,26 +130,27 @@ endfunction : do_print
 
 function uvml_metadata_t uvma_axis_seq_item_c::get_metadata();
    
-   string data_str  = "";
-   string size_str  = $sformatf("%d", size);
-   string tkeep_str = {"%0", $sformatf("%0d", cfg.tdata_width  ), "h"};
-   string tid_str   = {"%0", $sformatf("%0d", cfg.tid_width    ), "h"};
-   string tdest_str = {"%0", $sformatf("%0d", cfg.tdest_width  ), "h"};
-   string tuser_str = {"%0", $sformatf("%0d", cfg.tuser_width  ), "h"};
-   
    bit [7:0]  lower_n_bytes[];
    bit [7:0]  upper_n_bytes[];
+   string     data_str   = "";
+   string     size_str   = $sformatf("%0d", size );
+   string     tkeep_str  = $sformatf("%h" , tkeep);
+   string     tid_str    = $sformatf("%h" , tid  );
+   string     tdest_str  = $sformatf("%h" , tdest);
+   string     tuser_str  = $sformatf("%h" , tuser);
    
-   tkeep_str = $sformatf(tkeep_str, tkeep);
-   tid_str   = $sformatf(tid_str  , tid  );
-   tdest_str = $sformatf(tdest_str, tdest);
-   tuser_str = $sformatf(tuser_str, tuser);
+   tkeep_str = tkeep_str.substr(tkeep_str.len() - (cfg.tdata_width/4), tkeep_str.len()-1);
+   tid_str   = tid_str  .substr(tid_str  .len() - (cfg.tid_width  /4), tid_str  .len()-1);
+   tdest_str = tdest_str.substr(tdest_str.len() - (cfg.tdest_width/4), tdest_str.len()-1);
+   tuser_str = tuser_str.substr(tuser_str.len() - (cfg.tuser_width/4), tuser_str.len()-1);
    
    if (size > (uvma_axis_logging_num_data_bytes*2)) begin
       // Log first n bytes and last n bytes
+      lower_n_bytes = new[uvma_axis_logging_num_data_bytes];
       for (int unsigned ii=0; ii<uvma_axis_logging_num_data_bytes; ii++) begin
          lower_n_bytes[ii] = data[ii];
       end
+      upper_n_bytes = new[uvma_axis_logging_num_data_bytes];
       for (int unsigned ii=0; ii<uvma_axis_logging_num_data_bytes; ii++) begin
          upper_n_bytes[ii] = data[(size - uvma_axis_logging_num_data_bytes) + ii];
       end
@@ -164,7 +165,7 @@ function uvml_metadata_t uvma_axis_seq_item_c::get_metadata();
       index     : 0,
       value     : tid_str,
       col_name  : "tid",
-      col_width :  6,
+      col_width : cfg.tid_width/4,
       col_align : UVML_TEXT_ALIGN_RIGHT,
       data_type : UVML_FIELD_INT
    };
@@ -173,7 +174,7 @@ function uvml_metadata_t uvma_axis_seq_item_c::get_metadata();
       index     : 1,
       value     : tdest_str,
       col_name  : "tdest",
-      col_width : 7,
+      col_width : cfg.tdest_width/4,
       col_align : UVML_TEXT_ALIGN_RIGHT,
       data_type : UVML_FIELD_INT
    };
@@ -182,7 +183,7 @@ function uvml_metadata_t uvma_axis_seq_item_c::get_metadata();
       index     : 2,
       value     : tuser_str,
       col_name  : "tuser",
-      col_width :  7,
+      col_width : cfg.tuser_width/4,
       col_align : UVML_TEXT_ALIGN_RIGHT,
       data_type : UVML_FIELD_INT
    };
@@ -191,7 +192,7 @@ function uvml_metadata_t uvma_axis_seq_item_c::get_metadata();
       index     : 3,
       value     : size_str,
       col_name  : "size",
-      col_width :  6,
+      col_width : 4,
       col_align : UVML_TEXT_ALIGN_RIGHT,
       data_type : UVML_FIELD_INT
    };
@@ -200,7 +201,7 @@ function uvml_metadata_t uvma_axis_seq_item_c::get_metadata();
       index     : 4,
       value     : tkeep_str,
       col_name  : "tkeep",
-      col_width :  7,
+      col_width : cfg.tdata_width/4,
       col_align : UVML_TEXT_ALIGN_RIGHT,
       data_type : UVML_FIELD_INT
    };
@@ -209,7 +210,7 @@ function uvml_metadata_t uvma_axis_seq_item_c::get_metadata();
       index     : 5,
       value     : data_str,
       col_name  : "data",
-      col_width : 25,
+      col_width : uvma_axis_logging_num_data_bytes*3*2,
       col_align : UVML_TEXT_ALIGN_RIGHT,
       data_type : UVML_FIELD_QUEUE_INT
    };

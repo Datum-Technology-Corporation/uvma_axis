@@ -99,19 +99,19 @@ endfunction : do_print
 function uvml_metadata_t uvma_axis_mstr_seq_item_c::get_metadata();
    
    string status_str = "";
-   string tdata_str  = {"%", $sformatf("%0d", cfg.tdata_width*8), "h"};
-   string tstrb_str  = {"%", $sformatf("%0d", cfg.tdata_width  ), "h"};
-   string tkeep_str  = {"%", $sformatf("%0d", cfg.tdata_width  ), "h"};
-   string tid_str    = {"%", $sformatf("%0d", cfg.tid_width    ), "h"};
-   string tdest_str  = {"%", $sformatf("%0d", cfg.tdest_width  ), "h"};
-   string tuser_str  = {"%", $sformatf("%0d", cfg.tuser_width  ), "h"};
+   string tdata_str  = $sformatf("%h", tdata);
+   string tstrb_str  = $sformatf("%h", tstrb);
+   string tkeep_str  = $sformatf("%h", tkeep);
+   string tid_str    = $sformatf("%h", tid  );
+   string tdest_str  = $sformatf("%h", tdest);
+   string tuser_str  = $sformatf("%h", tuser);
    
-   tdata_str  = $sformatf(tdata_str, tdata);
-   tstrb_str  = $sformatf(tstrb_str, tstrb);
-   tkeep_str  = $sformatf(tkeep_str, tkeep);
-   tid_str    = $sformatf(tid_str  , tid  );
-   tdest_str  = $sformatf(tdest_str, tdest);
-   tuser_str  = $sformatf(tuser_str, tuser);
+   tdata_str = tdata_str.substr(tdata_str.len() - (cfg.tdata_width*2), tdata_str.len()-1);
+   tstrb_str = tstrb_str.substr(tstrb_str.len() - (cfg.tdata_width/4), tstrb_str.len()-1);
+   tkeep_str = tkeep_str.substr(tkeep_str.len() - (cfg.tdata_width/4), tkeep_str.len()-1);
+   tid_str   = tid_str  .substr(tid_str  .len() - (cfg.tid_width  /4), tid_str  .len()-1);
+   tdest_str = tdest_str.substr(tdest_str.len() - (cfg.tdest_width/4), tdest_str.len()-1);
+   tuser_str = tuser_str.substr(tuser_str.len() - (cfg.tuser_width/4), tuser_str.len()-1);
    
    if (tvalid === 1'b1) begin
       status_str = "V";
@@ -123,7 +123,7 @@ function uvml_metadata_t uvma_axis_mstr_seq_item_c::get_metadata();
          index     : 0,
          value     : status_str,
          col_name  : "status",
-         col_width :  8,
+         col_width :  6,
          col_align : UVML_TEXT_ALIGN_RIGHT,
          data_type : UVML_FIELD_INT
       };
@@ -132,7 +132,7 @@ function uvml_metadata_t uvma_axis_mstr_seq_item_c::get_metadata();
          index     : 1,
          value     : tid_str,
          col_name  : "tid",
-         col_width : 5,
+         col_width : cfg.tid_width/4,
          col_align : UVML_TEXT_ALIGN_RIGHT,
          data_type : UVML_FIELD_INT
       };
@@ -141,7 +141,7 @@ function uvml_metadata_t uvma_axis_mstr_seq_item_c::get_metadata();
          index     : 2,
          value     : tdest_str,
          col_name  : "tdest",
-         col_width :  7,
+         col_width : cfg.tdest_width/4,
          col_align : UVML_TEXT_ALIGN_RIGHT,
          data_type : UVML_FIELD_INT
       };
@@ -150,7 +150,7 @@ function uvml_metadata_t uvma_axis_mstr_seq_item_c::get_metadata();
          index     : 3,
          value     : tuser_str,
          col_name  : "tuser",
-         col_width :  7,
+         col_width : cfg.tuser_width/4,
          col_align : UVML_TEXT_ALIGN_RIGHT,
          data_type : UVML_FIELD_INT
       };
@@ -159,7 +159,7 @@ function uvml_metadata_t uvma_axis_mstr_seq_item_c::get_metadata();
          index     : 4,
          value     : tstrb_str,
          col_name  : "tstrb",
-         col_width :  7,
+         col_width : cfg.tdata_width/4,
          col_align : UVML_TEXT_ALIGN_RIGHT,
          data_type : UVML_FIELD_INT
       };
@@ -168,7 +168,7 @@ function uvml_metadata_t uvma_axis_mstr_seq_item_c::get_metadata();
          index     : 5,
          value     : tkeep_str,
          col_name  : "tkeep",
-         col_width : 7,
+         col_width : cfg.tdata_width/4,
          col_align : UVML_TEXT_ALIGN_RIGHT,
          data_type : UVML_FIELD_QUEUE_INT
       };
@@ -177,7 +177,7 @@ function uvml_metadata_t uvma_axis_mstr_seq_item_c::get_metadata();
          index     : 6,
          value     : tdata_str,
          col_name  : "data",
-         col_width : 50,
+         col_width : cfg.tdata_width*2,
          col_align : UVML_TEXT_ALIGN_RIGHT,
          data_type : UVML_FIELD_QUEUE_INT
       };

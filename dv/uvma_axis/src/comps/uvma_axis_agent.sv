@@ -303,12 +303,12 @@ endfunction : connect_cov_model
 
 function void uvma_axis_agent_c::connect_trn_loggers();
    
-   /*seq_item_ap.connect(logger.seq_item_logger_export     );
+   seq_item_ap.connect(logger.seq_item_logger_export     );
    mon_trn_ap .connect(logger.mon_trn_logger_export      );
    drv_mstr_ap.connect(logger.mstr_seq_item_logger_export);
    drv_slv_ap .connect(logger.slv_seq_item_logger_export );
    mon_mstr_ap.connect(logger.mstr_mon_trn_logger_export );
-   mon_slv_ap .connect(logger.slv_mon_trn_logger_export  );*/
+   mon_slv_ap .connect(logger.slv_mon_trn_logger_export  );
    
 endfunction : connect_trn_loggers
 
