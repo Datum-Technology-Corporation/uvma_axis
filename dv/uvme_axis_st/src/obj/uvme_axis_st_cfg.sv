@@ -43,7 +43,7 @@ class uvme_axis_st_cfg_c extends uvml_cfg_c;
       
       `uvm_field_object(mstr_cfg, UVM_DEFAULT)
       `uvm_field_object(slv_cfg , UVM_DEFAULT)
-      `uvm_field_object(sb_cfg    , UVM_DEFAULT)
+      `uvm_field_object(sb_cfg  , UVM_DEFAULT)
    `uvm_object_utils_end
    
    
@@ -78,6 +78,7 @@ class uvme_axis_st_cfg_c extends uvml_cfg_c;
    constraint sb_cfg_cons {
       if (scoreboarding_enabled) {
          /*soft */sb_cfg.enabled == 1;
+         sb_cfg.mode == UVML_SB_MODE_IN_ORDER;
       }
       else {
          sb_cfg.enabled == 0;

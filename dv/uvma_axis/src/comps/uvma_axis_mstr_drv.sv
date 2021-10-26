@@ -124,28 +124,28 @@ endfunction: process_req
 
 task uvma_axis_mstr_drv_c::drv_req(ref uvma_axis_mstr_seq_item_c req);
    
-   @(cntxt.vif.drv_mstr_cb); //@(mp.drv_mstr_cb);
+   @(mp.drv_mstr_cb);
    
-   cntxt.vif.drv_mstr_cb.tvalid <= req.tvalid; //mp.drv_mstr_cb.tvalid <= req.tvalid;
-   cntxt.vif.drv_mstr_cb.tlast  <= req.tlast ; //mp.drv_mstr_cb.tlast  <= req.tlast ;
+   mp.drv_mstr_cb.tvalid <= req.tvalid;
+   mp.drv_mstr_cb.tlast  <= req.tlast ;
    
    for (int unsigned ii=0; ii<cfg.tdata_width; ii++) begin
-      cntxt.vif.drv_mstr_cb.tdata[ii] <= req.tdata[ii]; //mp.drv_mstr_cb.tdata[ii] <= req.tdata[ii];
+      mp.drv_mstr_cb.tdata[ii] <= req.tdata[ii];
    end
    for (int unsigned ii=0; ii<cfg.tdata_width; ii++) begin
-      cntxt.vif.drv_mstr_cb.tstrb[ii] <= req.tstrb[ii]; //mp.drv_mstr_cb.tstrb[ii] <= req.tstrb[ii];
+      mp.drv_mstr_cb.tstrb[ii] <= req.tstrb[ii];
    end
    for (int unsigned ii=0; ii<cfg.tdata_width; ii++) begin
-      cntxt.vif.drv_mstr_cb.tkeep[ii] <= req.tkeep[ii]; //mp.drv_mstr_cb.tkeep[ii] <= req.tkeep[ii];
+      mp.drv_mstr_cb.tkeep[ii] <= req.tkeep[ii];
    end
-   //for (int unsigned ii=0; ii<cfg.tid_width; ii++) begin
-      cntxt.vif.drv_mstr_cb.tid/*[ii]*/ <= req.tid/*[ii]*/; //mp.drv_mstr_cb.tid[ii] <= req.tid[ii];
-   //end
-   //for (int unsigned ii=0; ii<cfg.tdest_width; ii++) begin
-      cntxt.vif.drv_mstr_cb.tdest/*[ii]*/ <= req.tdest/*[ii]*/; //mp.drv_mstr_cb.tdest[ii] <= req.tdest[ii];
-   //end
+   for (int unsigned ii=0; ii<cfg.tid_width; ii++) begin
+      mp.drv_mstr_cb.tid[ii] <= req.tid[ii];
+   end
+   for (int unsigned ii=0; ii<cfg.tdest_width; ii++) begin
+      mp.drv_mstr_cb.tdest[ii] <= req.tdest[ii];
+   end
    for (int unsigned ii=0; ii<cfg.tuser_width; ii++) begin
-      cntxt.vif.drv_mstr_cb.tuser[ii] <= req.tuser[ii]; //mp.drv_mstr_cb.tuser[ii] <= req.tuser[ii];
+      mp.drv_mstr_cb.tuser[ii] <= req.tuser[ii];
    end
    
 endtask : drv_req

@@ -71,9 +71,10 @@ endtask : body
 
 task uvma_axis_mon_vseq_c::process_transfers();
    
-   uvma_axis_mon_trn_c       mon_trn     ;
-   uvma_axis_mstr_mon_trn_c  mstr_mon_trn;
-   uvma_axis_slv_mon_trn_c   slv_mon_trn ;
+   bit                       skip_next = 0;
+   uvma_axis_mon_trn_c       mon_trn      ;
+   uvma_axis_mstr_mon_trn_c  mstr_mon_trn ;
+   uvma_axis_slv_mon_trn_c   slv_mon_trn  ;
    
    forever begin
       // Wait for start of transfer
@@ -94,8 +95,14 @@ task uvma_axis_mon_vseq_c::process_transfers();
       do begin
          get_slv_mon_trn (slv_mon_trn);
          get_mstr_mon_trn(mstr_mon_trn);
-         if ((slv_mon_trn.tready === 1'b1) && (mstr_mon_trn.tvalid === 1'b1)) begin
+         if (!skip_next) begin
             cntxt.mon_current_transfer.push_back(mstr_mon_trn);
+         end
+         if ((slv_mon_trn.tready !== 1'b1) || (mstr_mon_trn.tvalid !== 1'b1)) begin
+            skip_next = 1;
+         end
+         else begin
+            skip_next = 0;
          end
       end while (mstr_mon_trn.tlast !== 1'b1);
       

@@ -46,7 +46,7 @@ class uvme_axis_st_rand_traffic_vseq_c extends uvme_axis_st_base_vseq_c;
       min_gap  <= max_gap ;
       min_size <= max_size;
       min_size >  0;
-      max_size <= 256;
+      max_size <= 512;
    }
    
    

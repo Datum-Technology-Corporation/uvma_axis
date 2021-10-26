@@ -42,7 +42,7 @@ class uvma_axis_rand_traffic_vseq_c extends uvma_axis_base_vseq_c;
    
    constraint limits_cons {
       min_size >  0;
-      max_size <= 256;
+      max_size <= 512;
       min_gap  <= max_gap ;
       min_size <= max_size;
       num_transfers <= 100;

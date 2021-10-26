@@ -27,6 +27,21 @@ class uvma_axis_slv_base_vseq_c extends uvma_axis_base_vseq_c;
     */
    extern function new(string name="uvma_axis_slv_base_vseq");
    
+   /**
+    * TODO Describe uvma_axis_slv_base_vseq_c::body()
+    */
+   extern virtual task body();
+   
+   /**
+    * TODO Describe uvma_axis_slv_base_vseq_c::drv_valid()
+    */
+   extern virtual task drv_valid();
+   
+   /**
+    * TODO Describe uvma_axis_slv_base_vseq_c::drv_idle()
+    */
+   extern virtual task drv_idle();
+   
 endclass : uvma_axis_slv_base_vseq_c
 
 
@@ -35,6 +50,48 @@ function uvma_axis_slv_base_vseq_c::new(string name="uvma_axis_slv_base_vseq");
    super.new(name);
    
 endfunction : new
+
+
+task uvma_axis_slv_base_vseq_c::body();
+   
+   forever begin
+      fork
+         begin
+            `uvm_info("AXIS_SLV_DRV_VSEQ", "Waiting for post_reset", UVM_DEBUG)
+            wait (cntxt.reset_state == UVML_RESET_STATE_POST_RESET) begin
+               `uvm_info("AXIS_SLV_DRV_VSEQ", "Done waiting for post_reset", UVM_DEBUG)
+               if (cntxt.vif.drv_slv_cb.tvalid === 1'b1) begin
+                  drv_valid();
+               end
+               else begin
+                  drv_idle();
+               end
+            end
+         end
+         
+         begin
+            wait (cntxt.reset_state == UVML_RESET_STATE_POST_RESET);
+            wait (cntxt.reset_state != UVML_RESET_STATE_POST_RESET);
+         end
+      join_any
+      disable fork;
+   end
+   
+endtask : body
+
+
+task uvma_axis_slv_base_vseq_c::drv_valid();
+   
+   
+   
+endtask : drv_valid
+
+
+task uvma_axis_slv_base_vseq_c::drv_idle();
+   
+   
+   
+endtask : drv_idle
 
 
 `endif // __UVMA_AXIS_SLV_BASE_VSEQ_SV__

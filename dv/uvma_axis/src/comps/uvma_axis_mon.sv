@@ -233,28 +233,28 @@ endtask : observe_reset_async
 
 task uvma_axis_mon_c::mon_mstr_pre_reset();
    
-   @(cntxt.vif.mon_cb); //@(mp.mon_cb);
+   @(mp.mon_cb);
    
 endtask : mon_mstr_pre_reset
 
 
 task uvma_axis_mon_c::mon_slv_pre_reset();
    
-   @(cntxt.vif.mon_cb); //@(mp.mon_cb);
+   @(mp.mon_cb);
    
 endtask : mon_slv_pre_reset
 
 
 task uvma_axis_mon_c::mon_mstr_in_reset();
    
-   @(cntxt.vif.mon_cb); //@(mp.mon_cb);
+   @(mp.mon_cb);
    
 endtask : mon_mstr_in_reset
 
 
 task uvma_axis_mon_c::mon_slv_in_reset();
    
-   @(cntxt.vif.mon_cb); //@(mp.mon_cb);
+   @(mp.mon_cb);
    
 endtask : mon_slv_in_reset
 
@@ -283,29 +283,29 @@ endtask : mon_slv_post_reset
 
 task uvma_axis_mon_c::sample_mstr_trn(output uvma_axis_mstr_mon_trn_c trn);
    
-   @(cntxt.vif.mon_cb); //@(mp.mon_cb);
+   @(mp.mon_cb);
    trn = uvma_axis_mstr_mon_trn_c::type_id::create("trn");
    
-   trn.tvalid = cntxt.vif.mon_cb.tvalid; //trn.tvalid = mp.mon_cb.tvalid;
-   trn.tlast  = cntxt.vif.mon_cb.tlast ; //trn.tlast  = mp.mon_cb.tlast ;
+   trn.tvalid = mp.mon_cb.tvalid;
+   trn.tlast  = mp.mon_cb.tlast ;
    
    for (int unsigned ii=0; ii<cfg.tdata_width; ii++) begin
-      trn.tdata[ii] = cntxt.vif.mon_cb.tdata[ii]; //trn.tdata[ii] = mp.mon_cb.tdata[ii];
+      trn.tdata[ii] = mp.mon_cb.tdata[ii];
    end
    for (int unsigned ii=0; ii<cfg.tdata_width; ii++) begin
-      trn.tstrb[ii] = cntxt.vif.mon_cb.tstrb[ii]; //trn.tstrb[ii] = mp.mon_cb.tstrb[ii];
+      trn.tstrb[ii] = mp.mon_cb.tstrb[ii];
    end
    for (int unsigned ii=0; ii<cfg.tdata_width; ii++) begin
-      trn.tkeep[ii] = cntxt.vif.mon_cb.tkeep[ii];//trn.tkeep[ii] = mp.mon_cb.tkeep[ii];
+      trn.tkeep[ii] = mp.mon_cb.tkeep[ii];
    end
    for (int unsigned ii=0; ii<cfg.tid_width; ii++) begin
-      trn.tid[ii] = cntxt.vif.mon_cb.tid[ii]; //trn.tid[ii] = mp.mon_cb.tid[ii];
+      trn.tid[ii] = mp.mon_cb.tid[ii];
    end
    for (int unsigned ii=0; ii<cfg.tdest_width; ii++) begin
-      trn.tdest[ii] = cntxt.vif.mon_cb.tdest[ii]; //trn.tdest[ii] = mp.mon_cb.tdest[ii];
+      trn.tdest[ii] = mp.mon_cb.tdest[ii];
    end
    for (int unsigned ii=0; ii<cfg.tuser_width; ii++) begin
-      trn.tuser[ii] = cntxt.vif.mon_cb.tuser[ii]; //trn.tuser[ii] = mp.mon_cb.tuser[ii];
+      trn.tuser[ii] = mp.mon_cb.tuser[ii];
    end
    
 endtask : sample_mstr_trn
@@ -313,9 +313,9 @@ endtask : sample_mstr_trn
 
 task uvma_axis_mon_c::sample_slv_trn(output uvma_axis_slv_mon_trn_c trn);
    
-   @(cntxt.vif.mon_cb); //@(mp.mon_cb);
+   @(mp.mon_cb);
    trn = uvma_axis_slv_mon_trn_c::type_id::create("trn");
-   trn.tready = cntxt.vif.mon_cb.tready; //trn.tready = mp.mon_cb.tready;
+   trn.tready = mp.mon_cb.tready;
    
 endtask : sample_slv_trn
 

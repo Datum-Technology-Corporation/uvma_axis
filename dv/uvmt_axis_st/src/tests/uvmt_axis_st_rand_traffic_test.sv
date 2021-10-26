@@ -63,7 +63,6 @@ task uvmt_axis_st_rand_traffic_test_c::main_phase(uvm_phase phase);
    super.main_phase(phase);
    
    phase.raise_objection(this);
-   //`uvm_info("TEST", "Hello, World!", UVM_NONE)
    `uvm_info("TEST", $sformatf("Starting rand_traffic_vseq virtual sequence:\n%s", rand_traffic_vseq.sprint()), UVM_NONE)
    rand_traffic_vseq.start(vsequencer);
    `uvm_info("TEST", $sformatf("Finished rand_traffic_vseq virtual sequence\n%s", rand_traffic_vseq.sprint()), UVM_NONE)

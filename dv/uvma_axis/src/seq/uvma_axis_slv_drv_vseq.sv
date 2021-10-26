@@ -32,6 +32,16 @@ class uvma_axis_slv_drv_vseq_c extends uvma_axis_slv_base_vseq_c;
     */
    extern virtual task body();
    
+   /**
+    * TODO Describe uvma_axis_slv_drv_vseq_c::drv_valid()
+    */
+   extern virtual task drv_valid();
+   
+   /**
+    * TODO Describe uvma_axis_slv_drv_vseq_c::drv_idle()
+    */
+   extern virtual task drv_idle();
+   
 endclass : uvma_axis_slv_drv_vseq_c
 
 
@@ -44,23 +54,48 @@ endfunction : new
 
 task uvma_axis_slv_drv_vseq_c::body();
    
-   bit                       tready;
-   uvma_axis_slv_seq_item_c  req   ;
-   int unsigned              pct_off = 100 - cfg.drv_slv_on;
-   
    `uvm_info("AXIS_SLV_DRV_VSEQ", "SLV driver virtual sequence has started", UVM_HIGH)
-   forever begin
-      randcase
-         cfg.drv_slv_on : tready = 1;
-         pct_off        : tready = 0;
-      endcase
-      
+   super.body();
+   
+endtask : body
+
+
+task uvma_axis_slv_drv_vseq_c::drv_valid();
+   
+   uvma_axis_slv_seq_item_c  req   ;
+   int unsigned              pct_off = 100 - cfg.drv_slv_valid_ton;
+   
+   if ($urandom_range(1,100) > pct_off) begin
       `uvm_do_on_pri_with(req, p_sequencer.slv_sequencer, `UVMA_AXIS_SLV_DRV_SEQ_ITEM_PRI, {
-         req.tready == local::tready;
+         req.tready == 1;
+      })
+   end
+   else begin
+      `uvm_do_on_pri_with(req, p_sequencer.slv_sequencer, `UVMA_AXIS_SLV_DRV_SEQ_ITEM_PRI, {
+         req.tready == 0;
       })
    end
    
-endtask : body
+endtask : drv_valid
+
+
+task uvma_axis_slv_drv_vseq_c::drv_idle();
+   
+   uvma_axis_slv_seq_item_c  req   ;
+   int unsigned              pct_off = 100 - cfg.drv_slv_idle_ton;
+   
+   if ($urandom_range(1,100) > pct_off) begin
+      `uvm_do_on_pri_with(req, p_sequencer.slv_sequencer, `UVMA_AXIS_SLV_DRV_SEQ_ITEM_PRI, {
+         req.tready == 1;
+      })
+   end
+   else begin
+      // Let idle sequence do its thing
+      wait (cntxt.vif.clk === 1'b0);
+      wait (cntxt.vif.clk === 1'b1);
+   end
+   
+endtask : drv_idle
 
 
 `endif // __UVMA_AXIS_SLV_DRV_VSEQ_SV__

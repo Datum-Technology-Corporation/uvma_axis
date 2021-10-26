@@ -83,7 +83,9 @@ task uvma_axis_idle_vseq_c::slv();
    
    forever begin
       `uvm_create_on(slv_seq_item, p_sequencer.slv_sequencer)
-      `uvm_rand_send_pri(slv_seq_item, `UVMA_AXIS_SLV_IDLE_SEQ_ITEM_PRI)
+      `uvm_rand_send_pri_with(slv_seq_item, `UVMA_AXIS_SLV_IDLE_SEQ_ITEM_PRI, {
+         tready == 0;
+      })
    end
    
 endtask : slv

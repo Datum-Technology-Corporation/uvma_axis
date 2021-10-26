@@ -37,13 +37,14 @@ class uvma_axis_cfg_c extends uvml_cfg_c;
    rand bit                      trn_log_enabled  ; ///< 
    
    // Protocol options
-   rand uvma_axis_drv_mode_enum  drv_mode   ; ///< Operational mode
-   rand uvma_axis_drv_idle_enum  drv_idle   ; ///< 
-   rand int unsigned             drv_slv_on ; ///< 
-   rand int unsigned             tdata_width; ///< Measured in bytes (B)
-   rand int unsigned             tid_width  ; ///< Measured in bits  (b)
-   rand int unsigned             tdest_width; ///< Measured in bits  (b)
-   rand int unsigned             tuser_width; ///< Measured in bits  (b)
+   rand uvma_axis_drv_mode_enum  drv_mode         ; ///< Operational mode
+   rand uvma_axis_drv_idle_enum  drv_idle         ; ///< 
+   rand int unsigned             drv_slv_valid_ton; ///< 
+   rand int unsigned             drv_slv_idle_ton ; ///< 
+   rand int unsigned             tdata_width      ; ///< Measured in bytes (B)
+   rand int unsigned             tid_width        ; ///< Measured in bits  (b)
+   rand int unsigned             tdest_width      ; ///< Measured in bits  (b)
+   rand int unsigned             tuser_width      ; ///< Measured in bits  (b)
    
    // Sequence Types
    uvm_object_wrapper  mon_vseq_type     ; ///< 
@@ -61,13 +62,14 @@ class uvma_axis_cfg_c extends uvml_cfg_c;
       `uvm_field_int (                         cov_model_enabled, UVM_DEFAULT)
       `uvm_field_int (                         trn_log_enabled  , UVM_DEFAULT)
       
-      `uvm_field_enum(uvma_axis_drv_mode_enum, drv_mode   , UVM_DEFAULT          )
-      `uvm_field_enum(uvma_axis_drv_idle_enum, drv_idle   , UVM_DEFAULT          )
-      `uvm_field_int (                         drv_slv_on , UVM_DEFAULT + UVM_DEC)
-      `uvm_field_int (                         tdata_width, UVM_DEFAULT + UVM_DEC)
-      `uvm_field_int (                         tid_width  , UVM_DEFAULT + UVM_DEC)
-      `uvm_field_int (                         tdest_width, UVM_DEFAULT + UVM_DEC)
-      `uvm_field_int (                         tuser_width, UVM_DEFAULT + UVM_DEC)
+      `uvm_field_enum(uvma_axis_drv_mode_enum, drv_mode         , UVM_DEFAULT          )
+      `uvm_field_enum(uvma_axis_drv_idle_enum, drv_idle         , UVM_DEFAULT          )
+      `uvm_field_int (                         drv_slv_valid_ton, UVM_DEFAULT + UVM_DEC)
+      `uvm_field_int (                         drv_slv_idle_ton , UVM_DEFAULT + UVM_DEC)
+      `uvm_field_int (                         tdata_width      , UVM_DEFAULT + UVM_DEC)
+      `uvm_field_int (                         tid_width        , UVM_DEFAULT + UVM_DEC)
+      `uvm_field_int (                         tdest_width      , UVM_DEFAULT + UVM_DEC)
+      `uvm_field_int (                         tuser_width      , UVM_DEFAULT + UVM_DEC)
    `uvm_object_utils_end
    
    
@@ -90,7 +92,8 @@ class uvma_axis_cfg_c extends uvml_cfg_c;
       tid_width    inside {[0:`UVMA_AXIS_TID_MAX_WIDTH   ]};
       tdest_width  inside {[0:`UVMA_AXIS_TDEST_MAX_WIDTH ]};
       tuser_width  inside {[0:`UVMA_AXIS_TUSER_MAX_WIDTH ]};
-      drv_slv_on   inside {[0:100]};
+      drv_slv_valid_ton inside {[0:100]};
+      drv_slv_idle_ton  inside {[0:100]};
    }
    
    

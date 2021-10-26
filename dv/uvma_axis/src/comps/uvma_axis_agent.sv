@@ -350,9 +350,9 @@ task uvma_axis_agent_c::start_idle_vseq();
       `uvm_fatal("AXIS_AGENT", "Failed to randomize cntxt.idle_vseq")
    end
    
-   //fork
-   //   cntxt.idle_vseq.start(vsequencer);
-   //join_none
+   fork
+      cntxt.idle_vseq.start(vsequencer);
+   join_none
    
 endtask : start_idle_vseq
 
