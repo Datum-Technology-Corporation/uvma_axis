@@ -74,31 +74,14 @@ task uvma_axis_mon_vseq_c::process_transfers();
    uvma_axis_slv_mon_trn_c   slv_mon_trn ;
    
    forever begin
-      // Handshake
-      forever begin
-         //fork
-            get_slv_mon_trn (slv_mon_trn );
-            get_mstr_mon_trn(mstr_mon_trn);
-         //join
-         
+      do begin
+         get_slv_mon_trn (slv_mon_trn );
+         get_mstr_mon_trn(mstr_mon_trn);
          if ((slv_mon_trn.tready === 1'b1) && (mstr_mon_trn.tvalid === 1'b1)) begin
             cntxt.mon_current_transfer.push_back(mstr_mon_trn);
-            break;
          end
-      end
+      end while (!((mstr_mon_trn.tlast === 1'b1) && (mstr_mon_trn.tvalid === 1'b1) && (slv_mon_trn.tready === 1'b1)));
       
-      if (mstr_mon_trn.tlast !== 1'b1) begin
-         // Keep accumulating transfer data
-         do begin
-            //fork
-               get_slv_mon_trn (slv_mon_trn );
-               get_mstr_mon_trn(mstr_mon_trn);
-            //join
-            if (((slv_mon_trn.tready === 1'b1) && (mstr_mon_trn.tvalid === 1'b1))) begin
-               cntxt.mon_current_transfer.push_back(mstr_mon_trn);
-            end
-         end while ( !((mstr_mon_trn.tlast === 1'b1) && (mstr_mon_trn.tvalid === 1'b1) && (slv_mon_trn.tready === 1'b1)) );
-      end
       `uvm_info("AXIS_MON_VSEQ", $sformatf("Accumulated %0d transactions", cntxt.mon_current_transfer.size()), UVM_MEDIUM)
       foreach (cntxt.mon_current_transfer[ii]) begin
          `uvm_info("AXIS_MON_VSEQ", $sformatf("cntxt.mon_current_transfer[%0d]=\n%s", ii, cntxt.mon_current_transfer[ii].sprint()), UVM_MEDIUM)
@@ -116,11 +99,9 @@ task uvma_axis_mon_vseq_c::process_transfers();
       mon_trn.set_timestamp_end  (cntxt.mon_current_transfer[$].get_timestamp_end  ());
       do begin
          mstr_mon_trn = cntxt.mon_current_transfer.pop_front();
-         if (mstr_mon_trn.tvalid === 1'b1) begin
-            foreach (mstr_mon_trn.tdata[ii]) begin
-               if ((ii < cfg.tdata_width) && (mstr_mon_trn.tstrb[ii] === 1'b1) && (mstr_mon_trn.tkeep[ii] === 1'b1)) begin
-                  mon_trn.data.push_front(mstr_mon_trn.tdata[ii]);
-               end
+         foreach (mstr_mon_trn.tdata[ii]) begin
+            if ((ii < cfg.tdata_width) && (mstr_mon_trn.tstrb[ii] === 1'b1) && (mstr_mon_trn.tkeep[ii] === 1'b1)) begin
+               mon_trn.data.push_back(mstr_mon_trn.tdata[ii]);
             end
          end
       end while (cntxt.mon_current_transfer.size());

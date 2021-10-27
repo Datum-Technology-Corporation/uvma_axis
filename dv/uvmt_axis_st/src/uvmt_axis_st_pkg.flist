@@ -17,6 +17,10 @@
 -f ${DV_UVML_SB_SRC_PATH}/uvml_sb_pkg.flist
 
 // Agents
++define+UVMA_AXIS_TDATA_MAX_WIDTH=32
++define+UVMA_AXIS_TID_MAX_WIDTH=8
++define+UVMA_AXIS_TDEST_MAX_WIDTH=4
++define+UVMA_AXIS_TUSER_MAX_WIDTH=32
 -f ${DV_UVMA_AXIS_SRC_PATH}/uvma_axis_pkg.flist
 
 // Environments

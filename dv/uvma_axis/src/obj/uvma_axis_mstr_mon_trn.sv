@@ -76,11 +76,11 @@ function void uvma_axis_mstr_mon_trn_c::do_print(uvm_printer printer);
    super.do_print(printer);
    
    if (cfg != null) begin
-      printer.print_field("tvalid", tlast, $bits(tvalid));
-      printer.print_field("tdata" , tdata, cfg.tdata_width*8);
-      printer.print_field("tstrb" , tstrb, cfg.tdata_width);
-      printer.print_field("tkeep" , tkeep, cfg.tdata_width);
-      printer.print_field("tlast" , tlast, $bits(tlast));
+      printer.print_field("tvalid", tvalid, $bits(tvalid));
+      printer.print_field("tdata" , tdata , cfg.tdata_width*8);
+      printer.print_field("tstrb" , tstrb , cfg.tdata_width);
+      printer.print_field("tkeep" , tkeep , cfg.tdata_width);
+      printer.print_field("tlast" , tlast , $bits(tlast));
       
       if (cfg.tid_width != 0) begin
          printer.print_field("tid", tid, cfg.tid_width);
@@ -101,7 +101,7 @@ endfunction : do_print
 function uvml_metadata_t uvma_axis_mstr_mon_trn_c::get_metadata();
    
    string status_str = "";
-   string tdata_str  = $sformatf("%h", tdata);
+   string tdata_str  = "";
    string tstrb_str  = $sformatf("%h", tstrb);
    string tkeep_str  = $sformatf("%h", tkeep);
    string tid_str    = $sformatf("%h", tid  );
@@ -109,7 +109,12 @@ function uvml_metadata_t uvma_axis_mstr_mon_trn_c::get_metadata();
    string tuser_str  = $sformatf("%h", tuser);
    
    if (cfg != null) begin
-      tdata_str = tdata_str.substr(tdata_str.len() - (cfg.tdata_width*2), tdata_str.len()-1);
+      foreach (tdata[ii]) begin
+         if (ii < cfg.tdata_width) begin
+            tdata_str = {tdata_str, $sformatf("%h", tdata[ii])};
+         end
+      end
+      
       tstrb_str = tstrb_str.substr(tstrb_str.len() - (cfg.tdata_width/4), tstrb_str.len()-1);
       tkeep_str = tkeep_str.substr(tkeep_str.len() - (cfg.tdata_width/4), tkeep_str.len()-1);
       tid_str   = tid_str  .substr(tid_str  .len() - (cfg.tid_width  /4), tid_str  .len()-1);

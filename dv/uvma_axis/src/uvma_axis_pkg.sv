@@ -51,9 +51,10 @@ package uvma_axis_pkg;
    
    // Transactions
    `include "uvma_axis_mon_trn.sv"
-   `include "uvma_axis_seq_item.sv"
    `include "uvma_axis_mstr_mon_trn.sv"
    `include "uvma_axis_slv_mon_trn.sv"
+   typedef class uvma_axis_base_vseq_c;
+   `include "uvma_axis_seq_item.sv"
    `include "uvma_axis_mstr_seq_item.sv"
    `include "uvma_axis_slv_seq_item.sv"
    

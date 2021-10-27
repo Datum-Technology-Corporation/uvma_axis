@@ -18,13 +18,13 @@
    `define UVMA_AXIS_TDATA_MAX_WIDTH  1_024
 `endif
 `ifndef UVMA_AXIS_TID_MAX_WIDTH
-   `define UVMA_AXIS_TID_MAX_WIDTH        8
+   `define UVMA_AXIS_TID_MAX_WIDTH       64
 `endif
 `ifndef UVMA_AXIS_TDEST_MAX_WIDTH
-   `define UVMA_AXIS_TDEST_MAX_WIDTH      4
+   `define UVMA_AXIS_TDEST_MAX_WIDTH     64
 `endif
 `ifndef UVMA_AXIS_TUSER_MAX_WIDTH
-   `define UVMA_AXIS_TUSER_MAX_WIDTH  1_024
+   `define UVMA_AXIS_TUSER_MAX_WIDTH     128
 `endif
 
 `ifndef UVMA_AXIS_TDATA_DEFAULT_WIDTH

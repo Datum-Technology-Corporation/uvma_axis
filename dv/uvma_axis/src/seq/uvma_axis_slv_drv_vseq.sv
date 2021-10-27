@@ -91,8 +91,7 @@ task uvma_axis_slv_drv_vseq_c::drv_idle();
    end
    else begin
       // Let idle sequence do its thing
-      wait (cntxt.vif.clk === 1'b0);
-      wait (cntxt.vif.clk === 1'b1);
+      @(cntxt.vif.drv_slv_cb);
    end
    
 endtask : drv_idle

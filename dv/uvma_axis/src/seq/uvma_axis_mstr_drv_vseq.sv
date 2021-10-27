@@ -57,76 +57,56 @@ endtask : body
 
 task uvma_axis_mstr_drv_vseq_c::drv(ref uvma_axis_seq_item_c seq_item);
    
-   bit                        repeat_req = 0;
-   uvma_axis_mstr_seq_item_c  mstr_seq_item ;
-   bit [7:0]                  data_q[$]     ;
-   uvma_axis_tdata_b_t        data          ;
-   uvma_axis_tkeep_b_t        keep          ;
+   int unsigned               jj           ;
+   bit                        sent_req  = 0;
+   uvma_axis_mstr_seq_item_c  mstr_seq_item;
+   bit [7:0]                  data_q[$]    ;
+   uvma_axis_tdata_b_t        data         ;
+   uvma_axis_tkeep_b_t        keep         ;
    
    foreach (seq_item.data[ii]) begin
       data_q.push_back(seq_item.data[ii]);
    end
    
-   // First cycle
-   `uvm_create_on(mstr_seq_item, p_sequencer.mstr_sequencer)
-   keep = {`UVMA_AXIS_TDATA_MAX_WIDTH{1'b1}};
-   for (int unsigned ii=0; ii<cfg.tdata_width; ii++) begin
-      if (data_q.size()) begin
-         data[ii] = data_q.pop_front();
-      end
-      else begin
-         keep[ii] = 1'b0;
-      end
-   end
-   mstr_seq_item.tvalid = 1;
-   mstr_seq_item.tdata  = data;
-   mstr_seq_item.tid    = seq_item.tid  ;
-   mstr_seq_item.tdest  = seq_item.tdest;
-   mstr_seq_item.tuser  = seq_item.tuser;
-   mstr_seq_item.tkeep  = keep;
-   mstr_seq_item.tstrb  = keep;
-   mstr_seq_item.tlast  = 0;
-   do begin
-      `uvm_send_pri(mstr_seq_item, `UVMA_AXIS_MSTR_DRV_SEQ_ITEM_PRI)
-   end while (cntxt.vif.tready !== 1'b1);
-   
-   // Transfer rest of data (if any)
    while (data_q.size()) begin
       `uvm_create_on(mstr_seq_item, p_sequencer.mstr_sequencer)
       keep = {`UVMA_AXIS_TDATA_MAX_WIDTH{1'b0}};
       for (int unsigned ii=0; ii<cfg.tdata_width; ii++) begin
          if (data_q.size()) begin
-            data[ii] = data_q.pop_front();
+            jj = ii;//cfg.tdata_width - 1 - ii;
+            data[jj] = data_q.pop_front();
             keep[ii] = 1'b1;
          end
       end
+      mstr_seq_item.tvalid = 1'b1;
+      mstr_seq_item.tdata  = data;
+      mstr_seq_item.tid    = seq_item.tid  ;
+      mstr_seq_item.tdest  = seq_item.tdest;
+      mstr_seq_item.tuser  = seq_item.tuser;
       if (data_q.size()) begin
-         mstr_seq_item.tvalid = 1'b1;
-         mstr_seq_item.tdata  = data;
-         mstr_seq_item.tid    = seq_item.tid  ;
-         mstr_seq_item.tdest  = seq_item.tdest;
-         mstr_seq_item.tuser  = seq_item.tuser;
-         mstr_seq_item.tkeep  = {`UVMA_AXIS_TDATA_MAX_WIDTH{1'b1}};
-         mstr_seq_item.tstrb  = {`UVMA_AXIS_TDATA_MAX_WIDTH{1'b1}};
-         mstr_seq_item.tlast  = 0;
+         mstr_seq_item.tkeep = {`UVMA_AXIS_TDATA_MAX_WIDTH{1'b1}};
+         mstr_seq_item.tstrb = {`UVMA_AXIS_TDATA_MAX_WIDTH{1'b1}};
+         mstr_seq_item.tlast = 0;
       end
       else begin
-         mstr_seq_item.tvalid = 1'b1;
-         mstr_seq_item.tdata  = data;
-         mstr_seq_item.tid    = seq_item.tid  ;
-         mstr_seq_item.tdest  = seq_item.tdest;
-         mstr_seq_item.tuser  = seq_item.tuser;
-         mstr_seq_item.tkeep  = keep;
-         mstr_seq_item.tstrb  = keep;
-         mstr_seq_item.tlast  =  1;
+         mstr_seq_item.tkeep = keep;
+         mstr_seq_item.tstrb = keep;
+         mstr_seq_item.tlast =    1;
       end
       
       do begin
          `uvm_send_pri(mstr_seq_item, `UVMA_AXIS_MSTR_DRV_SEQ_ITEM_PRI)
-      end while (cntxt.vif.tready !== 1'b1);
+         if (cntxt.vif.drv_mstr_cb.tready === 1'b1) begin
+            sent_req = 1;
+         end
+         else begin
+            sent_req = 0;
+         end
+      end while (!sent_req);
    end
    
-   repeat (100) begin
+   // TEMP IPG
+   repeat (10) begin
       `uvm_create_on(mstr_seq_item, p_sequencer.mstr_sequencer)
       mstr_seq_item.tvalid = 0;
       `uvm_send_pri(mstr_seq_item, `UVMA_AXIS_MSTR_DRV_SEQ_ITEM_PRI)

@@ -82,11 +82,11 @@ class uvme_axis_st_cfg_c extends uvml_cfg_c;
    }
    
    constraint sb_cfg_cons {
+      mstr_sb_cfg.mode == UVML_SB_MODE_IN_ORDER;
+      e2e_sb_cfg .mode == UVML_SB_MODE_IN_ORDER;
       if (scoreboarding_enabled) {
-         /*soft */mstr_sb_cfg.enabled == 0;
-         /*soft */e2e_sb_cfg .enabled == 1;
-         mstr_sb_cfg.mode == UVML_SB_MODE_IN_ORDER;
-         e2e_sb_cfg .mode == UVML_SB_MODE_IN_ORDER;
+         mstr_sb_cfg.enabled == 1;
+         e2e_sb_cfg .enabled == 1;
       }
       else {
          mstr_sb_cfg.enabled == 0;

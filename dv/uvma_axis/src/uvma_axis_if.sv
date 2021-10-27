@@ -19,10 +19,10 @@
  * monitor (uvma_axis_mon_c) and driver (uvma_axis_drv_c).
  */
 interface uvma_axis_if #(
-   parameter TDATA_WIDTH  = `UVMA_AXIS_TDATA_DEFAULT_WIDTH, ///< 
-   parameter TUSER_WIDTH  = `UVMA_AXIS_TUSER_DEFAULT_WIDTH, ///< 
-   parameter TDEST_WIDTH  = `UVMA_AXIS_TDEST_DEFAULT_WIDTH, ///< 
-   parameter TID_WIDTH    = `UVMA_AXIS_TID_DEFAULT_WIDTH    ///< 
+   parameter TDATA_WIDTH  = `UVMA_AXIS_TDATA_MAX_WIDTH, ///< 
+   parameter TUSER_WIDTH  = `UVMA_AXIS_TUSER_MAX_WIDTH, ///< 
+   parameter TDEST_WIDTH  = `UVMA_AXIS_TDEST_MAX_WIDTH, ///< 
+   parameter TID_WIDTH    = `UVMA_AXIS_TID_MAX_WIDTH    ///< 
 ) (
    input logic clk    ,
    input logic reset_n

@@ -283,6 +283,8 @@ endtask : mon_slv_post_reset
 
 task uvma_axis_mon_c::sample_mstr_trn(output uvma_axis_mstr_mon_trn_c trn);
    
+   int unsigned  jj;
+   
    @(mp.mon_cb);
    trn = uvma_axis_mstr_mon_trn_c::type_id::create("trn");
    

@@ -124,8 +124,6 @@ endfunction: process_req
 
 task uvma_axis_mstr_drv_c::drv_req(ref uvma_axis_mstr_seq_item_c req);
    
-   @(mp.drv_mstr_cb);
-   
    mp.drv_mstr_cb.tvalid <= req.tvalid;
    mp.drv_mstr_cb.tlast  <= req.tlast ;
    
@@ -147,6 +145,8 @@ task uvma_axis_mstr_drv_c::drv_req(ref uvma_axis_mstr_seq_item_c req);
    for (int unsigned ii=0; ii<cfg.tuser_width; ii++) begin
       mp.drv_mstr_cb.tuser[ii] <= req.tuser[ii];
    end
+   
+   @(mp.drv_mstr_cb);
    
 endtask : drv_req
 

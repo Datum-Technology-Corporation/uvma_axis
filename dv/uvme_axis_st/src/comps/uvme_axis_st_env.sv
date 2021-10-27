@@ -204,9 +204,9 @@ function void uvme_axis_st_env_c::create_env_components();
    
    if (cfg.scoreboarding_enabled) begin
       predictor     = uvme_axis_st_prd_c                    ::type_id::create("predictor"    , this);
-      //mstr_sb       = uvme_axis_st_sb_simplex_c             ::type_id::create("mstr_sb"      , this);
+      mstr_sb       = uvme_axis_st_sb_simplex_c             ::type_id::create("mstr_sb"      , this);
       e2e_sb        = uvme_axis_st_sb_simplex_c             ::type_id::create("e2e_sb"       , this);
-      //mstr_dly_line = uvml_dly_line_c #(uvma_axis_mon_trn_c)::type_id::create("mstr_dly_line", this);
+      mstr_dly_line = uvml_dly_line_c #(uvma_axis_mon_trn_c)::type_id::create("mstr_dly_line", this);
       e2e_dly_line  = uvml_dly_line_c #(uvma_axis_mon_trn_c)::type_id::create("e2e_dly_line" , this);
    end
    
@@ -232,17 +232,17 @@ endfunction: connect_predictor
 function void uvme_axis_st_env_c::connect_scoreboard();
    
    // Connect agent -> scoreboard
-   //mstr_agent   .mon_trn_ap.connect(mstr_dly_line.in_export );
+   mstr_agent   .mon_trn_ap.connect(mstr_dly_line.in_export );
    slv_agent    .mon_trn_ap.connect(e2e_dly_line .in_export );
    e2e_dly_line .out_ap    .connect(e2e_sb       .act_export);
-   //mstr_dly_line.out_ap    .connect(mstr_sb      .act_export);
+   mstr_dly_line.out_ap    .connect(mstr_sb      .act_export);
    
-   e2e_dly_line .set_duration(100);
-   //mstr_dly_line.set_duration(100);
+   e2e_dly_line .set_duration(1000);
+   mstr_dly_line.set_duration(1000);
    
    // Connect predictor -> scoreboard
    predictor.e2e_out_ap .connect(e2e_sb .exp_export);
-   //predictor.mstr_out_ap.connect(mstr_sb.exp_export);
+   predictor.mstr_out_ap.connect(mstr_sb.exp_export);
    
 endfunction: connect_scoreboard
 

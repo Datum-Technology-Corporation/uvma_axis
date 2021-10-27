@@ -124,8 +124,8 @@ endfunction: process_req
 
 task uvma_axis_slv_drv_c::drv_req(ref uvma_axis_slv_seq_item_c req);
    
-   @(mp.drv_slv_cb);
    mp.drv_slv_cb.tready <= req.tready;
+   @(mp.drv_slv_cb);
    
 endtask : drv_req
 
