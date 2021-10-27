@@ -82,9 +82,9 @@ task uvma_axis_mon_vseq_c::process_transfers();
          end
       end while (!((mstr_mon_trn.tlast === 1'b1) && (mstr_mon_trn.tvalid === 1'b1) && (slv_mon_trn.tready === 1'b1)));
       
-      `uvm_info("AXIS_MON_VSEQ", $sformatf("Accumulated %0d transactions", cntxt.mon_current_transfer.size()), UVM_MEDIUM)
+      `uvm_info("AXIS_MON_VSEQ", $sformatf("Accumulated %0d transactions", cntxt.mon_current_transfer.size()), UVM_DEBUG)
       foreach (cntxt.mon_current_transfer[ii]) begin
-         `uvm_info("AXIS_MON_VSEQ", $sformatf("cntxt.mon_current_transfer[%0d]=\n%s", ii, cntxt.mon_current_transfer[ii].sprint()), UVM_MEDIUM)
+         `uvm_info("AXIS_MON_VSEQ", $sformatf("cntxt.mon_current_transfer[%0d]=\n%s", ii, cntxt.mon_current_transfer[ii].sprint()), UVM_DEBUG)
       end
       
       // Process queue of transactions into final monitor transaction
@@ -99,8 +99,8 @@ task uvma_axis_mon_vseq_c::process_transfers();
       mon_trn.set_timestamp_end  (cntxt.mon_current_transfer[$].get_timestamp_end  ());
       do begin
          mstr_mon_trn = cntxt.mon_current_transfer.pop_front();
-         foreach (mstr_mon_trn.tdata[ii]) begin
-            if ((ii < cfg.tdata_width) && (mstr_mon_trn.tstrb[ii] === 1'b1) && (mstr_mon_trn.tkeep[ii] === 1'b1)) begin
+         for (int unsigned ii=0; ii<cfg.tdata_width; ii++) begin
+            if ((mstr_mon_trn.tstrb[ii] === 1'b1) && (mstr_mon_trn.tkeep[ii] === 1'b1)) begin
                mon_trn.data.push_back(mstr_mon_trn.tdata[ii]);
             end
          end
