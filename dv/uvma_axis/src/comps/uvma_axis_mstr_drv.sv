@@ -108,6 +108,7 @@ task uvma_axis_mstr_drv_c::run_phase(uvm_phase phase);
          ap.write                   (req);
          
          seq_item_port.item_done();
+         @(mp.drv_mstr_cb);
       end
    end
    
@@ -145,8 +146,6 @@ task uvma_axis_mstr_drv_c::drv_req(ref uvma_axis_mstr_seq_item_c req);
    for (int unsigned ii=0; ii<cfg.tuser_width; ii++) begin
       mp.drv_mstr_cb.tuser[ii] <= req.tuser[ii];
    end
-   
-   @(mp.drv_mstr_cb);
    
 endtask : drv_req
 
