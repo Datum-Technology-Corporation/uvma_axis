@@ -22,7 +22,7 @@ const int unsigned  uvma_axis_default_tuser_width  = `UVMA_AXIS_TUSER_DEFAULT_WI
 const int unsigned  uvma_axis_max_payload_size  = 32_768; // Measured in bytes (B)
 const int unsigned  uvma_axis_min_payload_size  =      8; // Measured in bytes (B)
 
-const int unsigned  uvma_axis_logging_num_data_bytes =  64; // Number of bytes logged at start and end of payload by transaction loggers
+const int unsigned  uvma_axis_logging_num_data_bytes =  32; // Number of bytes logged at start and end of payload by transaction loggers
 
 
 `endif // __UVMA_AXIS_CONSTANTS_SV__
