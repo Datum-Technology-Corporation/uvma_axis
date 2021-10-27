@@ -105,13 +105,6 @@ task uvma_axis_mstr_drv_vseq_c::drv(ref uvma_axis_seq_item_c seq_item);
       end while (!sent_req);
    end
    
-   // TEMP IPG
-   repeat (10) begin
-      `uvm_create_on(mstr_seq_item, p_sequencer.mstr_sequencer)
-      mstr_seq_item.tvalid = 0;
-      `uvm_send_pri(mstr_seq_item, `UVMA_AXIS_MSTR_DRV_SEQ_ITEM_PRI)
-   end
-   
 endtask : drv
 
 
