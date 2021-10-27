@@ -57,7 +57,7 @@ endtask : body
 
 task uvma_axis_mstr_drv_vseq_c::drv(ref uvma_axis_seq_item_c seq_item);
    
-   int unsigned               jj           ;
+   int unsigned               pct_off      ;
    bit                        sent_req  = 0;
    uvma_axis_mstr_seq_item_c  mstr_seq_item;
    bit [7:0]                  data_q[$]    ;
@@ -73,8 +73,7 @@ task uvma_axis_mstr_drv_vseq_c::drv(ref uvma_axis_seq_item_c seq_item);
       keep = {`UVMA_AXIS_TDATA_MAX_WIDTH{1'b0}};
       for (int unsigned ii=0; ii<cfg.tdata_width; ii++) begin
          if (data_q.size()) begin
-            jj = ii;//cfg.tdata_width - 1 - ii;
-            data[jj] = data_q.pop_front();
+            data[ii] = data_q.pop_front();
             keep[ii] = 1'b1;
          end
       end
@@ -94,13 +93,20 @@ task uvma_axis_mstr_drv_vseq_c::drv(ref uvma_axis_seq_item_c seq_item);
          mstr_seq_item.tlast =    1;
       end
       
+      pct_off = 100 - cfg.drv_mstr_ton;
       do begin
-         `uvm_send_pri(mstr_seq_item, `UVMA_AXIS_MSTR_DRV_SEQ_ITEM_PRI)
-         if (cntxt.vif.drv_mstr_cb.tready === 1'b1) begin
-            sent_req = 1;
+         if ($urandom_range(1,100) > pct_off) begin
+            `uvm_send_pri(mstr_seq_item, `UVMA_AXIS_MSTR_DRV_SEQ_ITEM_PRI)
+            if (cntxt.vif.drv_mstr_cb.tready === 1'b1) begin
+               sent_req = 1;
+            end
+            else begin
+               sent_req = 0;
+            end
          end
          else begin
-            sent_req = 0;
+            // Let idle sequence do its thing
+            wait_clk();
          end
       end while (!sent_req);
    end

@@ -42,6 +42,11 @@ class uvma_axis_slv_base_vseq_c extends uvma_axis_base_vseq_c;
     */
    extern virtual task drv_idle();
    
+   /**
+    * TODO Describe uvma_axis_slv_base_vseq_c::wait_clk()
+    */
+   extern task wait_clk();
+   
 endclass : uvma_axis_slv_base_vseq_c
 
 
@@ -92,6 +97,13 @@ task uvma_axis_slv_base_vseq_c::drv_idle();
    
    
 endtask : drv_idle
+
+
+task uvma_axis_slv_base_vseq_c::wait_clk();
+   
+   @(cntxt.vif.drv_slv_cb);
+   
+endtask : wait_clk
 
 
 `endif // __UVMA_AXIS_SLV_BASE_VSEQ_SV__

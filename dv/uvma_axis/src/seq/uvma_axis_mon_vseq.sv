@@ -89,6 +89,7 @@ task uvma_axis_mon_vseq_c::process_transfers();
       
       // Process queue of transactions into final monitor transaction
       // TODO Add mechanism for adding error checkers
+      // TODO Check that simple implementation of keep/strobe is correct vs. spec
       mon_trn = uvma_axis_mon_trn_c::type_id::create("mon_trn");
       mon_trn.set_initiator(mstr_mon_trn.get_initiator());
       mon_trn.cfg   = cfg;

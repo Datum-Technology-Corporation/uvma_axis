@@ -16,9 +16,8 @@
 
 // This file should be empty by the end of the project
 
-constraint slv_ton_cons {
-   env_cfg.slv_cfg.drv_slv_valid_ton == 100;
-   env_cfg.slv_cfg.drv_slv_idle_ton  ==   0;
+constraint mstr_ton_cons {
+   env_cfg.mstr_cfg.drv_mstr_ton == 100;
 }
 
 

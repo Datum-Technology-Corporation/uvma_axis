@@ -42,6 +42,11 @@ class uvma_axis_mstr_base_vseq_c extends uvma_axis_base_vseq_c;
     */
    extern virtual task drv(ref uvma_axis_seq_item_c seq_item);
    
+   /**
+    * TODO Describe uvma_axis_mstr_base_vseq_c::wait_clk()
+    */
+   extern task wait_clk();
+   
 endclass : uvma_axis_mstr_base_vseq_c
 
 
@@ -95,6 +100,13 @@ task uvma_axis_mstr_base_vseq_c::drv(ref uvma_axis_seq_item_c seq_item);
    
    
 endtask : drv
+
+
+task uvma_axis_mstr_base_vseq_c::wait_clk();
+   
+   @(cntxt.vif.drv_mstr_cb);
+   
+endtask : wait_clk
 
 
 `endif // __UVMA_AXIS_MSTR_BASE_VSEQ_SV__
