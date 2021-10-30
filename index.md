@@ -22,7 +22,7 @@ The [Moore.io](https://www.mooreio.com) Arm® AMBA® IP Suite's Advanced eXtensi
 | [Source Code](https://mooreio.com/packages/uvma_axis.tgz) | Source Code (Coming Soon) | Source Code (Coming Soon) |
 | Documentation (Coming Soon) | Documentation (Coming Soon) | Documentation (Coming Soon) |
 
-> **[View All Releases](Coming Soon)**
+> **[View All Releases](releases.md)**
 
 
 ## Metrics
