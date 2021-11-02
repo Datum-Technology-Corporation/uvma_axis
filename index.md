@@ -1,7 +1,7 @@
 # Home Page
 
 ## [Get Latest Release](https://mooreio.com/packages/uvma_axis.tgz)
-### [View Documentation online](https://mooreio.com/packages/uvml_logs/dox_out/)
+### [View Documentation online](https://mooreio.com/packages/uvma_axis/dox_out/)
 
 ----------------
 
