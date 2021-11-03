@@ -37,17 +37,17 @@ source ./setup_terminal.sh
 
 **4. Launch**
 
-All jobs for simulation are performed via `dvm`.
+All jobs for simulation are performed via `mio`.
 
 > At any time, you can invoke its built-in documentation:
 
 ```
-dvm --help
+mio --help
 ```
 
 > To run test 'rand_traffic' with seed '1' and wave capture enabled:
 
 
 ```
-clear && dvm all uvmt_axis_st -t rand_traffic -s 1 -w
+clear && mio all uvmt_axis_st -t rand_traffic -s 1 -w
 ```
