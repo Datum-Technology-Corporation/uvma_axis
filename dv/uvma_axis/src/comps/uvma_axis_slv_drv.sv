@@ -107,8 +107,8 @@ task uvma_axis_slv_drv_c::run_phase(uvm_phase phase);
          drv_req                    (req);
          ap.write                   (req);
          
-         seq_item_port.item_done();
          @(mp.drv_slv_cb);
+         seq_item_port.item_done();
       end
    end
    
