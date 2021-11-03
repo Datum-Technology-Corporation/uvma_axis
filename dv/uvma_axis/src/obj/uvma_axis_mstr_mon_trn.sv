@@ -32,6 +32,7 @@ class uvma_axis_mstr_mon_trn_c extends uvml_mon_trn_c;
    uvma_axis_tuser_l_t   tuser ; ///< 
    
    // Metadata
+   bit  data_transferred;
    
    
    `uvm_object_utils_begin(uvma_axis_mstr_mon_trn_c)
@@ -67,6 +68,7 @@ endclass : uvma_axis_mstr_mon_trn_c
 function uvma_axis_mstr_mon_trn_c::new(string name="uvma_axis_mstr_mon_trn");
    
    super.new(name);
+   data_transferred = 0;
    
 endfunction : new
 
@@ -108,7 +110,7 @@ function uvml_metadata_t uvma_axis_mstr_mon_trn_c::get_metadata();
    string tdest_str  = $sformatf("%h", tdest);
    string tuser_str  = $sformatf("%h", tuser);
    
-   if (cfg != null) begin
+   if (data_transferred && (cfg != null)) begin
       foreach (tdata[ii]) begin
          if (ii < cfg.tdata_width) begin
             tdata_str = {tdata_str, $sformatf("%h", tdata[ii])};

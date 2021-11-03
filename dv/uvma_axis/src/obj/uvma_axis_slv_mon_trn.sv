@@ -24,6 +24,9 @@ class uvma_axis_slv_mon_trn_c extends uvml_mon_trn_c;
    // Data
    uvma_axis_tready_l_t  tready; ///< 
    
+   // Metadata
+   bit  data_transferred;
+   
    
    `uvm_object_utils_begin(uvma_axis_slv_mon_trn_c)
       `uvm_field_int(tready, UVM_DEFAULT)
@@ -46,6 +49,7 @@ endclass : uvma_axis_slv_mon_trn_c
 function uvma_axis_slv_mon_trn_c::new(string name="uvma_axis_slv_mon_trn");
    
    super.new(name);
+   data_transferred = 0;
    
 endfunction : new
 
@@ -54,7 +58,7 @@ function uvml_metadata_t uvma_axis_slv_mon_trn_c::get_metadata();
    
    string tready_str = "";
    
-   if (tready === 1'b1) begin
+   if (data_transferred && (tready === 1'b1)) begin
       tready_str = "ASSERTED";
       
       get_metadata[0] = '{

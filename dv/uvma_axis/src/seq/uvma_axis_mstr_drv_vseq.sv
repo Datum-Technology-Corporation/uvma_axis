@@ -58,7 +58,6 @@ endtask : body
 task uvma_axis_mstr_drv_vseq_c::drv(ref uvma_axis_seq_item_c seq_item);
    
    int unsigned               pct_off      ;
-   bit                        sent_req  = 0;
    uvma_axis_mstr_seq_item_c  mstr_seq_item;
    bit [7:0]                  data_q[$]    ;
    uvma_axis_tdata_b_t        data         ;
@@ -97,18 +96,12 @@ task uvma_axis_mstr_drv_vseq_c::drv(ref uvma_axis_seq_item_c seq_item);
       do begin
          if ($urandom_range(1,100) > pct_off) begin
             `uvm_send_pri(mstr_seq_item, `UVMA_AXIS_MSTR_DRV_SEQ_ITEM_PRI)
-            if (cntxt.vif.drv_mstr_cb.tready === 1'b1) begin
-               sent_req = 1;
-            end
-            else begin
-               sent_req = 0;
-            end
          end
          else begin
             // Let idle sequence do its thing
             wait_clk();
          end
-      end while (!sent_req);
+      end while (!mstr_seq_item.data_transferred);
    end
    
 endtask : drv

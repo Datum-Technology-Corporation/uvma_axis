@@ -107,8 +107,9 @@ task uvma_axis_mstr_drv_c::run_phase(uvm_phase phase);
          drv_req                    (req);
          ap.write                   (req);
          
-         seq_item_port.item_done();
          @(mp.drv_mstr_cb);
+         req.data_transferred = (req.tvalid === 1'b1) && (cntxt.vif.mon_cb.tready === 1'b1);
+         seq_item_port.item_done();
       end
    end
    

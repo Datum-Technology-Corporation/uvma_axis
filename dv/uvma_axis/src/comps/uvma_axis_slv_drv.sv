@@ -126,6 +126,7 @@ endfunction: process_req
 task uvma_axis_slv_drv_c::drv_req(ref uvma_axis_slv_seq_item_c req);
    
    mp.drv_slv_cb.tready <= req.tready;
+   req.data_transferred = (cntxt.vif.mon_cb.tvalid === 1'b1) && (req.tready);
    
 endtask : drv_req
 
