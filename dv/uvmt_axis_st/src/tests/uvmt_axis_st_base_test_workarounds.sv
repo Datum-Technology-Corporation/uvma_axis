@@ -17,7 +17,7 @@
 // This file should be empty by the end of the project
 
 constraint mstr_ton_cons {
-   env_cfg.mstr_cfg.drv_mstr_ton == 100;
+   
 }
 
 
