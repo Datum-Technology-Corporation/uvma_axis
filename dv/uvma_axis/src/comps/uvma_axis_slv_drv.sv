@@ -108,6 +108,7 @@ task uvma_axis_slv_drv_c::run_phase(uvm_phase phase);
          ap.write                   (req);
          
          @(mp.drv_slv_cb);
+         req.data_transferred = (cntxt.vif.mon_cb.tvalid === 1'b1) && (req.tready);
          seq_item_port.item_done();
       end
    end
@@ -126,7 +127,6 @@ endfunction: process_req
 task uvma_axis_slv_drv_c::drv_req(ref uvma_axis_slv_seq_item_c req);
    
    mp.drv_slv_cb.tready <= req.tready;
-   req.data_transferred = (cntxt.vif.mon_cb.tvalid === 1'b1) && (req.tready);
    
 endtask : drv_req
 
