@@ -308,7 +308,7 @@ task uvma_axis_mon_c::sample_mstr_trn(output uvma_axis_mstr_mon_trn_c trn);
       trn.tuser[ii] = mp.mon_cb.tuser[ii];
    end
    
-   trn.data_transferred = (mp.mon_cb.tvalid === 1'b1) && (mp.mon_cb.tready === 1'b1);
+   trn.tready = mp.mon_cb.tready;
    
 endtask : sample_mstr_trn
 
@@ -319,7 +319,7 @@ task uvma_axis_mon_c::sample_slv_trn(output uvma_axis_slv_mon_trn_c trn);
    trn = uvma_axis_slv_mon_trn_c::type_id::create("trn");
    trn.tready = mp.mon_cb.tready;
    
-   trn.data_transferred = (mp.mon_cb.tvalid === 1'b1) && (mp.mon_cb.tready === 1'b1);
+   trn.tvalid = mp.mon_cb.tvalid;
    
 endtask : sample_slv_trn
 

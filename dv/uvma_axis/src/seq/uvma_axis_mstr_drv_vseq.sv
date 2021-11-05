@@ -101,7 +101,7 @@ task uvma_axis_mstr_drv_vseq_c::drv(ref uvma_axis_seq_item_c seq_item);
             // Let idle sequence do its thing
             wait_clk();
          end
-      end while (!mstr_seq_item.data_transferred);
+      end while (!((mstr_seq_item.tvalid === 1'b1) && (mstr_seq_item.tready === 1'b1)));
    end
    
 endtask : drv

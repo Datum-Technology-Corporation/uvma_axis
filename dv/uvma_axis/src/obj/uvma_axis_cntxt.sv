@@ -20,14 +20,14 @@
  */
 class uvma_axis_cntxt_c extends uvml_cntxt_c;
    
-   virtual uvma_axis_if   vif; ///< Handle to agent interface
-   uvml_reset_state_enum  reset_state = UVML_RESET_STATE_PRE_RESET; ///< 
+   virtual uvma_axis_if      vif                    ; ///< Handle to agent interface
+   uvml_reset_state_enum     reset_state            ; ///< 
    uvma_axis_mstr_mon_trn_c  mon_current_transfer[$]; ///< Current data transfer
    
-   uvm_sequence_base  mon_vseq ;
-   uvm_sequence_base  idle_vseq;
-   uvm_sequence_base  mstr_vseq;
-   uvm_sequence_base  slv_vseq ;
+   uvm_sequence_base  mon_vseq     ; ///< 
+   uvm_sequence_base  idle_vseq    ; ///< 
+   uvm_sequence_base  mstr_drv_vseq; ///< 
+   uvm_sequence_base  slv_drv_vseq ; ///< 
    
    // Events
    uvm_event  sample_cfg_e  ; ///< 
@@ -61,6 +61,7 @@ function uvma_axis_cntxt_c::new(string name="uvma_axis_cntxt");
    
    super.new(name);
    
+   reset_state    = UVML_RESET_STATE_PRE_RESET;
    sample_cfg_e   = new("sample_cfg_e"  );
    sample_cntxt_e = new("sample_cntxt_e");
    

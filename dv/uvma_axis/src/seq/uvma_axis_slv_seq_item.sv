@@ -25,7 +25,7 @@ class uvma_axis_slv_seq_item_c extends uvml_seq_item_c;
    rand uvma_axis_tready_b_t  tready; ///< 
    
    // Metadata
-   bit  data_transferred;
+   uvma_axis_tvalid_l_t  tvalid; ///< 
    
    
    `uvm_object_utils_begin(uvma_axis_slv_seq_item_c)
@@ -49,7 +49,6 @@ endclass : uvma_axis_slv_seq_item_c
 function uvma_axis_slv_seq_item_c::new(string name="uvma_axis_slv_seq_item");
    
    super.new(name);
-   data_transferred = 0;
    
 endfunction : new
 
@@ -58,7 +57,7 @@ function uvml_metadata_t uvma_axis_slv_seq_item_c::get_metadata();
    
    string tready_str = "";
    
-   if (data_transferred && (tready === 1'b1)) begin
+   if ((tvalid === 1'b1) && (tready === 1'b1)) begin
       tready_str = "ASSERTED";
       get_metadata[0] = '{
          index     : 0,

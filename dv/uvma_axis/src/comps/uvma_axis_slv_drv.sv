@@ -64,6 +64,11 @@ class uvma_axis_slv_drv_c extends uvml_drv_c #(
     */
    extern virtual task drv_req(ref uvma_axis_slv_seq_item_c req);
    
+   /**
+    * TODO Describe uvma_axis_slv_drv_c::sample_post_clk()
+    */
+   extern virtual task sample_post_clk(ref uvma_axis_slv_seq_item_c req);
+   
 endclass : uvma_axis_slv_drv_c
 
 
@@ -108,7 +113,7 @@ task uvma_axis_slv_drv_c::run_phase(uvm_phase phase);
          ap.write                   (req);
          
          @(mp.drv_slv_cb);
-         req.data_transferred = (cntxt.vif.mon_cb.tvalid === 1'b1) && (req.tready);
+         sample_post_clk(req);
          seq_item_port.item_done();
       end
    end
@@ -129,6 +134,13 @@ task uvma_axis_slv_drv_c::drv_req(ref uvma_axis_slv_seq_item_c req);
    mp.drv_slv_cb.tready <= req.tready;
    
 endtask : drv_req
+
+
+task uvma_axis_slv_drv_c::sample_post_clk(ref uvma_axis_slv_seq_item_c req);
+   
+   req.tvalid = cntxt.vif.mon_cb.tvalid;
+   
+endtask : sample_post_clk
 
 
 `endif // __UVMA_AXIS_SLV_DRV_SV__

@@ -125,14 +125,14 @@ class uvma_axis_agent_c extends uvml_agent_c;
    extern task start_idle_vseq();
    
    /**
-    * TODO Describe uvma_axis_agent_c::start_mstr_vseq()
+    * TODO Describe uvma_axis_agent_c::start_mstr_drv_vseq()
     */
-   extern task start_mstr_vseq();
+   extern task start_mstr_drv_vseq();
    
    /**
-    * TODO Describe uvma_axis_agent_c::start_slv_vseq()
+    * TODO Describe uvma_axis_agent_c::start_slv_drv_vseq()
     */
-   extern task start_slv_vseq();
+   extern task start_slv_drv_vseq();
    
 endclass : uvma_axis_agent_c
 
@@ -185,8 +185,8 @@ task uvma_axis_agent_c::run_phase(uvm_phase phase);
          start_idle_vseq();
          
          case (cfg.drv_mode)
-            UVMA_AXIS_DRV_MODE_MSTR: start_mstr_vseq();
-            UVMA_AXIS_DRV_MODE_SLV : start_slv_vseq ();
+            UVMA_AXIS_DRV_MODE_MSTR: start_mstr_drv_vseq();
+            UVMA_AXIS_DRV_MODE_SLV : start_slv_drv_vseq ();
             
             default: begin
                `uvm_fatal("AXIS_AGENT", $sformatf("Invalid cfg.drv_mode: %s", cfg.drv_mode.name()))
@@ -357,48 +357,48 @@ task uvma_axis_agent_c::start_idle_vseq();
 endtask : start_idle_vseq
 
 
-task uvma_axis_agent_c::start_mstr_vseq();
+task uvma_axis_agent_c::start_mstr_drv_vseq();
    
    uvm_coreservice_t cs = uvm_coreservice_t::get();
    uvm_factory       f  = cs.get_factory();
    uvm_object        temp_obj;
    
    temp_obj = f.create_object_by_type(cfg.mstr_drv_vseq_type, get_full_name(), cfg.mstr_drv_vseq_type.get_type_name());
-   if (!$cast(cntxt.mstr_vseq, temp_obj)) begin
-      `uvm_fatal("AXIS_AGENT", $sformatf("Could not cast 'temp_obj' (%s) to 'cntxt.mstr_vseq' (%s)", $typename(temp_obj), $typename(cntxt.mstr_vseq)))
+   if (!$cast(cntxt.mstr_drv_vseq, temp_obj)) begin
+      `uvm_fatal("AXIS_AGENT", $sformatf("Could not cast 'temp_obj' (%s) to 'cntxt.mstr_drv_vseq' (%s)", $typename(temp_obj), $typename(cntxt.mstr_drv_vseq)))
    end
    
-   if (!cntxt.mstr_vseq.randomize()) begin
-      `uvm_fatal("AXIS_AGENT", "Failed to randomize cntxt.mstr_vseq")
+   if (!cntxt.mstr_drv_vseq.randomize()) begin
+      `uvm_fatal("AXIS_AGENT", "Failed to randomize cntxt.mstr_drv_vseq")
    end
    
    fork
-      cntxt.mstr_vseq.start(vsequencer);
+      cntxt.mstr_drv_vseq.start(vsequencer);
    join_none
    
-endtask : start_mstr_vseq
+endtask : start_mstr_drv_vseq
 
 
-task uvma_axis_agent_c::start_slv_vseq();
+task uvma_axis_agent_c::start_slv_drv_vseq();
    
    uvm_coreservice_t cs = uvm_coreservice_t::get();
    uvm_factory       f  = cs.get_factory();
    uvm_object        temp_obj;
    
    temp_obj = f.create_object_by_type(cfg.slv_drv_vseq_type, get_full_name(), cfg.slv_drv_vseq_type.get_type_name());
-   if (!$cast(cntxt.slv_vseq, temp_obj)) begin
-      `uvm_fatal("AXIS_AGENT", $sformatf("Could not cast 'temp_obj' (%s) to 'cntxt.slv_vseq' (%s)", $typename(temp_obj), $typename(cntxt.slv_vseq)))
+   if (!$cast(cntxt.slv_drv_vseq, temp_obj)) begin
+      `uvm_fatal("AXIS_AGENT", $sformatf("Could not cast 'temp_obj' (%s) to 'cntxt.slv_drv_vseq' (%s)", $typename(temp_obj), $typename(cntxt.slv_drv_vseq)))
    end
    
-   if (!cntxt.slv_vseq.randomize()) begin
-      `uvm_fatal("AXIS_AGENT", "Failed to randomize cntxt.slv_vseq")
+   if (!cntxt.slv_drv_vseq.randomize()) begin
+      `uvm_fatal("AXIS_AGENT", "Failed to randomize cntxt.slv_drv_vseq")
    end
    
    fork
-      cntxt.slv_vseq.start(vsequencer);
+      cntxt.slv_drv_vseq.start(vsequencer);
    join_none
    
-endtask : start_slv_vseq
+endtask : start_slv_drv_vseq
 
 
 `endif // __UVMA_AXIS_AGENT_SV__
