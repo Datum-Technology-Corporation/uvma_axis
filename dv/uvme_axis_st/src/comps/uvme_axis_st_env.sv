@@ -31,8 +31,8 @@ class uvme_axis_st_env_c extends uvml_env_c;
    // Components
    uvme_axis_st_cov_model_c                cov_model    ; ///< 
    uvme_axis_st_prd_c                      predictor    ; ///< 
-   uvme_axis_st_sb_simplex_c               mstr_sb      ; ///< 
-   uvme_axis_st_sb_simplex_c               e2e_sb       ; ///< 
+   uvme_axis_st_sb_simplex_c               sb_mstr      ; ///< 
+   uvme_axis_st_sb_simplex_c               sb_e2e       ; ///< 
    uvme_axis_st_vsqr_c                     vsequencer   ; ///< 
    uvml_dly_line_c #(uvma_axis_mon_trn_c)  mstr_dly_line; ///< 
    uvml_dly_line_c #(uvma_axis_mon_trn_c)  e2e_dly_line ; ///< 
@@ -175,8 +175,8 @@ function void uvme_axis_st_env_c::assign_cfg();
    uvm_config_db#(uvme_axis_st_cfg_c   )::set(this, "*"         , "cfg", cfg            );
    uvm_config_db#(uvma_axis_cfg_c      )::set(this, "mstr_agent", "cfg", cfg.mstr_cfg   );
    uvm_config_db#(uvma_axis_cfg_c      )::set(this, "slv_agent" , "cfg", cfg.slv_cfg    );
-   uvm_config_db#(uvml_sb_simplex_cfg_c)::set(this, "mstr_sb"   , "cfg", cfg.mstr_sb_cfg);
-   uvm_config_db#(uvml_sb_simplex_cfg_c)::set(this, "e2e_sb"    , "cfg", cfg.e2e_sb_cfg );
+   uvm_config_db#(uvml_sb_simplex_cfg_c)::set(this, "sb_mstr"   , "cfg", cfg.sb_mstr_cfg);
+   uvm_config_db#(uvml_sb_simplex_cfg_c)::set(this, "sb_e2e"    , "cfg", cfg.sb_e2e_cfg );
    
 endfunction: assign_cfg
 
@@ -186,8 +186,8 @@ function void uvme_axis_st_env_c::assign_cntxt();
    uvm_config_db#(uvme_axis_st_cntxt_c   )::set(this, "*"         , "cntxt", cntxt              );
    uvm_config_db#(uvma_axis_cntxt_c      )::set(this, "mstr_agent", "cntxt", cntxt.mstr_cntxt   );
    uvm_config_db#(uvma_axis_cntxt_c      )::set(this, "slv_agent" , "cntxt", cntxt.slv_cntxt    );
-   uvm_config_db#(uvml_sb_simplex_cntxt_c)::set(this, "mstr_sb"   , "cntxt", cntxt.mstr_sb_cntxt);
-   uvm_config_db#(uvml_sb_simplex_cntxt_c)::set(this, "e2e_sb"    , "cntxt", cntxt.e2e_sb_cntxt );
+   uvm_config_db#(uvml_sb_simplex_cntxt_c)::set(this, "sb_mstr"   , "cntxt", cntxt.sb_mstr_cntxt);
+   uvm_config_db#(uvml_sb_simplex_cntxt_c)::set(this, "sb_e2e"    , "cntxt", cntxt.sb_e2e_cntxt );
    
 endfunction: assign_cntxt
 
@@ -204,8 +204,8 @@ function void uvme_axis_st_env_c::create_env_components();
    
    if (cfg.scoreboarding_enabled) begin
       predictor     = uvme_axis_st_prd_c                    ::type_id::create("predictor"    , this);
-      mstr_sb       = uvme_axis_st_sb_simplex_c             ::type_id::create("mstr_sb"      , this);
-      e2e_sb        = uvme_axis_st_sb_simplex_c             ::type_id::create("e2e_sb"       , this);
+      sb_mstr       = uvme_axis_st_sb_simplex_c             ::type_id::create("sb_mstr"      , this);
+      sb_e2e        = uvme_axis_st_sb_simplex_c             ::type_id::create("sb_e2e"       , this);
       mstr_dly_line = uvml_dly_line_c #(uvma_axis_mon_trn_c)::type_id::create("mstr_dly_line", this);
       e2e_dly_line  = uvml_dly_line_c #(uvma_axis_mon_trn_c)::type_id::create("e2e_dly_line" , this);
    end
@@ -234,15 +234,15 @@ function void uvme_axis_st_env_c::connect_scoreboard();
    // Connect agent -> scoreboard
    mstr_agent   .mon_trn_ap.connect(mstr_dly_line.in_export );
    slv_agent    .mon_trn_ap.connect(e2e_dly_line .in_export );
-   e2e_dly_line .out_ap    .connect(e2e_sb       .act_export);
-   mstr_dly_line.out_ap    .connect(mstr_sb      .act_export);
+   e2e_dly_line .out_ap    .connect(sb_e2e       .act_export);
+   mstr_dly_line.out_ap    .connect(sb_mstr      .act_export);
    
    e2e_dly_line .set_duration(1000);
    mstr_dly_line.set_duration(1000);
    
    // Connect predictor -> scoreboard
-   predictor.e2e_out_ap .connect(e2e_sb .exp_export);
-   predictor.mstr_out_ap.connect(mstr_sb.exp_export);
+   predictor.e2e_out_ap .connect(sb_e2e .exp_export);
+   predictor.mstr_out_ap.connect(sb_mstr.exp_export);
    
 endfunction: connect_scoreboard
 

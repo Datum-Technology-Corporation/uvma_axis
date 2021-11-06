@@ -65,7 +65,7 @@ package uvma_axis_pkg;
    `include "uvma_axis_mstr_sqr.sv"
    `include "uvma_axis_slv_sqr.sv"
    
-   // Agent Components
+   // Agent-Level Components
    `include "uvma_axis_cov_model.sv"
    `include "uvma_axis_logger.sv"
    `include "uvma_axis_drv.sv"

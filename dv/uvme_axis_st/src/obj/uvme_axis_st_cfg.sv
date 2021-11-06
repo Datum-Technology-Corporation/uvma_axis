@@ -31,8 +31,8 @@ class uvme_axis_st_cfg_c extends uvml_cfg_c;
    // Objects
    rand uvma_axis_cfg_c        mstr_cfg   ; ///< 
    rand uvma_axis_cfg_c        slv_cfg    ; ///< 
-   rand uvml_sb_simplex_cfg_c  mstr_sb_cfg; ///< 
-   rand uvml_sb_simplex_cfg_c  e2e_sb_cfg ; ///< 
+   rand uvml_sb_simplex_cfg_c  sb_mstr_cfg; ///< 
+   rand uvml_sb_simplex_cfg_c  sb_e2e_cfg ; ///< 
    
    
    `uvm_object_utils_begin(uvme_axis_st_cfg_c)
@@ -44,8 +44,8 @@ class uvme_axis_st_cfg_c extends uvml_cfg_c;
       
       `uvm_field_object(mstr_cfg   , UVM_DEFAULT)
       `uvm_field_object(slv_cfg    , UVM_DEFAULT)
-      `uvm_field_object(mstr_sb_cfg, UVM_DEFAULT)
-      `uvm_field_object(e2e_sb_cfg , UVM_DEFAULT)
+      `uvm_field_object(sb_mstr_cfg, UVM_DEFAULT)
+      `uvm_field_object(sb_e2e_cfg , UVM_DEFAULT)
    `uvm_object_utils_end
    
    
@@ -54,15 +54,23 @@ class uvme_axis_st_cfg_c extends uvml_cfg_c;
          mstr_cfg.enabled == 1;
          slv_cfg .enabled == 1;
       }
+      else {
+         mstr_cfg.enabled == 0;
+         slv_cfg .enabled == 0;
+      }
       
       if (is_active == UVM_ACTIVE) {
          mstr_cfg.is_active == UVM_ACTIVE;
          slv_cfg .is_active == UVM_ACTIVE;
       }
+      else {
+         mstr_cfg.is_active == UVM_PASSIVE;
+         slv_cfg .is_active == UVM_PASSIVE;
+      }
       
       if (trn_log_enabled) {
-         /*soft */mstr_cfg.trn_log_enabled == 1;
-         /*soft */slv_cfg .trn_log_enabled == 1;
+         mstr_cfg.trn_log_enabled == 1;
+         slv_cfg .trn_log_enabled == 1;
       }
       else {
          mstr_cfg.trn_log_enabled == 0;
@@ -82,15 +90,15 @@ class uvme_axis_st_cfg_c extends uvml_cfg_c;
    }
    
    constraint sb_cfg_cons {
-      mstr_sb_cfg.mode == UVML_SB_MODE_IN_ORDER;
-      e2e_sb_cfg .mode == UVML_SB_MODE_IN_ORDER;
+      sb_mstr_cfg.mode == UVML_SB_MODE_IN_ORDER;
+      sb_e2e_cfg .mode == UVML_SB_MODE_IN_ORDER;
       if (scoreboarding_enabled) {
-         mstr_sb_cfg.enabled == 1;
-         e2e_sb_cfg .enabled == 1;
+         sb_mstr_cfg.enabled == 1;
+         sb_e2e_cfg .enabled == 1;
       }
       else {
-         mstr_sb_cfg.enabled == 0;
-         e2e_sb_cfg .enabled == 0;
+         sb_mstr_cfg.enabled == 0;
+         sb_e2e_cfg .enabled == 0;
       }
    }
    
@@ -109,8 +117,8 @@ function uvme_axis_st_cfg_c::new(string name="uvme_axis_st_cfg");
    
    mstr_cfg    = uvma_axis_cfg_c      ::type_id::create("mstr_cfg"   );
    slv_cfg     = uvma_axis_cfg_c      ::type_id::create("slv_cfg"    );
-   mstr_sb_cfg = uvml_sb_simplex_cfg_c::type_id::create("mstr_sb_cfg");
-   e2e_sb_cfg  = uvml_sb_simplex_cfg_c::type_id::create("e2e_sb_cfg" );
+   sb_mstr_cfg = uvml_sb_simplex_cfg_c::type_id::create("sb_mstr_cfg");
+   sb_e2e_cfg  = uvml_sb_simplex_cfg_c::type_id::create("sb_e2e_cfg" );
    
 endfunction : new
 

@@ -15,22 +15,21 @@
 
 
 /**
- * Component implementing transaction-based software model of AMBA Advanced Extensible Interface Stream
- * VIP Self-Testing DUT.
+ * Component implementing transaction-based software model of AXI-Stream Agent Self-Testing DUT.
  */
 class uvme_axis_st_prd_c extends uvm_component;
    
    // Objects
-   uvme_axis_st_cfg_c    cfg;
-   uvme_axis_st_cntxt_c  cntxt;
+   uvme_axis_st_cfg_c    cfg  ; ///< 
+   uvme_axis_st_cntxt_c  cntxt; ///< 
    
    // TLM
-   uvm_analysis_export  #(uvma_axis_mon_trn_c)  mstr_in_export;
-   uvm_analysis_export  #(uvma_axis_mon_trn_c)  e2e_in_export ;
-   uvm_tlm_analysis_fifo#(uvma_axis_mon_trn_c)  mstr_in_fifo  ;
-   uvm_tlm_analysis_fifo#(uvma_axis_mon_trn_c)  e2e_in_fifo   ;
-   uvm_analysis_port    #(uvma_axis_mon_trn_c)  mstr_out_ap   ;
-   uvm_analysis_port    #(uvma_axis_mon_trn_c)  e2e_out_ap    ;
+   uvm_analysis_export  #(uvma_axis_mon_trn_c )  e2e_in_export ; ///< 
+   uvm_analysis_export  #(uvma_axis_seq_item_c)  mstr_in_export; ///< 
+   uvm_tlm_analysis_fifo#(uvma_axis_mon_trn_c )  e2e_in_fifo   ; ///< 
+   uvm_tlm_analysis_fifo#(uvma_axis_seq_item_c)  mstr_in_fifo  ; ///< 
+   uvm_analysis_port    #(uvma_axis_mon_trn_c )  e2e_out_ap    ; ///< 
+   uvm_analysis_port    #(uvma_axis_mon_trn_c )  mstr_out_ap   ; ///< 
    
    
    `uvm_component_utils_begin(uvme_axis_st_prd_c)
@@ -84,12 +83,12 @@ function void uvme_axis_st_prd_c::build_phase(uvm_phase phase);
    end
    
    // Build TLM objects
-   mstr_in_export  = new("mstr_in_export", this);
    e2e_in_export   = new("e2e_in_export" , this);
-   mstr_in_fifo    = new("mstr_in_fifo"  , this);
+   mstr_in_export  = new("mstr_in_export", this);
    e2e_in_fifo     = new("e2e_in_fifo"   , this);
-   mstr_out_ap     = new("mstr_out_ap"   , this);
+   mstr_in_fifo    = new("mstr_in_fifo"  , this);
    e2e_out_ap      = new("e2e_out_ap"    , this);
+   mstr_out_ap     = new("mstr_out_ap"   , this);
    
 endfunction : build_phase
 
@@ -99,8 +98,8 @@ function void uvme_axis_st_prd_c::connect_phase(uvm_phase phase);
    super.connect_phase(phase);
    
    // Connect TLM objects
-   mstr_in_export.connect(mstr_in_fifo.analysis_export);
    e2e_in_export .connect(e2e_in_fifo .analysis_export);
+   mstr_in_export.connect(mstr_in_fifo.analysis_export);
    
 endfunction: connect_phase
 
@@ -113,6 +112,20 @@ task uvme_axis_st_prd_c::run_phase(uvm_phase phase);
    super.run_phase(phase);
    
    fork
+      begin : e2e
+         forever begin
+            // Get next transaction and copy it
+            e2e_in_fifo.get(e2e_in_trn);
+            e2e_out_trn = uvma_axis_mon_trn_c::type_id::create("e2e_out_trn");
+            e2e_out_trn.copy(e2e_in_trn);
+            e2e_out_trn.cfg = e2e_in_trn.cfg;
+            e2e_out_trn.set_may_drop(cntxt.slv_cntxt.reset_state != UVML_RESET_STATE_POST_RESET);
+            
+            // Send transaction to analysis port
+            e2e_out_ap.write(e2e_out_trn);
+         end
+      end
+      
       begin : mstr
          forever begin
             // Get next transaction and copy it
@@ -131,20 +144,6 @@ task uvme_axis_st_prd_c::run_phase(uvm_phase phase);
             
             // Send transaction to analysis port
             mstr_out_ap.write(mstr_out_trn);
-         end
-      end
-      
-      begin : e2e
-         forever begin
-            // Get next transaction and copy it
-            e2e_in_fifo.get(e2e_in_trn);
-            e2e_out_trn = uvma_axis_mon_trn_c::type_id::create("e2e_out_trn");
-            e2e_out_trn.copy(e2e_in_trn);
-            e2e_out_trn.cfg = e2e_in_trn.cfg;
-            e2e_out_trn.set_may_drop(cntxt.slv_cntxt.reset_state != UVML_RESET_STATE_POST_RESET);
-            
-            // Send transaction to analysis port
-            e2e_out_ap.write(e2e_out_trn);
          end
       end
    join_none

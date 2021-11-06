@@ -196,7 +196,6 @@ endfunction : connect_phase
 task uvmt_axis_st_base_test_c::run_phase(uvm_phase phase);
    
    super.run_phase(phase);
-   
    start_clk();
    
 endtask : run_phase
