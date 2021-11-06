@@ -138,7 +138,7 @@ endtask : drv_req
 
 task uvma_axis_slv_drv_c::sample_post_clk(ref uvma_axis_slv_seq_item_c req);
    
-   req.tvalid = cntxt.vif.mon_cb.tvalid;
+   req.tvalid = mp.drv_slv_cb.tvalid;
    
 endtask : sample_post_clk
 

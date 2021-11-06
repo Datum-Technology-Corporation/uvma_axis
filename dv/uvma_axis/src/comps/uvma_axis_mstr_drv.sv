@@ -158,7 +158,7 @@ endtask : drv_req
 
 task uvma_axis_mstr_drv_c::sample_post_clk(ref uvma_axis_mstr_seq_item_c req);
    
-   req.tready = cntxt.vif.mon_cb.tready;
+   req.tready = mp.drv_mstr_cb.tready;
    
 endtask : sample_post_clk
 
