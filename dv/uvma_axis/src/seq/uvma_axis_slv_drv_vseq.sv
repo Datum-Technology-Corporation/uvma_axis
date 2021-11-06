@@ -17,7 +17,7 @@
 /**
  * TODO Describe uvma_axis_slv_drv_vseq_c
  */
-class uvma_axis_slv_drv_vseq_c extends uvma_axis_slv_base_vseq_c;
+class uvma_axis_slv_drv_vseq_c extends uvma_axis_base_vseq_c;
    
    `uvm_object_utils(uvma_axis_slv_drv_vseq_c)
    
@@ -33,14 +33,19 @@ class uvma_axis_slv_drv_vseq_c extends uvma_axis_slv_base_vseq_c;
    extern virtual task body();
    
    /**
-    * TODO Describe uvma_axis_slv_drv_vseq_c::drv_valid()
+    * TODO Describe uvma_axis_slv_drv_vseq_c::drive_valid()
     */
-   extern virtual task drv_valid();
+   extern virtual task drive_valid();
    
    /**
-    * TODO Describe uvma_axis_slv_drv_vseq_c::drv_idle()
+    * TODO Describe uvma_axis_slv_drv_vseq_c::drive_idle()
     */
-   extern virtual task drv_idle();
+   extern virtual task drive_idle();
+   
+   /**
+    * TODO Describe uvma_axis_slv_drv_vseq_c::wait_clk()
+    */
+   extern task wait_clk();
    
 endclass : uvma_axis_slv_drv_vseq_c
 
@@ -55,12 +60,33 @@ endfunction : new
 task uvma_axis_slv_drv_vseq_c::body();
    
    `uvm_info("AXIS_SLV_DRV_VSEQ", "SLV driver virtual sequence has started", UVM_HIGH)
-   super.body();
+   forever begin
+      fork
+         begin
+            `uvm_info("AXIS_SLV_DRV_VSEQ", "Waiting for post_reset", UVM_DEBUG)
+            wait (cntxt.reset_state == UVML_RESET_STATE_POST_RESET) begin
+               `uvm_info("AXIS_SLV_DRV_VSEQ", "Done waiting for post_reset", UVM_DEBUG)
+               if (cntxt.vif.drv_slv_cb.tvalid === 1'b1) begin
+                  drive_valid();
+               end
+               else begin
+                  drive_idle();
+               end
+            end
+         end
+         
+         begin
+            wait (cntxt.reset_state == UVML_RESET_STATE_POST_RESET);
+            wait (cntxt.reset_state != UVML_RESET_STATE_POST_RESET);
+         end
+      join_any
+      disable fork;
+   end
    
 endtask : body
 
 
-task uvma_axis_slv_drv_vseq_c::drv_valid();
+task uvma_axis_slv_drv_vseq_c::drive_valid();
    
    uvma_axis_slv_seq_item_c  req   ;
    int unsigned              pct_off = 100 - cfg.drv_slv_valid_ton;
@@ -76,10 +102,10 @@ task uvma_axis_slv_drv_vseq_c::drv_valid();
       })
    end
    
-endtask : drv_valid
+endtask : drive_valid
 
 
-task uvma_axis_slv_drv_vseq_c::drv_idle();
+task uvma_axis_slv_drv_vseq_c::drive_idle();
    
    uvma_axis_slv_seq_item_c  req   ;
    int unsigned              pct_off = 100 - cfg.drv_slv_idle_ton;
@@ -94,7 +120,14 @@ task uvma_axis_slv_drv_vseq_c::drv_idle();
       wait_clk();
    end
    
-endtask : drv_idle
+endtask : drive_idle
+
+
+task uvma_axis_slv_drv_vseq_c::wait_clk();
+   
+   @(cntxt.vif.drv_slv_cb);
+   
+endtask : wait_clk
 
 
 `endif // __UVMA_AXIS_SLV_DRV_VSEQ_SV__

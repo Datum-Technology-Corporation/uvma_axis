@@ -17,7 +17,7 @@
 /**
  * TODO Describe uvma_axis_mstr_drv_vseq_c
  */
-class uvma_axis_mstr_drv_vseq_c extends uvma_axis_mstr_base_vseq_c;
+class uvma_axis_mstr_drv_vseq_c extends uvma_axis_base_vseq_c;
    
    `uvm_object_utils(uvma_axis_mstr_drv_vseq_c)
    
@@ -28,14 +28,24 @@ class uvma_axis_mstr_drv_vseq_c extends uvma_axis_mstr_base_vseq_c;
    extern function new(string name="uvma_axis_mstr_drv_vseq");
    
    /**
-    * TODO Describe uvma_axis_mstr_base_vseq_c::body()
+    * TODO Describe uvma_axis_mstr_vseq_c::body()
     */
    extern virtual task body();
    
    /**
-    * TODO Describe uvma_axis_mstr_vseq_c::drv()
+    * TODO Describe uvma_axis_mstr_vseq_c::process_req()
     */
-   extern virtual task drv(ref uvma_axis_seq_item_c seq_item);
+   extern function void process_req(ref uvma_axis_seq_item_c seq_item);
+   
+   /**
+    * TODO Describe uvma_axis_mstr_vseq_c::drive()
+    */
+   extern virtual task drive(ref uvma_axis_seq_item_c seq_item);
+   
+   /**
+    * TODO Describe uvma_axis_mstr_vseq_c::wait_clk()
+    */
+   extern task wait_clk();
    
 endclass : uvma_axis_mstr_drv_vseq_c
 
@@ -49,13 +59,44 @@ endfunction : new
 
 task uvma_axis_mstr_drv_vseq_c::body();
    
+   uvma_axis_seq_item_c  seq_item;
+   
    `uvm_info("AXIS_MSTR_DRV_VSEQ", "MSTR driver virtual sequence has started", UVM_HIGH)
-   super.body();
+   forever begin
+      fork
+         begin
+            `uvm_info("AXIS_MSTR_DRV_VSEQ", "Waiting for post_reset", UVM_DEBUG)
+            wait (cntxt.reset_state == UVML_RESET_STATE_POST_RESET) begin
+               `uvm_info("AXIS_MSTR_DRV_VSEQ", "Waiting for next item", UVM_DEBUG)
+               p_sequencer.get_next_item    (seq_item);
+               process_req                  (seq_item);
+               drive                        (seq_item);
+               p_sequencer.seq_item_ap.write(seq_item);
+               p_sequencer.item_done();
+            end
+         end
+         
+         begin
+            wait (cntxt.reset_state == UVML_RESET_STATE_POST_RESET);
+            wait (cntxt.reset_state != UVML_RESET_STATE_POST_RESET);
+         end
+      join_any
+      disable fork;
+   end
    
 endtask : body
 
 
-task uvma_axis_mstr_drv_vseq_c::drv(ref uvma_axis_seq_item_c seq_item);
+function void uvma_axis_mstr_drv_vseq_c::process_req(ref uvma_axis_seq_item_c seq_item);
+   
+   seq_item.cfg = cfg;
+   `uvm_info("AXIS_MSTR_DRV_VSEQ", $sformatf("Got item:\n%s", seq_item.sprint()), UVM_HIGH)
+   `uvml_hrtbt_owner(p_sequencer)
+   
+endfunction : process_req
+
+
+task uvma_axis_mstr_drv_vseq_c::drive(ref uvma_axis_seq_item_c seq_item);
    
    int unsigned               pct_off      ;
    uvma_axis_mstr_seq_item_c  mstr_seq_item;
@@ -104,7 +145,14 @@ task uvma_axis_mstr_drv_vseq_c::drv(ref uvma_axis_seq_item_c seq_item);
       end while (!((mstr_seq_item.tvalid === 1'b1) && (mstr_seq_item.tready === 1'b1)));
    end
    
-endtask : drv
+endtask : drive
+
+
+task uvma_axis_mstr_drv_vseq_c::wait_clk();
+   
+   @(cntxt.vif.drv_mstr_cb);
+   
+endtask : wait_clk
 
 
 `endif // __UVMA_AXIS_MSTR_DRV_VSEQ_SV__

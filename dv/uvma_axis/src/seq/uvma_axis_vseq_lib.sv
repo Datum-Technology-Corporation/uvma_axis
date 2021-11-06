@@ -14,9 +14,6 @@
 `define __UVMA_AXIS_VSEQ_LIB_SV__
 
 
-`include "uvma_axis_base_vseq.sv"
-`include "uvma_axis_mon_vseq.sv"
-`include "uvma_axis_idle_vseq.sv"
 `include "uvma_axis_transport_vseq.sv"
 `include "uvma_axis_rand_traffic_vseq.sv"
 
@@ -46,7 +43,6 @@ function uvma_axis_vseq_lib_c::new(string name="uvma_axis_vseq_lib");
    super.new(name);
    init_sequence_library();
    
-   add_sequence(uvma_axis_idle_vseq_c        ::get_type());
    add_sequence(uvma_axis_transport_vseq_c   ::get_type());
    add_sequence(uvma_axis_rand_traffic_vseq_c::get_type());
    

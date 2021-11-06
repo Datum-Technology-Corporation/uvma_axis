@@ -32,9 +32,9 @@ class uvma_axis_mon_vseq_c extends uvma_axis_base_vseq_c;
    extern virtual task body();
    
    /**
-    * TODO Describe uvma_axis_mon_vseq_c::process_transfers()
+    * TODO Describe uvma_axis_mon_vseq_c::monitor()
     */
-   extern virtual task process_transfers();
+   extern virtual task monitor();
    
 endclass : uvma_axis_mon_vseq_c
 
@@ -51,12 +51,12 @@ task uvma_axis_mon_vseq_c::body();
    `uvm_info("AXIS_MON_VSEQ", "Monitor virtual sequence has started", UVM_HIGH)
    forever begin
       fork
-         begin : transfer
+         begin
             wait (cntxt.reset_state == UVML_RESET_STATE_POST_RESET);
-            process_transfers();
+            monitor();
          end
          
-         begin : reset
+         begin
             wait (cntxt.reset_state == UVML_RESET_STATE_POST_RESET);
             wait (cntxt.reset_state != UVML_RESET_STATE_POST_RESET);
          end
@@ -67,7 +67,7 @@ task uvma_axis_mon_vseq_c::body();
 endtask : body
 
 
-task uvma_axis_mon_vseq_c::process_transfers();
+task uvma_axis_mon_vseq_c::monitor();
    
    uvma_axis_mon_trn_c       mon_trn     ;
    uvma_axis_mstr_mon_trn_c  mstr_mon_trn;
@@ -113,7 +113,7 @@ task uvma_axis_mon_vseq_c::process_transfers();
       write_mon_trn(mon_trn);
    end
    
-endtask : process_transfers
+endtask : monitor
 
 
 `endif // __UVMA_AXIS_MON_VSEQ_SV__

@@ -17,7 +17,7 @@
 /**
  * TODO Describe uvma_axis_idle_vseq_c
  */
-class uvma_axis_idle_vseq_c extends uvma_axis_mstr_base_vseq_c;
+class uvma_axis_idle_vseq_c extends uvma_axis_base_vseq_c;
    
    `uvm_object_utils(uvma_axis_idle_vseq_c)
    

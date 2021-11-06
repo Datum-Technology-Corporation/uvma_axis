@@ -75,9 +75,12 @@ package uvma_axis_pkg;
    `include "uvma_axis_agent.sv"
    
    // Sequences
+   `include "uvma_axis_base_vseq.sv"
+   `include "uvma_axis_mon_vseq.sv"
+   `include "uvma_axis_mstr_drv_vseq.sv"
+   `include "uvma_axis_slv_drv_vseq.sv"
+   `include "uvma_axis_idle_vseq.sv"
    `include "uvma_axis_vseq_lib.sv"
-   `include "uvma_axis_mstr_vseq_lib.sv"
-   `include "uvma_axis_slv_vseq_lib.sv"
    
 endpackage : uvma_axis_pkg
 

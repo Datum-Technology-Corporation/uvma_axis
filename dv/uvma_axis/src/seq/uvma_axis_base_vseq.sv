@@ -24,8 +24,8 @@ class uvma_axis_base_vseq_c extends uvml_vseq_c #(
 );
    
    // Agent handles
-   uvma_axis_cfg_c    cfg  ; ///< 
-   uvma_axis_cntxt_c  cntxt; ///< 
+   uvma_axis_cfg_c    cfg  ; ///< Agent configuration handle
+   uvma_axis_cntxt_c  cntxt; ///< Agent context handle
    
    
    `uvm_object_utils(uvma_axis_base_vseq_c)

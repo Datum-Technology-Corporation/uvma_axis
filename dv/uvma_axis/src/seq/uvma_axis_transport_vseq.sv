@@ -24,8 +24,8 @@ class uvma_axis_transport_vseq_c extends uvma_axis_base_vseq_c;
    
    
    `uvm_object_utils_begin(uvma_axis_transport_vseq_c)
-      `uvm_field_int   (tdest, UVM_DEFAULT)
-      `uvm_field_int   (tuser, UVM_DEFAULT)
+      `uvm_field_int(tdest, UVM_DEFAULT)
+      `uvm_field_int(tuser, UVM_DEFAULT)
    `uvm_object_utils_end
    
    
