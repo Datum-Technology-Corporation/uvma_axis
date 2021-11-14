@@ -29,13 +29,13 @@ class uvme_axis_st_env_c extends uvml_env_c;
    uvma_axis_agent_c  slv_agent ; ///< 
    
    // Components
-   uvme_axis_st_cov_model_c                cov_model    ; ///< 
-   uvme_axis_st_prd_c                      predictor    ; ///< 
-   uvme_axis_st_sb_simplex_c               sb_mstr      ; ///< 
-   uvme_axis_st_sb_simplex_c               sb_e2e       ; ///< 
-   uvme_axis_st_vsqr_c                     vsequencer   ; ///< 
-   uvml_dly_line_c #(uvma_axis_mon_trn_c)  mstr_dly_line; ///< 
-   uvml_dly_line_c #(uvma_axis_mon_trn_c)  e2e_dly_line ; ///< 
+   uvme_axis_st_cov_model_c             cov_model ; ///< 
+   uvme_axis_st_prd_c                   predictor ; ///< 
+   uvme_axis_st_sb_simplex_c            sb_mstr   ; ///< 
+   uvme_axis_st_sb_simplex_c            sb_e2e    ; ///< 
+   uvme_axis_st_vsqr_c                  vsequencer; ///< 
+   uvml_delay_c #(uvma_axis_mon_trn_c)  mstr_delay; ///< 
+   uvml_delay_c #(uvma_axis_mon_trn_c)  e2e_delay ; ///< 
    
    
    `uvm_component_utils_begin(uvme_axis_st_env_c)
@@ -203,11 +203,11 @@ endfunction: create_agents
 function void uvme_axis_st_env_c::create_env_components();
    
    if (cfg.scoreboarding_enabled) begin
-      predictor     = uvme_axis_st_prd_c                    ::type_id::create("predictor"    , this);
-      sb_mstr       = uvme_axis_st_sb_simplex_c             ::type_id::create("sb_mstr"      , this);
-      sb_e2e        = uvme_axis_st_sb_simplex_c             ::type_id::create("sb_e2e"       , this);
-      mstr_dly_line = uvml_dly_line_c #(uvma_axis_mon_trn_c)::type_id::create("mstr_dly_line", this);
-      e2e_dly_line  = uvml_dly_line_c #(uvma_axis_mon_trn_c)::type_id::create("e2e_dly_line" , this);
+      predictor  = uvme_axis_st_prd_c                 ::type_id::create("predictor" , this);
+      sb_mstr    = uvme_axis_st_sb_simplex_c          ::type_id::create("sb_mstr"   , this);
+      sb_e2e     = uvme_axis_st_sb_simplex_c          ::type_id::create("sb_e2e"    , this);
+      mstr_delay = uvml_delay_c #(uvma_axis_mon_trn_c)::type_id::create("mstr_delay", this);
+      e2e_delay  = uvml_delay_c #(uvma_axis_mon_trn_c)::type_id::create("e2e_delay" , this);
    end
    
 endfunction: create_env_components
@@ -232,13 +232,13 @@ endfunction: connect_predictor
 function void uvme_axis_st_env_c::connect_scoreboard();
    
    // Connect agent -> scoreboard
-   mstr_agent   .mon_trn_ap.connect(mstr_dly_line.in_export );
-   slv_agent    .mon_trn_ap.connect(e2e_dly_line .in_export );
-   e2e_dly_line .out_ap    .connect(sb_e2e       .act_export);
-   mstr_dly_line.out_ap    .connect(sb_mstr      .act_export);
+   mstr_agent.mon_trn_ap.connect(mstr_delay.in_export );
+   slv_agent .mon_trn_ap.connect(e2e_delay .in_export );
+   e2e_delay .out_ap    .connect(sb_e2e    .act_export);
+   mstr_delay.out_ap    .connect(sb_mstr   .act_export);
    
-   e2e_dly_line .set_duration(1000);
-   mstr_dly_line.set_duration(1000);
+   e2e_delay .set_duration(1000);
+   mstr_delay.set_duration(1000);
    
    // Connect predictor -> scoreboard
    predictor.e2e_out_ap .connect(sb_e2e .exp_export);
