@@ -17,4 +17,4 @@ source ./setup_terminal.sh
 ../tools/.imports/mio/src/mio.py cpel uvmt_axis_st
 ../tools/.imports/mio/src/mio.py sim uvmt_axis_st -t rand_traffic -s 1 -c
 ../tools/.imports/mio/src/mio.py results uvmt_axis_st results
-#../tools/.imports/mio/src/mio.py cov uvmt_axis_st
+../tools/.imports/mio/src/mio.py cov uvmt_axis_st
