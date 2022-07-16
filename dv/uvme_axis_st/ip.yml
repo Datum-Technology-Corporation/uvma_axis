@@ -31,14 +31,15 @@ dependencies:
   - { name: "uvml"     , version: "~1.0" }
   - { name: "uvml_logs", version: "~1.0" }
   - { name: "uvml_sb"  , version: "~1.0" }
+#  - { name: "uvma_axis"  , version: "^" }
 
 hdl-src:
   directories: [".", "comps", "obj", "seq"]
-  flists:
-    metrics : [ "src/uvme_axis_st_pkg.flist"      ]
-    riviera : [ "src/uvme_axis_st_pkg.flist"      ]
-    questa  : [ "src/uvme_axis_st_pkg.flist"      ]
-    vcs     : [ "src/uvme_axis_st_pkg.flist"      ]
-    vivado  : [ "src/uvme_axis_st_pkg.flist.xsim" ]
-    xcelium : [ "src/uvme_axis_st_pkg.flist"      ]
+  flist:
+    metrics : "uvme_axis_st_pkg.flist"
+    riviera : "uvme_axis_st_pkg.flist"
+    questa  : "uvme_axis_st_pkg.flist"
+    vcs     : "uvme_axis_st_pkg.flist"
+    vivado  : "uvme_axis_st_pkg.flist.xsim"
+    xcelium : "uvme_axis_st_pkg.flist"
 

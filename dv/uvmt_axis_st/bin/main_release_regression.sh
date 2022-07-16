@@ -6,9 +6,9 @@
 
 
 # Launched from uvml project sim dir
-python ./setup_project.py
-source ./setup_terminal.sh
-../tools/.imports/mio/src/__main__.py cpel uvmt_axis_st
-../tools/.imports/mio/src/__main__.py sim uvmt_axis_st -t rand_traffic -s 1 -c
-../tools/.imports/mio/src/__main__.py results uvmt_axis_st results
-../tools/.imports/mio/src/__main__.py cov uvmt_axis_st
+shopt -s expand_aliases
+source ~/.bashrc
+mio cpel    uvmt_axis_st
+mio sim     uvmt_axis_st -t rand_traffic -s 1 -c
+mio results uvmt_axis_st results
+mio cov     uvmt_axis_st

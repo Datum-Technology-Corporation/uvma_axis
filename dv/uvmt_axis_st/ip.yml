@@ -31,17 +31,19 @@ dependencies:
   - { name: "uvml"     , version: "~1.0" }
   - { name: "uvml_logs", version: "~1.0" }
   - { name: "uvml_sb"  , version: "~1.0" }
+ # - { name: "uvma_axis", version: "^" }
+ # - { name: "uvme_axis_st", version: "^" }
 
 hdl-src:
-  top-constructs: ["uvmt_axis_st_tb", "uvml_logs_sim_summary" ]
+  top-constructs: ["uvmt_axis_st_tb", "uvml_sim_summary" ]
   directories: [".", "tb", "tests"]
   test-paths: ["tests"]
   test-name-template: "uvmt_axis_st_{{ name }}_test_c"
-  flists:
-    metrics : [ "src/uvmt_axis_st_pkg.flist"      ]
-    riviera : [ "src/uvmt_axis_st_pkg.flist"      ]
-    questa  : [ "src/uvmt_axis_st_pkg.flist"      ]
-    vcs     : [ "src/uvmt_axis_st_pkg.flist"      ]
-    vivado  : [ "src/uvmt_axis_st_pkg.flist.xsim" ]
-    xcelium : [ "src/uvmt_axis_st_pkg.flist"      ]
+  flist:
+    metrics : "uvmt_axis_st_pkg.flist"
+    riviera : "uvmt_axis_st_pkg.flist"
+    questa  : "uvmt_axis_st_pkg.flist"
+    vcs     : "uvmt_axis_st_pkg.flist"
+    vivado  : "uvmt_axis_st_pkg.flist.xsim"
+    xcelium : "uvmt_axis_st_pkg.flist"
 

@@ -4,10 +4,10 @@
 
 
 // Directories
--i ${DV_UVMA_AXIS_SRC_PATH}
--i ${DV_UVMA_AXIS_SRC_PATH}/comps
--i ${DV_UVMA_AXIS_SRC_PATH}/obj
--i ${DV_UVMA_AXIS_SRC_PATH}/seq
+-i ${UVMA_AXIS_SRC_PATH}
+-i ${UVMA_AXIS_SRC_PATH}/comps
+-i ${UVMA_AXIS_SRC_PATH}/obj
+-i ${UVMA_AXIS_SRC_PATH}/seq
 
 // Files
-${DV_UVMA_AXIS_SRC_PATH}/uvma_axis_pkg.sv
+${UVMA_AXIS_SRC_PATH}/uvma_axis_pkg.sv

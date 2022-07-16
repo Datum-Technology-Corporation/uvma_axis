@@ -4,26 +4,26 @@
 
 
 // Libraries
--f ${DV_UVM_SRC_PATH}/uvm_pkg.flist
--f ${DV_UVML_SRC_PATH}/uvml_pkg.flist
--f ${DV_UVML_LOGS_SRC_PATH}/uvml_logs_pkg.flist
--f ${DV_UVML_SB_SRC_PATH}/uvml_sb_pkg.flist
+-f ${UVM_SRC_PATH}/uvm_pkg.flist
+-f ${UVML_SRC_PATH}/uvml_pkg.flist
+-f ${UVML_LOGS_SRC_PATH}/uvml_logs_pkg.flist
+-f ${UVML_SB_SRC_PATH}/uvml_sb_pkg.flist
 
 // Agents
 +define+UVMA_AXIS_TDATA_MAX_WIDTH=32
 +define+UVMA_AXIS_TID_MAX_WIDTH=8
 +define+UVMA_AXIS_TDEST_MAX_WIDTH=4
 +define+UVMA_AXIS_TUSER_MAX_WIDTH=32
--f ${DV_UVMA_AXIS_SRC_PATH}/uvma_axis_pkg.flist
+-f ${UVMA_AXIS_SRC_PATH}/uvma_axis_pkg.flist
 
 // Environments
--f ${DV_UVME_AXIS_ST_SRC_PATH}/uvme_axis_st_pkg.flist
+-f ${UVME_AXIS_ST_SRC_PATH}/uvme_axis_st_pkg.flist
 
 // AMBA Advanced Extensible Interface Stream test bench directories
-+incdir+${DV_UVMT_AXIS_ST_SRC_PATH}
-+incdir+${DV_UVMT_AXIS_ST_SRC_PATH}/tb
-+incdir+${DV_UVMT_AXIS_ST_SRC_PATH}/tests
-+incdir+${DV_UVMT_AXIS_ST_SRC_PATH}/seq
++incdir+${UVMT_AXIS_ST_SRC_PATH}
++incdir+${UVMT_AXIS_ST_SRC_PATH}/tb
++incdir+${UVMT_AXIS_ST_SRC_PATH}/tests
++incdir+${UVMT_AXIS_ST_SRC_PATH}/seq
 
 // AMBA Advanced Extensible Interface Stream test bench files
-${DV_UVMT_AXIS_ST_SRC_PATH}/uvmt_axis_st_pkg.sv
+${UVMT_AXIS_ST_SRC_PATH}/uvmt_axis_st_pkg.sv

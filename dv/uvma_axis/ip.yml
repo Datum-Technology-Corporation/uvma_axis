@@ -15,7 +15,7 @@ ip:
   block-diagram: ""
   languages: ["sv"]
   simulators-supported:
-    - { name: "vivado", version: "2021.1" }
+    - { name: "vivado", version: "2022.1" }
   tags: []
   copyright-holders: ["Datum Technology Corporation"]
   licenses: ["SHL-2.1"]
@@ -34,11 +34,11 @@ dependencies:
 hdl-src:
   directories: [".", "comps", "obj", "seq"]
   tests-name-template: ""
-  flists:
-    metrics : [ "src/uvma_axis_pkg.flist"      ]
-    riviera : [ "src/uvma_axis_pkg.flist"      ]
-    questa  : [ "src/uvma_axis_pkg.flist"      ]
-    vcs     : [ "src/uvma_axis_pkg.flist"      ]
-    vivado  : [ "src/uvma_axis_pkg.flist.xsim" ]
-    xcelium : [ "src/uvma_axis_pkg.flist"      ]
+  flist:
+    metrics : "uvma_axis_pkg.flist"
+    riviera : "uvma_axis_pkg.flist"
+    questa  : "uvma_axis_pkg.flist"
+    vcs     : "uvma_axis_pkg.flist"
+    vivado  : "uvma_axis_pkg.flist.xsim"
+    xcelium : "uvma_axis_pkg.flist"
 
